@@ -88,11 +88,16 @@ The template is made with the following workflow in mind:
    a nicely formatted `report.pdf`.
    
 ## Dependencies
+The following python libraries are required by the python scripts and
+functions:
+
 - arviz
 - numpy
 - scipy
 - pandas
 - cmdstanpy
-- pandoc
+
+In addition, to generate `report.pdf` with `make report.pdf` requires pandoc
+and make to be installed.
 
 
