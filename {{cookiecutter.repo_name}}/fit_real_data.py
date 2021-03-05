@@ -3,6 +3,9 @@ from cmdstanpy.utils import get_logger
 from datetime import datetime
 import os
 
+from fitting import generate_samples
+from model_configuration import SAMPLE_KWARGS
+
 # File where a csv of measurements can be found. Edit unless your measurements
 # file is called `raw_measurements.csv`!
 CSV_INPUT = os.path.join("data", "raw", "raw_measurements.csv")
@@ -26,7 +29,7 @@ def main():
     now = datetime.now().strftime("%Y%m%d%H%M%S")
     analysis_name = f"real_study-{now}"
     measurements = prepare_data(pd.read_csv(CSV_FILE))
-    generate_samples(study_name, measurements, MODEL_CONFIGURATIONS, logger)
+    generate_samples(study_name, measurements, MODEL_CONFIGURATIONS, logger, SAMPLE_KWARGS)
 
 
 if __name__ == "__main__":
