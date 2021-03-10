@@ -1,10 +1,10 @@
 """Some handy python functions."""
 
 
+from typing import Tuple, Dict
 import numpy as np
 import pandas as pd
-from scipy.stats import norm, lognorm
-from typing import Tuple
+from scipy.stats import norm
 
 
 def one_encode(s: pd.Series) -> pd.Series:
@@ -26,7 +26,9 @@ def make_columns_lower_case(df: pd.DataFrame) -> pd.DataFrame:
     return new
 
 
-def get_lognormal_params_from_qs(x1, x2, p1, p2) -> Tuple[float, float]:
+def get_lognormal_params_from_qs(
+    x1: float, x2: float, p1: float, p2: float
+) -> Tuple[float, float]:
     """Find parameters for a lognormal distribution from two quantiles.
 
     i.e. get mu and sigma such that if X ~ lognormal(mu, sigma), then pr(X <
@@ -46,7 +48,9 @@ def get_lognormal_params_from_qs(x1, x2, p1, p2) -> Tuple[float, float]:
     return mu, sigma
 
 
-def get_normal_params_from_qs(x1, x2, p1, p2) -> Tuple[float, float]:
+def get_normal_params_from_qs(
+    x1: float, x2: float, p1: float, p2: float
+) -> Tuple[float, float]:
     """find parameters for a normal distribution from two quantiles.
 
     i.e. get mu and sigma such that if x ~ normal(mu, sigma), then pr(x <
@@ -64,7 +68,7 @@ def get_normal_params_from_qs(x1, x2, p1, p2) -> Tuple[float, float]:
     return mu, sigma
 
 
-def get_99_pct_params_ln(x1, x2):
+def get_99_pct_params_ln(x1: float, x2: float):
     """Wrapper assuming you want the 0.5%-99.5% inter-quantile range.
 
     :param x1: the lower value such that pr(X > x1) = 0.005
@@ -74,7 +78,7 @@ def get_99_pct_params_ln(x1, x2):
     return get_lognormal_params_from_qs(x1, x2, 0.005, 0.995)
 
 
-def get_99_pct_params_n(x1, x2):
+def get_99_pct_params_n(x1: float, x2: float):
     """Wrapper assuming you want the 0.5%-99.5% inter-quantile range.
 
     :param x1: the lower value such that pr(X > x1) = 0.005
