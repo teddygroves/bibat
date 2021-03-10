@@ -1,10 +1,11 @@
-from munging import prepare_data
-from cmdstanpy.utils import get_logger
+"""Fit the models in MODEL_CONFIGURATIONS to real data."""
+
 from datetime import datetime
 import os
+import pandas as pd
 
 from fitting import generate_samples
-from model_configuration import SAMPLE_KWARGS
+from model_configurations_to_try import MODEL_CONFIGURATIONS
 
 # File where a csv of measurements can be found. Edit unless your measurements
 # file is called `raw_measurements.csv`!
@@ -23,13 +24,13 @@ LOGGER_LEVEL = 40
 # mode.
 LIKELIHOOD = True
 
+
 def main():
-    logger = get_logger()
-    logger.setLevel(LOGGER_LEVEL)
+    """Run the script."""
     now = datetime.now().strftime("%Y%m%d%H%M%S")
-    analysis_name = f"real_study-{now}"
-    measurements = prepare_data(pd.read_csv(CSV_FILE))
-    generate_samples(study_name, measurements, MODEL_CONFIGURATIONS, logger, SAMPLE_KWARGS)
+    study_name = f"real_study-{now}"
+    measurements = pd.read_csv(CSV_INPUT)
+    generate_samples(study_name, measurements, MODEL_CONFIGURATIONS)
 
 
 if __name__ == "__main__":
