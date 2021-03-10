@@ -20,7 +20,7 @@ def generate_samples(
     study_name: str,
     measurements: pd.DataFrame,
     model_configurations: List[ModelConfiguration],
-):
+) -> None:
     """Run cmdstanpy.CmdStanModel.sample, do diagnostics and save results.
 
     :param study_name: a string
