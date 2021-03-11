@@ -24,11 +24,11 @@ INTERACTION_CONFIG = ModelConfiguration(
         df,
         x_cols=["x1", "x2", "x1:x2"],
         priors={
-            "prior_a": get_99_pct_params_n(0, 1),
+            "prior_a": get_99_pct_params_n(-1, 1),
             "prior_b": [
-                get_99_pct_params_n(0, 2),
-                get_99_pct_params_n(0, 2),
-                get_99_pct_params_n(0, 2),
+                get_99_pct_params_n(-2, 2),
+                get_99_pct_params_n(-2, 2),
+                get_99_pct_params_n(-1, 1),
             ],
             "prior_sigma": get_99_pct_params_ln(0.4, 5.2),
         },
@@ -50,8 +50,8 @@ NON_INTERACTION_CONFIG = ModelConfiguration(
         priors={
             "prior_a": get_99_pct_params_n(0, 1),
             "prior_b": [
-                get_99_pct_params_n(0, 2),
-                get_99_pct_params_n(0, 2),
+                get_99_pct_params_n(-2, 2),
+                get_99_pct_params_n(-2, 2),
             ],
             "prior_sigma": get_99_pct_params_ln(0.4, 5.2),
         },
