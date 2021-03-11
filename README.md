@@ -34,8 +34,8 @@ pip install cookiecutter
 
 ```
 
-However, the code in the template assumes that the following python libraries
-are available:
+However, the code in the template will only work for python versions at least
+3.7, and assumes the following python libraries are available:
 
 - arviz
 - cmdstanpy
