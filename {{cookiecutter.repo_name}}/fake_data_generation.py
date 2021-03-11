@@ -37,7 +37,7 @@ def generate_fake_measurements(
             for colname, stat_list in x_stats.items()
         }
     )
-    fake["A:B"] = fake["A"] * fake["B"]
+    fake["x1:x2"] = fake["x1"] * fake["x2"]
     fake["y"] = 0
     model = CmdStanModel(stan_file=model_config.stan_file)
     stan_input = model_config.stan_input_function(fake)

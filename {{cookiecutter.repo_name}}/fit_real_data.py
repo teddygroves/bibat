@@ -7,15 +7,8 @@ import pandas as pd
 from fitting import generate_samples
 from model_configurations_to_try import MODEL_CONFIGURATIONS
 
-# File where a csv of measurements can be found. Edit unless your measurements
-# file is called `raw_measurements.csv`!
-CSV_INPUT = os.path.join("data", "raw", "raw_measurements.csv")
-
-# Directories where output should be saved. You shouldn't need to edit these.
-LOO_DIR = os.path.join("results", "loo")
-SAMPLES_DIR = os.path.join("results", "samples")
-INFD_DIR = os.path.join("results", "infd")
-JSON_DIR = os.path.join("results", "input_data_json")
+# File where a prepared csv of measurements can be found
+CSV_INPUT = os.path.join("data", "prepared", "data_prepared.csv")
 
 # only display messages with at least this severity
 LOGGER_LEVEL = 40

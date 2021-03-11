@@ -22,7 +22,7 @@ INTERACTION_CONFIG = ModelConfiguration(
     stan_file=os.path.join("stan", "model.stan"),
     stan_input_function=lambda df: get_stan_input(
         df,
-        x_cols=["A", "B", "A:B"],
+        x_cols=["x1", "x2", "x1:x2"],
         priors={
             "prior_a": get_99_pct_params_n(0, 1),
             "prior_b": [
@@ -35,7 +35,7 @@ INTERACTION_CONFIG = ModelConfiguration(
         likelihood=True,
     ),
     infd_kwargs_function=lambda df: get_infd_kwargs(
-        df, ["A", "B", "A:B"], SAMPLE_KWARGS
+        df, ["x1", "x2", "x1:x2"], SAMPLE_KWARGS
     ),
     sample_kwargs=SAMPLE_KWARGS,
 )
@@ -46,7 +46,7 @@ NON_INTERACTION_CONFIG = ModelConfiguration(
     stan_file=os.path.join("stan", "model.stan"),
     stan_input_function=lambda df: get_stan_input(
         df,
-        x_cols=["A", "B"],
+        x_cols=["x1", "x2"],
         priors={
             "prior_a": get_99_pct_params_n(0, 1),
             "prior_b": [
@@ -58,7 +58,7 @@ NON_INTERACTION_CONFIG = ModelConfiguration(
         likelihood=True,
     ),
     infd_kwargs_function=lambda df: get_infd_kwargs(
-        df, ["A", "B"], SAMPLE_KWARGS
+        df, ["x1", "x2"], SAMPLE_KWARGS
     ),
     sample_kwargs=SAMPLE_KWARGS,
 )

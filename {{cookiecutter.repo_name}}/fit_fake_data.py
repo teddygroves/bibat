@@ -11,8 +11,8 @@ from fitting import generate_samples
 # Distributions of covariates in simulated data. First value is mean, second is
 # stanard deviation.
 FAKE_DATA_X_STATS = {
-    "A": [-1, 0.2],
-    "B": [0.2, 1],
+    "x1": [-1, 0.2],
+    "x2": [0.2, 1],
 }
 
 # True values for each variable in your program's `parameters` block. Make sure
