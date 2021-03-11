@@ -1,7 +1,5 @@
 # cookiecutter-cmdstanpy
 
-## A template for one-off cmdstanpy projects.
-
 So you have a nice idea about how to model some data, but your intended model
 can't easily be implemented with a generic solution like
 [brms](https://paul-buerkner.github.io/brms/) or
@@ -18,10 +16,12 @@ Unless...
 
 ## Overview
 
-This template aims to reduce the amount of work you repeat every time you
-embark on a cmdstanpy project. Instead of writing everything from scratch, you
-can start with the template and edit it to match your specific use case, which
-should hopefully take less time and effort.
+This repository is a
+[cookiecutter](https://cookiecutter.readthedocs.io/en/1.7.2/) template for
+one-off cmdstanpy projects. It aims to reduce the amount of work you repeat
+every time you want to use cmdstanpy to analyse some data. Instead of writing
+everything from scratch, you can start with this template and edit it to match
+your specific use case, which should hopefully save some time and effort.
 
 ## Dependencies
 The only requirement in order to create a new project with
