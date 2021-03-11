@@ -1,4 +1,6 @@
-# cookiecutter-cmdstanpy: a template for one-off cmdstanpy projects
+# cookiecutter-cmdstanpy
+
+## A template for one-off cmdstanpy projects.
 
 So you have a nice idea about how to model some data, but your intended model
 can't easily be implemented with a generic solution like
