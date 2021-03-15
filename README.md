@@ -110,8 +110,9 @@ The template is made with the following workflow in mind:
    results. Possibly go back to step 1.
 8. Prepare real data, fit every model configuration to it and analyse the
    results. Possibly go back to step 1.
-9. Write up the results of the investigation in `report.md` and generate
-   a nicely formatted pdf file.
+9. Write up the results of the investigation in
+   [`report.md`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/10e127209c92ba3beafe29de11ab269ec030e436/%7B%7Bcookiecutter.repo_name%7D%7D/report.md)
+   and generate a nicely formatted pdf file.
 
 Steps 1 to 6 are already completed for the simple example model at
 [`src/stan/model.stan`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/stan/model.stan). Hopefully
