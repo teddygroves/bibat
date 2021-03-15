@@ -10,9 +10,7 @@ Luckily almost any statistical model can be implemented as a
 [cmdstanpy](https://cmdstanpy.readthedocs.io/) and
 [arviz](https://arviz-devs.github.io/arviz/) make it pretty straightforward to
 run these programs and analyse their results. Still, a lot of typing seems to
-lie in your future. 
-
-Unless...
+lie in your future. Unless...
 
 ## Overview
 
@@ -21,7 +19,7 @@ This repository is a
 one-off cmdstanpy projects. It aims to reduce the amount of work you repeat
 every time you want to use cmdstanpy to analyse some data. Instead of writing
 everything from scratch, you can start with this template and edit it to match
-your specific use case, which should hopefully save some time and effort.
+your specific use case.
 
 ## Dependencies
 The only requirement in order to create a new project with
@@ -89,21 +87,25 @@ analyse your model.
 The template is made with the following workflow in mind:
 
 1. Write one or more Stan programs implementing statistical models and store
-   them in the folder `src/stan`.
+   them in the folder
+   [`src/stan`](https://github.com/teddygroves/cookiecutter-cmdstanpy/tree/master/%7B%7Bcookiecutter.repo_name%7D%7D/src/stan).
 2. Write one or more functions for generating cmdstanpy input dictionaries that
    are compatible with your models and put these in the file
-   `src/pandas_to_cmdstanpy.py`.
+   [`src/pandas_to_cmdstanpy.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/pandas_to_cmdstanpy.py).
 3. Write functions for generating keyword arguments to the arviz function
-   `from_cmdstanpy` and put these in the file `src/cmdstanpy_to_arviz.py`.
+   `from_cmdstanpy` and put these in the file
+   [`src/cmdstanpy_to_arviz.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/master/%7B%7Bcookiecutter.repo_name%7D%7D/src/cmdstanpy_to_arviz.py).
 4. Choose some model configurations - i.e. a Stan program plus functions for
    generating cmdstanpy inputs and arviz keyword arguments - that you want to
    run and analyse. Put these in the list `MODEL_CONFIGURATIONS` in the file
-   `src/model_configurations_to_try.py`. See `src/model_configuration.py` for
-   the specification of a model configuration.
+   [`src/model_configurations_to_try.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/master/%7B%7Bcookiecutter.repo_name%7D%7D/src/model_configurations_to_try.py). See
+   [`src/model_configuration.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/master/%7B%7Bcookiecutter.repo_name%7D%7D/src/model_configuration.py)
+   for the specification of a model configuration.
 5. Write functions for generating fake data given known parameter values. Put
-   them in `src/fake_data_generation.py`.
+   them in
+   [`src/fake_data_generation.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/fake_data_generation.py).
 6. Write a function for preparing raw data and put it in
-   `src/data_preparation.py`.
+   [`src/data_preparation.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/data_preparation.py).
 7. Fit every model configuration using fake data and analyse the
    results. Possibly go back to step 1.
 8. Prepare real data, fit every model configuration to it and analyse the
@@ -112,10 +114,10 @@ The template is made with the following workflow in mind:
    a nicely formatted pdf file.
 
 Steps 1 to 6 are already completed for the simple example model at
-`src/stan/model.stan`. Hopefully there should be some common ground between this
-model and at least the first iteration of the custom model you would like to
-build, so that the template only need to be tweaked rather than completely
-re-written.
+[`src/stan/model.stan`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/stan/model.stan). Hopefully
+there should be some common ground between this model and at least the first
+iteration of the custom model you would like to build, so that the template
+only needs to be tweaked rather than completely re-written.
 
 Steps 7 to 9 should not require any custom writing, except for analysing the
 models' output. They can be completed with the following terminal commands:
@@ -135,5 +137,12 @@ make report.pdf          # step 9
 
 ## Contributing
 
-If you have a suggestion or comment, or find a bug then please file an issue or
-submit a pull request.
+All contributions are very welcome!
+
+If you have a specific suggestion for how cookiecutter-cmdstanpy could be
+improved, or if you find a bug then please file an issue or submit a pull
+request.
+
+Alternatively, if you have any more general thoughts or questions, please post
+them in the [discussions
+page](https://github.com/teddygroves/cookiecutter-cmdstanpy/discussions).
