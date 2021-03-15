@@ -2,7 +2,8 @@
 
 BIBLIOGRAPHY = bibliography.bib
 CMDSTAN_LOGS = $(shell find results/samples -type f -name "*.txt")
-STAN_FILES = $(shell find stan -type f \( -not -name "*.stan" -not -name "*.md" \))
+STAN_OBJECT_CODE = \
+  $(shell find src/stan -type f \( -not -name "*.stan" -not -name "*.md" \))
 SAMPLES = $(shell find results/samples -name "*.csv")
 FAKE_DATA = $(shell find data/fake -name "*.csv")
 PREPARED_DATA = $(shell find data/prepared -name "*.csv")
@@ -27,7 +28,7 @@ clean_data:
 	$(RM) $(FAKE_DATA) $(PREPARED_DATA)
 
 clean_stan:
-	$(RM) $(CMDSTAN_LOGS) $(STAN_FILES)
+	$(RM) $(CMDSTAN_LOGS) $(STAN_OBJECT_CODE)
 
 clean_results:
 	$(RM) $(SAMPLES) $(INFDS) $(LOOS) $(PLOTS) $(JSONS)
