@@ -1,12 +1,14 @@
 """Define a list of ModelConfiguration objects called MODEL_CONFIGURATIONS."""
 
 import os
-from typing import List
-from util import get_99_pct_params_ln, get_99_pct_params_n
-from model_configuration import ModelConfiguration
-from pandas_to_cmdstanpy import get_stan_input
-from cmdstanpy_to_arviz import get_infd_kwargs
+from .util import get_99_pct_params_ln, get_99_pct_params_n
+from .model_configuration import ModelConfiguration
+from .pandas_to_cmdstanpy import get_stan_input
+from .cmdstanpy_to_arviz import get_infd_kwargs
 
+
+# Location of this file
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Configure cmdstanpy.CmdStanModel.sample
 SAMPLE_KWARGS = dict(
@@ -19,7 +21,7 @@ SAMPLE_KWARGS = dict(
 # Configuration of model.stan with an interaction between covariates A and B.
 INTERACTION_CONFIG = ModelConfiguration(
     name="interaction",
-    stan_file=os.path.join("stan", "model.stan"),
+    stan_file=os.path.join(HERE, "stan", "model.stan"),
     stan_input_function=lambda df: get_stan_input(
         df,
         x_cols=["x1", "x2", "x1:x2"],
@@ -43,7 +45,7 @@ INTERACTION_CONFIG = ModelConfiguration(
 # Configuration of model.stan with no A:B interaction
 NON_INTERACTION_CONFIG = ModelConfiguration(
     name="no interaction",
-    stan_file=os.path.join("stan", "model.stan"),
+    stan_file=os.path.join(HERE, "stan", "model.stan"),
     stan_input_function=lambda df: get_stan_input(
         df,
         x_cols=["x1", "x2"],
@@ -64,7 +66,7 @@ NON_INTERACTION_CONFIG = ModelConfiguration(
 )
 
 # A list of model configurations to test
-MODEL_CONFIGURATIONS: List[ModelConfiguration] = [
+MODEL_CONFIGURATIONS = [
     INTERACTION_CONFIG,
     NON_INTERACTION_CONFIG,
 ]

@@ -4,8 +4,8 @@ from datetime import datetime
 import os
 import pandas as pd
 
-from fitting import generate_samples
-from model_configurations_to_try import MODEL_CONFIGURATIONS
+from src.fitting import generate_samples
+from src.model_configurations_to_try import MODEL_CONFIGURATIONS
 
 # File where a prepared csv of measurements can be found
 CSV_INPUT = os.path.join("data", "prepared", "data_prepared.csv")

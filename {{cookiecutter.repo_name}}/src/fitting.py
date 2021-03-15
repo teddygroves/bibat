@@ -6,14 +6,16 @@ import arviz as az
 from cmdstanpy import CmdStanModel
 from cmdstanpy.utils import jsondump
 import pandas as pd
-from model_configuration import ModelConfiguration
+from .model_configuration import ModelConfiguration
 
+# Location of this file
+HERE = os.path.dirname(os.path.abspath(__file__))
 
 # Where to save files
-LOO_DIR = os.path.join("results", "loo")
-SAMPLES_DIR = os.path.join("results", "samples")
-INFD_DIR = os.path.join("results", "infd")
-JSON_DIR = os.path.join("results", "input_data_json")
+LOO_DIR = os.path.join(HERE, "..", "results", "loo")
+SAMPLES_DIR = os.path.join(HERE, "..", "results", "samples")
+INFD_DIR = os.path.join(HERE, "..", "results", "infd")
+JSON_DIR = os.path.join(HERE, "..", "results", "input_data_json")
 
 
 def generate_samples(

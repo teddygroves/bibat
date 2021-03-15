@@ -2,7 +2,7 @@
 
 import os
 import pandas as pd
-from data_preparation import prepare_data
+from src.data_preparation import prepare_data
 
 # Where to find raw data and where to save prepared data: probably don't edit!
 RAW_DATA_DIR = os.path.join("data", "raw")

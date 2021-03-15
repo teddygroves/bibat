@@ -3,9 +3,9 @@ data/*/*
 !data/*/*.md
 results/*/*
 !results/*/*.md
-stan/*
-!stan/*.stan
-!stan/*.md
+src/stan/*
+!src/stan/*.stan
+!src/stan/*.md
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

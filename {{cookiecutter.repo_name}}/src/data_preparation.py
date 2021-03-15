@@ -2,7 +2,7 @@
 
 import pandas as pd
 
-from util import make_columns_lower_case
+from .util import make_columns_lower_case
 
 RENAMING_DICT = {"yButIThoughtIdAddSomeLetters": "y"}
 COLS_THAT_MUST_BE_NON_NULL = ["y"]

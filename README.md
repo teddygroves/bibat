@@ -89,20 +89,21 @@ analyse your model.
 The template is made with the following workflow in mind:
 
 1. Write one or more Stan programs implementing statistical models and store
-   them in the `stan` folder.
+   them in the folder `src/stan`.
 2. Write one or more functions for generating cmdstanpy input dictionaries that
    are compatible with your models and put these in the file
-   `pandas_to_cmdstanpy.py`.
+   `src/pandas_to_cmdstanpy.py`.
 3. Write functions for generating keyword arguments to the arviz function
-   `from_cmdstanpy` and put these in the file `cmdstanpy_to_arviz.py`.
+   `from_cmdstanpy` and put these in the file `src/cmdstanpy_to_arviz.py`.
 4. Choose some model configurations - i.e. a Stan program plus functions for
    generating cmdstanpy inputs and arviz keyword arguments - that you want to
    run and analyse. Put these in the list `MODEL_CONFIGURATIONS` in the file
-   `model_configurations_to_try.py`. See `model_configuration.py` for the
-   specification of a model configuration.
+   `src/model_configurations_to_try.py`. See `src/model_configuration.py` for
+   the specification of a model configuration.
 5. Write functions for generating fake data given known parameter values. Put
-   them in `fake_data_generation.py`.
-6. Write a function for preparing raw data and put it in `data_preparation.py`.
+   them in `src/fake_data_generation.py`.
+6. Write a function for preparing raw data and put it in
+   `src/data_preparation.py`.
 7. Fit every model configuration using fake data and analyse the
    results. Possibly go back to step 1.
 8. Prepare real data, fit every model configuration to it and analyse the
@@ -111,7 +112,7 @@ The template is made with the following workflow in mind:
    a nicely formatted pdf file.
 
 Steps 1 to 6 are already completed for the simple example model at
-`stan/model.stan`. Hopefully there should be some common ground between this
+`src/stan/model.stan`. Hopefully there should be some common ground between this
 model and at least the first iteration of the custom model you would like to
 build, so that the template only need to be tweaked rather than completely
 re-written.
