@@ -38,7 +38,7 @@ However, the code in the template will only work for python versions at least
 - arviz
 - cmdstanpy
 - numpy
-- scipy
+- sklearn
 - pandas
 
 These can be installed after creating your project by going to its root
@@ -88,53 +88,40 @@ The template is made with the following workflow in mind:
 
 1. Write one or more Stan programs implementing statistical models and store
    them in the folder
-   [`src/stan`](https://github.com/teddygroves/cookiecutter-cmdstanpy/tree/master/%7B%7Bcookiecutter.repo_name%7D%7D/src/stan).
+   [`src/stan`]({{cookiecutter.repo_name}}/src/stan).
 2. Write one or more functions for generating cmdstanpy input dictionaries that
-   are compatible with your models and put these in the file
-   [`src/pandas_to_cmdstanpy.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/pandas_to_cmdstanpy.py).
-3. Write functions for generating keyword arguments to the arviz function
-   `from_cmdstanpy` and put these in the file
-   [`src/cmdstanpy_to_arviz.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/master/%7B%7Bcookiecutter.repo_name%7D%7D/src/cmdstanpy_to_arviz.py).
-4. Choose some model configurations - i.e. a Stan program plus functions for
-   generating cmdstanpy inputs and arviz keyword arguments - that you want to
-   run and analyse. Put these in the list `MODEL_CONFIGURATIONS` in the file
-   [`src/model_configurations_to_try.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/master/%7B%7Bcookiecutter.repo_name%7D%7D/src/model_configurations_to_try.py). See
-   [`src/model_configuration.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/master/%7B%7Bcookiecutter.repo_name%7D%7D/src/model_configuration.py)
-   for the specification of a model configuration.
-5. Write functions for generating fake data given known parameter values. Put
-   them in
-   [`src/fake_data_generation.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/fake_data_generation.py).
-6. Write a function for preparing raw data and put it in
-   [`src/data_preparation.py`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/data_preparation.py).
-7. Fit every model configuration using fake data and analyse the
-   results. Possibly go back to step 1.
-8. Prepare real data, fit every model configuration to it and analyse the
-   results. Possibly go back to step 1.
-9. Write up the results of the investigation in
-   [`report.md`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/10e127209c92ba3beafe29de11ab269ec030e436/%7B%7Bcookiecutter.repo_name%7D%7D/report.md)
-   and generate a nicely formatted pdf file.
+   are compatible with your models. Put these in the file
+   [`src/data_preparation.py`]({{cookiecutter.repo_name}}/src/data_preparation.py)
+   and configure them with toml files in the folder
+   [`data_configurations`]({{cookiecutter.repo_name}}/data_configurations).
+3. Write some model configurations - i.e. toml files referring to a data
+   configuration and a Stan program and providing keyword arguments to
+   cmdstanpy's `sample` method. Put these in the folder
+   [`model_configurations`]({{cookiecutter.repo_name}}/model_configurations).
+4. Run the script
+   [`prepare_data.py`]({{cookiecutter.repo_name}}/prepare_data.py). This will
+   create a subfolder of
+   [`data/prepared`]({{cookiecutter.repo_name}}/data/prepared) containing all
+   the prepared data for each data configuration.
+5. Run the script
+   [`sample.py`]({{cookiecutter.repo_name}}/prepare_data.py). This will create a
+   subfolder of [`results/runs`]({{cookiecutter.repo_name}}/results/runs) for
+   each model configuration and populate it with the results of running the
+   specified model and data in each of three modes: prior, posterior and
+   cross-validation. The results are stored as netcdf files from which you can
+   easily load arviz `InferenceData` objects.
+6. Check out the results, then write up the results of your investigation in
+   [`report.md`]({{cookiecutter.repo_name}}/report.md) and generate a nicely
+   formatted pdf file by running `make report`.
 
-Steps 1 to 6 are already completed for the simple example model at
-[`src/stan/model.stan`](https://github.com/teddygroves/cookiecutter-cmdstanpy/blob/f04c78b15787c552db72f52a6a445aee2399ae67/%7B%7Bcookiecutter.repo_name%7D%7D/src/stan/model.stan). Hopefully
-there should be some common ground between this model and at least the first
-iteration of the custom model you would like to build, so that the template
-only needs to be tweaked rather than completely re-written.
+To illustrate how this is intended to work, these steps have are already
+completed for the simple example model at
+[`src/stan/model.stan`]({{cookiecutter.repo_name}}/src/stan/model.stan) and the
+example data configurations `interaction` and `no_interaction`. Hopefully there
+should be some common ground between this model and at least the first iteration
+of the custom model you would like to build, so that the template only needs to
+be tweaked rather than completely re-written.
 
-Steps 7 to 9 should not require any custom writing, except for analysing the
-models' output. They can be completed with the following terminal commands:
-
-```sh
-python fit_fake_data.py  # step 7
-
-# Analyse the results...
-
-python prepare_data.py   # step 8
-python fit_real_data.py
-
-# Analyse the results...
-
-make report.pdf          # step 9
-```
 
 ## Contributing
 

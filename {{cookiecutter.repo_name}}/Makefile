@@ -1,4 +1,4 @@
-.PHONY: clean-results clean-stan clean-all clean-pdf results
+.PHONY: clean-results clean-stan clean-all clean-pdf results report plots
 
 BIBLIOGRAPHY = bibliography.bib
 MARKDOWN_FILE = report.md
@@ -15,6 +15,8 @@ results:
 
 plots:
 	python analyse.py
+
+report: $(PDF_FILE)
 
 $(PDF_FILE): $(MARKDOWN_FILE) $(BIBLIOGRAPHY)
 	pandoc $< -o $@ $(PANDOCFLAGS)
