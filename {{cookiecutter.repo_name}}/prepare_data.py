@@ -1,5 +1,3 @@
-"""Prepare the data at RAW_DATA_CSV and save it to PREPARED_DATA_CSV."""
-
 import json
 import os
 
