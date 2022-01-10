@@ -21,6 +21,17 @@ every time you want to use cmdstanpy to analyse some data. Instead of writing
 everything from scratch, you can start with this template and edit it to match
 your specific use case.
 
+The strucutre is meant to be general enough to support a range of typical
+statistical workflows, from fitting a single model once to a single dataset to
+fitting arbitrary combinations of models and datasets in prior, posterior and kfold-cross-validation modes. 
+
+Unfortunately, covering all these possibilities meant introducing some
+abstraction in the form of two concepts that are specific to the template:
+**data configuration** and **model configuration**. A data configuration points
+to and configures a function that turns some raw data into a Stan input. A model
+configuration points to some prepared data in the form of a Stan input and a
+model in the form of a Stan program, configures Stan's sampler and specifies which modes to run the model in (currently the options are prior, posterior and cross validation).
+
 ## Dependencies
 The only requirement in order to create a new project with
 cookiecutter-cmdstanpy is the python package
