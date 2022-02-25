@@ -16,64 +16,35 @@ lie in your future. Unless...
 
 This repository is a
 [cookiecutter](https://cookiecutter.readthedocs.io/en/1.7.2/) template for
-one-off cmdstanpy projects. It aims to reduce the amount of work you repeat
-every time you want to use cmdstanpy to analyse some data. Instead of writing
-everything from scratch, you can start with this template and edit it to match
-your specific use case.
+cmdstanpy projects. It aims to reduce the amount of work you repeat every time
+you want to use cmdstanpy to analyse some data. Instead of writing everything
+from scratch, you can start with this template and edit it to match your
+specific use case.
 
 The strucutre is meant to be general enough to support a range of typical
 statistical workflows, from fitting a single model once to a single dataset to
 fitting arbitrary combinations of models and datasets in prior, posterior and kfold-cross-validation modes. 
 
-Unfortunately, covering all these possibilities meant introducing some
-abstraction in the form of two concepts that are specific to the template:
-**data configuration** and **model configuration**. A data configuration points
-to and configures a function that turns some raw data into a Stan input. A model
-configuration points to some prepared data in the form of a Stan input and a
-model in the form of a Stan program, configures Stan's sampler and specifies which modes to run the model in (currently the options are prior, posterior and cross validation).
+## How to use cookiecutter-cmdstanpy
 
-## Dependencies
-The only requirement in order to create a new project with
-cookiecutter-cmdstanpy is the python package
-[cookiecutter](https://cookiecutter.readthedocs.io/en/1.7.2/), which can be
-installed as follows:
+### Get cookiecutter
+
+First ensure you are using a recent python version (3.7 or above should work)
+and install the package
+[cookiecutter](https://cookiecutter.readthedocs.io/en/1.7.2/) as follows:
 
 ```sh
 pip install cookiecutter
 
 ```
 
-However, the code in the template will only work for python versions at least
-3.7, and assumes the following python libraries are available:
+Now download the template and customise it for your project by going to the
+directory where you want to put your project and entering the following command:
 
-- arviz
-- cmdstanpy
-- numpy
-- sklearn
-- pandas
-
-These can be installed after creating your project by going to its root
-directory and running this terminal command:
+### Use the template
 
 ```sh
-pip install -r requirements.txt
-```
-
-Cmdstanpy depends on [cmdstan](https://mc-stan.org/users/interfaces/cmdstan)
-and provides helpful utilities for installing it: see
-[here](https://cmdstanpy.readthedocs.io/en/v0.9.68/installation.html#install-cmdstan)
-for details.
-
-Finally, generating `report.pdf` with `make report.pdf` requires
-[pandoc](https://pandoc.org/) and [make](https://www.gnu.org/software/make/).
-
-## How to get started
-
-To download the template and customise it for your project, go to the directory
-where you want to put your project and enter the following command:
-
-```sh
-cookiecutter https://github.com/teddygroves/cookiecutter-cmdstanpy
+cookiecutter gh:teddygroves/cookiecutter-cmdstanpy
 
 ```
 
@@ -90,49 +61,172 @@ A folder with the repo name you chose should now appear in your current working
 directory, containing a lot of the writing you would otherwise have had to do
 yourself. 
 
-Now you can get started with tweaking the defaults so that they implement and
-analyse your model.
+### Install dependencies
+
+The template project requires the following python libraries:
+
+- arviz
+- cmdstanpy
+- numpy
+- sklearn
+- pandas
+- toml
+
+These can be installed after creating your project by going to its root
+directory and running this command:
+
+```sh
+pip install -r requirements.txt
+```
+
+Cmdstanpy depends on [cmdstan](https://mc-stan.org/users/interfaces/cmdstan) and
+provides helpful utilities for installing it: see
+[here](https://cmdstanpy.readthedocs.io/en/v0.9.68/installation.html#install-cmdstan)
+for details.
+
+Finally, the project also comes with a recipe for generating a pdf report file `report.pdf` from the markdown file `report.md` using the command `make report.pdf`. This recipe requires [pandoc](https://pandoc.org/).
+
+Now you can get started with tweaking the defaults so that they implement your analysis.
 
 ## Intended workflow
 
-The template is made with the following workflow in mind:
+The idea behind the template is to take advantage of cmdstanpy's file-based
+workflow to ensure reproducibility and persistence while using a standard
+directory structure to keep things organised.
 
-1. Write one or more Stan programs implementing statistical models and store
-   them in the folder
-   [`src/stan`]({{cookiecutter.repo_name}}/src/stan).
-2. Write one or more functions for generating cmdstanpy input dictionaries that
-   are compatible with your models. Put these in the file
-   [`src/data_preparation.py`]({{cookiecutter.repo_name}}/src/data_preparation.py)
-   and configure them with toml files in the folder
-   [`data_configurations`]({{cookiecutter.repo_name}}/data_configurations).
-3. Write some model configurations - i.e. toml files referring to a data
-   configuration and a Stan program and providing keyword arguments to
-   cmdstanpy's `sample` method. Put these in the folder
-   [`model_configurations`]({{cookiecutter.repo_name}}/model_configurations).
-4. Run the script
-   [`prepare_data.py`]({{cookiecutter.repo_name}}/prepare_data.py). This will
-   create a subfolder of
-   [`data/prepared`]({{cookiecutter.repo_name}}/data/prepared) containing all
-   the prepared data for each data configuration.
-5. Run the script
-   [`sample.py`]({{cookiecutter.repo_name}}/prepare_data.py). This will create a
-   subfolder of [`results/runs`]({{cookiecutter.repo_name}}/results/runs) for
-   each model configuration and populate it with the results of running the
-   specified model and data in each of three modes: prior, posterior and
-   cross-validation. The results are stored as netcdf files from which you can
-   easily load arviz `InferenceData` objects.
-6. Check out the results, then write up the results of your investigation in
-   [`report.md`]({{cookiecutter.repo_name}}/report.md) and generate a nicely
-   formatted pdf file by running `make report`.
+The template creates the following file structure:
 
-To illustrate how this is intended to work, these steps have are already
-completed for the simple example model at
-[`src/stan/model.stan`]({{cookiecutter.repo_name}}/src/stan/model.stan) and the
-example data configurations `interaction` and `no_interaction`. Hopefully there
-should be some common ground between this model and at least the first iteration
-of the custom model you would like to build, so that the template only needs to
-be tweaked rather than completely re-written.
+```sh
+.
+├── LICENSE
+├── Makefile
+├── README.md
+├── analyse.py
+├── bibliography.bib
+├── data
+│   ├── prepared
+│   │   └── readme.md
+│   └── raw
+│       ├── raw_measurements.csv
+│       └── readme.md
+├── model_configurations
+│   ├── interaction.toml
+│   ├── interaction_fake_data.toml
+│   └── no_interaction.toml
+├── prepare_data.py
+├── pyproject.toml
+├── report.md
+├── requirements.txt
+├── results
+│   └── runs
+│       └── readme.md
+├── sample.py
+└── src
+    ├── data_preparation.py
+    ├── model_configuration.py
+    ├── prepared_data.py
+    ├── readme.md
+    ├── sampling.py
+    ├── stan
+    │   ├── custom_functions.stan
+    │   ├── model.stan
+    │   └── readme.md
+    └── util.py
+```
 
+Entry-points to your analysis should live in `.py` files in the project root, such as `prepare_data.py`, `sample.py` and `analyse.py`. Most logic should go in python files in the `src` directory. In particular, Stan code should go in the directory `src/stan`.
+
+In particular, the file `data_preparation.py` should contain a function for each data-preparation variation you would like to investigate. These functions can be imported by the script `prepare_data.py` and used to write prepared data to subdirectories of `data/prepared`. The provided `PreparedData` class and the example logic in the files `prepare_data.py` aim to cover a wide range of data preparation workflows and carry out boilerplate tasks like reading and writing files, splitting data for cross-validation and handling boolean `likelihood` variables, so that adapting the code for your use case should hopefully be mostly a matter of changing substantive details in the file `src/data_preparation.py`.
+
+The folder `model_configurations` should contain `toml` files, each of which specifies a data/statistical model combination that you would like to investigate. The fields `name`, `stan_file` and `data_dir` must be entered, and a list of `modes` as well as tables `stanc_options`, `cpp_options`, `sample_kwargs` and `sample_kwargs.<mode>` can also be included. For example, here are the contents of the file `model_configurations/interaction.toml`:
+
+```toml
+name = "interaction"
+stan_file = "src/stan/model.stan"
+data_dir = "data/prepared/interaction"
+modes = ["prior", "posterior", "cross_validation"]
+
+[stanc_options]
+warn-pedantic = true
+
+[sample_kwargs]
+show_progress = true
+save_warmup = false
+iter_warmup = 2000
+iter_sampling = 2000
+
+[sample_kwargs.cross_validation]
+chains = 1
+```
+
+This model configuration is called "interaction", and uses the model at `src/stan/model.stan` and the data at `data/prepared/interaction`. It will run in `prior`, `posterior` and `cross_validation` modes, with pedantic warnings being raised when the model's Stan code is compiled. Some keyword arguments for cmdstanpy's `sample` method are set for all modes, and the `chains` argument is set to one for the mode `cross_validation`.
+
+The script `sample.py` will run each model configurations in all specified modes, convert the results to arviz InferenceData objects and save them in netcdf format in the directory `results/runs/<name-of-model-configuration>/`.
+
+The example script `analyse.py` looks at all completed model runs and compares their approximate leave-one-out cross-validation and exact k-fold cross-validation performance. This script could also contain code for drawing plots based on the results.
+
+The file `Makefile` has instructions for building the target `report.pdf` with pandoc, as well as phony targets for conveniently running the whole analysis (`make analysis`) and deleting files (`clean-stan`, `clean-report`, `clean-prepared-data`, `clean-results` and `clean-all`)
+
+Finally, the file `pyproject.toml` contains some default configuration for the common python developer tools `black`, `isort`, `pylint` and `pyright`.
+
+To get a better idea of how everything works, why not try running the example yourself, checking out the output and then tweaking something? You can do this by running `make analysis`: this will run `prepare_data.py`, then `sample.py` and then `analyse.py`.
+
+## Extending the template
+
+Perhaps your analysis involves fetching some data from the internet, and you would like to include the code that does the fetching alongside the code that implements the rest of your analysis. A way to do this that fits in nicely with the rest of the template would be to write a new script `fetch_data.py` that writes to `data/raw` and possibly a library file `fetching.py` with code for the script to import.
+
+Perhaps your data doesn't naturally fit into a single table, and you would like your analysis to assume that prepared data has two tables: `measurements` and `cats`. This can be done by first editing the `PreparedData` class:
+
+```python
+@dataclass
+class PreparedData:
+    name: str
+    coords: CoordDict
+    dims: Dict[str, Any]
+    measurements: pd.DataFrame
+    cats: pd.DataFrame
+    ...
+```
+
+Next go to `src/data_preparation.py` and add logic for processing a new `cats` dataframe:
+
+```python
+def prepare_data_cats_hats(measurements_raw: pd.DataFrame, cats_raw) -> PreparedData:
+    """Prepare data about cats with hats."""
+    
+    ... 
+    
+    return PreparedData(
+        name="cats_hats",
+        measurements=measurements,
+        cats=cats,
+        ...
+    )
+
+```
+
+Finally go to `prepare_data.py` and add logic for reading and writing the `cats`:
+
+```python
+...
+RAW_DATA_FILES = {
+    "raw_measurements": os.path.join(RAW_DIR, "raw_measurements.csv"),
+    "raw_cats": os.path.join(RAW_DIR, "raw_cats.csv"),
+}
+...
+def main():
+    ...
+        prepared_data = data_prep_function(
+            raw_data["raw_measurements"], raw_data["raw_cats"]
+        )
+        ...
+        measurements_file = os.path.join(output_dir, "measurements.csv")
+        cats_file = os.path.join(output_dir, "cats.csv")
+        ...
+        prepared_data.measurements.to_csv(measurements_file)
+        prepared_data.cats.to_csv(cats_file)
+        ...
+```
 
 ## Contributing
 
