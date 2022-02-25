@@ -1,4 +1,4 @@
-arviz>=0.16.0
+arviz>=0.11.4
 cmdstanpy>=1.0.1
 numpy
 pandas
