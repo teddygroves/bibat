@@ -1,0 +1,29 @@
+# This workflow tests the cookiecutter.
+
+name: Test cookiecutter-cmdstanpy
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name Install cookiecutter
+      run: pip install cookiecutter
+    - name: Use cookiecutter
+      run: |
+        cookiecutter --no-input --config-file tests/example_config.yml .
+        cd my_cool_project
+    - name: install dependencies
+      run: pip install -r requirements.txt
+    - name: Install cmdstan
+      run: install_cmdstan -v 2.29.0
+    - name: Run analysis
+      run: make analysis

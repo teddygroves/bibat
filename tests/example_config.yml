@@ -1,0 +1,7 @@
+default_context:
+  project_name: "My Cool Project"
+  repo_name: "my_cool_project"
+  author_name: "Dr Statistics"
+  description: "I used cookiecutter, cmdstanpy and arviz to do an analysis."
+  open_source_license: "MIT"
+
