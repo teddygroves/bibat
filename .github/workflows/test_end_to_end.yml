@@ -20,10 +20,9 @@ jobs:
     - name: Use cookiecutter
       run: |
         cookiecutter --no-input --config-file tests/example_config.yml .
-        cd my_cool_project
     - name: install dependencies
-      run: pip install -r requirements.txt
+      run: pip install -r my_cool_project/requirements.txt
     - name: Install cmdstan
       run: install_cmdstan -v 2.29.0
     - name: Run analysis
-      run: make analysis
+      run: cd my_cool_project && make analysis
