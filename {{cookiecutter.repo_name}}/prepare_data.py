@@ -1,77 +1,67 @@
+"""Read the data in RAW_DIR and save prepared data to PREPARED_DIR."""
+
 import json
 import os
 
 import pandas as pd
-import toml
 from cmdstanpy import write_stan_json
 
-from src.data_configuration import DataConfiguration
-from src.data_preparation import PREPARE_DATA_FUNCTIONS
-from src.prepared_data import PrepareDataFunction
+from src.data_preparation import (
+    prepare_data_fake_interaction,
+    prepare_data_interaction,
+    prepare_data_no_interaction,
+)
+from src.util import check_is_df, tree
 
-PREPARE_DATA_FUNCTIONS_BY_NAME = {f.__name__: f for f in PREPARE_DATA_FUNCTIONS}
+RAW_DIR = os.path.join("data", "raw")
+RAW_DATA_FILES = {
+    "raw_measurements": os.path.join(RAW_DIR, "raw_measurements.csv"),
+}
 
-# Where to find raw data and where to save prepared data: probably don't edit!
-RAW_DATA_DIR = os.path.join("data", "raw")
-PREPARED_DATA_DIR = os.path.join("data", "prepared")
-DATA_CONFIGURATION_DIR = "data_configurations"
-
-# Filenames of the input and output: edit these unless they are already what
-# you want
-RAW_DATA_CSV = "raw_measurements.csv"
-PREPARED_DATA_CSV = "data_prepared.csv"
+PREPARED_DIR = os.path.join("data", "prepared")
 
 
 def main():
-    config_files = sorted(
-        [
-            os.path.join(DATA_CONFIGURATION_DIR, f)
-            for f in os.listdir(DATA_CONFIGURATION_DIR)
-            if f.endswith(".toml")
-        ]
-    )
-    for config_file in config_files:
-        dc = DataConfiguration(**toml.load(config_file))
-        print(f"Preparing data for data configuration {dc.name}...")
-        assert (
-            dc.prepare_data_function in PREPARE_DATA_FUNCTIONS_BY_NAME.keys()
-        ), f"Unknown function {dc.prepare_data_function}"
-        prepare_data_function: PrepareDataFunction = (
-            PREPARE_DATA_FUNCTIONS_BY_NAME[dc.prepare_data_function]
-        )
-        raw_df = pd.read_csv(dc.raw_df)
-        prepped = prepare_data_function(dc.name, raw_df, dc.xcols, dc.n_folds)
-        output_dir = os.path.join(PREPARED_DATA_DIR, prepped.name)
+    """Save prepared data in the PREPARED_DATA_DIR."""
+    print("Reading raw data...")
+    raw_data = {
+        k: check_is_df(pd.read_csv(v, index_col=None))
+        for k, v in RAW_DATA_FILES.items()
+    }
+    print("Preparing data...")
+    for data_prep_function in [
+        prepare_data_interaction,
+        prepare_data_no_interaction,
+        prepare_data_fake_interaction,
+    ]:
+        prepared_data = data_prep_function(raw_data["raw_measurements"])
+        output_dir = os.path.join(PREPARED_DIR, prepared_data.name)
         cv_dir = os.path.join(output_dir, "stan_inputs_cv")
+        measurements_file = os.path.join(output_dir, "measurements.csv")
+        input_file_prior, input_file_posterior = (
+            os.path.join(output_dir, f"stan_input_{s}.json")
+            for s in ["prior", "posterior"]
+        )
         if not os.path.exists(output_dir):
             os.mkdir(output_dir)
+        if not os.path.exists(cv_dir):
             os.mkdir(cv_dir)
-        output_dir_files = {
-            "coords": "coords.json",
-            "dims": "dims.json",
-            "measurements": "measurements.csv",
-            "stan_input_prior": "stan_input_prior.json",
-            "stan_input_posterior": "stan_input_posterior.json",
-        }
-        output_dir_files = {
-            k: os.path.join(output_dir, v) for k, v in output_dir_files.items()
-        }
-        with open(output_dir_files["coords"], "w") as f:
-            json.dump(prepped.coords, f)
-        with open(output_dir_files["dims"], "w") as f:
-            json.dump(prepped.dims, f)
-        prepped.df.to_csv(output_dir_files["measurements"])
+        prepared_data.measurements.to_csv(measurements_file)
         write_stan_json(
-            output_dir_files["stan_input_prior"], prepped.stan_input_prior
+            input_file_posterior, prepared_data.stan_input_posterior
         )
-        write_stan_json(
-            output_dir_files["stan_input_posterior"],
-            prepped.stan_input_posterior,
-        )
-        for i, si in enumerate(prepped.stan_inputs_cv):
+        write_stan_json(input_file_prior, prepared_data.stan_input_prior)
+        for i, si in enumerate(prepared_data.stan_inputs_cv):
             f = os.path.join(cv_dir, f"split_{str(i)}.json")
             write_stan_json(f, si)
-    print("Data prepared!")
+        with open(os.path.join(output_dir, "coords.json"), "w") as f:
+            json.dump(prepared_data.coords, f)
+        with open(os.path.join(output_dir, "dims.json"), "w") as f:
+            json.dump(prepared_data.dims, f)
+        print(
+            f"Finished preparing data folder {output_dir}.\n Here are the resulting files:"
+        )
+        tree(str(output_dir))
 
 
 if __name__ == "__main__":

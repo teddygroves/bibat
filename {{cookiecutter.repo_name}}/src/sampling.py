@@ -2,6 +2,7 @@
 
 import json
 import os
+from typing import Optional
 
 import arviz as az
 from arviz.data.inference_data import InferenceData
@@ -18,9 +19,15 @@ def sample(
     coords: dict,
     dims: dict,
     sample_kwargs: dict,
+    cpp_options: Optional[dict],
+    stanc_options: Optional[dict],
 ) -> InferenceData:
     """Run cmdstanpy.CmdStanModel.sample and return an InferenceData."""
-    model = CmdStanModel(stan_file=stan_file)
+    model = CmdStanModel(
+        stan_file=stan_file,
+        cpp_options=cpp_options,
+        stanc_options=stanc_options,
+    )
     with open(input_json, "r") as f:
         stan_input = json.load(f)
     coords["ix_train"] = [i - 1 for i in stan_input["ix_train"]]

@@ -1,7 +1,10 @@
-name = "no_interaction"
+name = "interaction_fake_data"
 stan_file = "src/stan/model.stan"
-data_dir = "data/prepared/no_interaction"
+data_dir = "data/prepared/fake_interaction"
 modes = ["prior", "posterior", "cross_validation"]
+
+[stanc_options]
+warn-pedantic = true
 
 [sample_kwargs]
 show_progress = true

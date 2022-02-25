@@ -1,5 +1,0 @@
-name = "interaction"
-raw_df = "data/raw/raw_measurements.csv"
-prepare_data_function = "prepare_data_main"
-xcols = ["x1", "x2", "x1:x2"]
-n_folds = 7

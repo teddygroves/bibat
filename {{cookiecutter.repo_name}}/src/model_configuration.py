@@ -2,7 +2,7 @@
 
 import os
 from dataclasses import dataclass
-from typing import Dict, Optional
+from typing import List, Optional
 
 
 @dataclass
@@ -22,7 +22,8 @@ class ModelConfiguration:
     :param sample_kwargs: dictionary of keyword arguments to
     cmdstanpy.CmdStanModel.sample.
 
-    :param run_cross_validation: whether or not to run cross validation
+    :param modes: which modes to run the model in. Choose one or more of
+    "prior", "posterior" and "cross_validation"
 
     """
 
@@ -30,8 +31,9 @@ class ModelConfiguration:
     stan_file: str
     data_dir: str
     sample_kwargs: dict
-    run_cross_validation: bool = True
-    sample_kwargs_cross_validation: Optional[Dict] = None
+    modes: List[str]
+    cpp_options: Optional[dict] = None
+    stanc_options: Optional[dict] = None
 
     def __post_init__(self) -> None:
         """Handle windows paths correctly"""

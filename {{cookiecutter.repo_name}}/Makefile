@@ -9,11 +9,9 @@ PANDOCFLAGS =                         \
   --pdf-engine=xelatex                \
   --bibliography=$(BIBLIOGRAPHY)      
 
-results:
+analysis:
 	python prepare_data.py
 	python sample.py
-
-plots:
 	python analyse.py
 
 report: $(PDF_FILE)
