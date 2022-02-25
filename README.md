@@ -94,6 +94,8 @@ The idea behind the template is to take advantage of cmdstanpy's file-based
 workflow to ensure reproducibility and persistence while using a standard
 directory structure to keep things organised.
 
+The template is set up already filled in with an analysis of a linear regression problem, comparing the results of fitting a model with and without an interaction effect, and also seeing what happens when the model with the interaction effect is fit to fake data generated using its assumptions.
+
 The template creates the following file structure:
 
 ```sh
@@ -134,7 +136,7 @@ The template creates the following file structure:
     └── util.py
 ```
 
-Entry-points to your analysis should live in `.py` files in the project root, such as `prepare_data.py`, `sample.py` and `analyse.py`. Most logic should go in python files in the `src` directory. In particular, Stan code should go in the directory `src/stan`.
+Entry-points to your analysis should live in `.py` files in the project root, such as `prepare_data.py`, `sample.py` and `analyse.py`. Most logic should go in python files in the `src` directory. Stan code should go in the directory `src/stan`.
 
 In particular, the file `data_preparation.py` should contain a function for each data-preparation variation you would like to investigate. These functions can be imported by the script `prepare_data.py` and used to write prepared data to subdirectories of `data/prepared`. The provided `PreparedData` class and the example logic in the files `prepare_data.py` aim to cover a wide range of data preparation workflows and carry out boilerplate tasks like reading and writing files, splitting data for cross-validation and handling boolean `likelihood` variables, so that adapting the code for your use case should hopefully be mostly a matter of changing substantive details in the file `src/data_preparation.py`.
 
