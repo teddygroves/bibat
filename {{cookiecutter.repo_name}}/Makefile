@@ -1,4 +1,4 @@
-.PHONY: clean-results clean-stan clean-all clean-pdf results report plots
+.PHONY: clean-results clean-stan clean-all clean-report results report
 
 BIBLIOGRAPHY = bibliography.bib
 MARKDOWN_FILE = report.md
@@ -29,12 +29,8 @@ clean-results:
 clean-prepared-data:
 	$(RM) -r data/prepared/*/
 
-clean-plots:
-	$(RM) results/plots/*.png
-	$(RM) results/plots/*.svg
-
-clean_pdf:
+clean-report:
 	$(RM) $(PDF_FILE)
 
 
-clean-all: clean-prepared-data clean-stan clean-results clean-pdf
+clean-all: clean-prepared-data clean-stan clean-results clean-report
