@@ -11,14 +11,14 @@ jobs:
 
     strategy:
         matrix:
-            os: [ubuntu-latest, macos-latest, windows-latest]
+            os: [ubuntu-latest, windows-latest]
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.9
+    - name: Set up Python 3.8
       uses: actions/setup-python@v2
       with:
-        python-version: 3.9
+        python-version: 3.8
     - name: Install cookiecutter
       run: pip install cookiecutter
     - name: Use cookiecutter
