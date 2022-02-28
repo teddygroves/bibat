@@ -1,27 +1,18 @@
 # cookiecutter-cmdstanpy
 
-So you have a nice idea about how to model some data, but your intended model
-can't easily be implemented with a generic solution like
-[brms](https://paul-buerkner.github.io/brms/) or
-[bambi](https://bambinos.github.io/bambi/).
+A small statistical statistical analysis can often be done by a single script or notebook file. This is really nice because the file is easy to keep track of and work with. Unfortunately it usually happens that the single file starts to get a bit big: a few models have to be compared, there are a few data input options to consider, several plots need drawing, it would be nice to test the models against some fake data, and so on.
 
-Luckily almost any statistical model can be implemented as a
-[Stan](https://mc-stan.org/) program, and python libraries like
+Luckily [Stan](https://mc-stan.org/) and python libraries like
 [cmdstanpy](https://cmdstanpy.readthedocs.io/) and
-[arviz](https://arviz-devs.github.io/arviz/) make it pretty straightforward to
-run these programs and analyse their results. Still, a lot of typing seems to
-lie in your future. Unless...
+[arviz](https://arviz-devs.github.io/arviz/) support splitting your analysis up
+into multiple files when it starts getting unwieldy. Still, how exactly to do this is left up to the user and it can be tricky and tedious to decide and then remember the best way every time you start a new project.
 
-## Overview
+cookiecutter-cmdstanpy attempts to address this problem by implementing a
+flexible but still effort-saving template for medium to largish statistical
+analyis projects. Instead of writing everything from scratch, you can start with
+this template and edit it to match your specific use case.
 
-This repository is a
-[cookiecutter](https://cookiecutter.readthedocs.io/en/1.7.2/) template for
-cmdstanpy projects. It aims to reduce the amount of work you repeat every time
-you want to use cmdstanpy to analyse some data. Instead of writing everything
-from scratch, you can start with this template and edit it to match your
-specific use case.
-
-The strucutre is meant to be general enough to support a range of typical
+The structure is meant to be general enough to support a range of typical
 statistical workflows, from fitting a single model once to a single dataset to
 fitting arbitrary combinations of models and datasets in prior, posterior and kfold-cross-validation modes. 
 
@@ -260,7 +251,7 @@ Now when you run the script `prepare_data.py`, a new folder should be created at
 
 You might like to write a new statistical model including a term capturing the effect of a cat's hat type on its measurement. There are five types - "bowler", "trucker", "beanie", "stetson" and "wizard" - and you don't think they naturally fit on a cardinal or even ordinal scale.
 
-The first step is to write a Stan program `src/stan/model_cats_hats.stan` including the effect. This can be done by adding the Following lines to the packaged program `model.stan`.
+The first step is to write a Stan program `src/stan/model_cats_hats.stan` including the effect. This can be done by adding the following lines to the packaged program `model.stan`.
 
 ```stan
 data {
