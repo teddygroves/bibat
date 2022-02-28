@@ -111,7 +111,7 @@ def tree(
     print(dir_path.name)
     iterator = inner(dir_path, level=level)
     for line in islice(iterator, length_limit):
-        print(line)
+        print(line.encode("utf-8"))
     if next(iterator, None):
         print(f"... length_limit, {length_limit}, reached, counted:")
     print(
