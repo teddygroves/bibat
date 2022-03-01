@@ -12,7 +12,7 @@ from src.data_preparation import (
     prepare_data_interaction,
     prepare_data_no_interaction,
 )
-from src.util import check_is_df, tree
+from src.util import check_is_df
 
 RAW_DIR = os.path.join("data", "raw")
 RAW_DATA_FILES = {
@@ -58,10 +58,7 @@ def main():
             json.dump(prepared_data.coords, f)
         with open(os.path.join(output_dir, "dims.json"), "w") as f:
             json.dump(prepared_data.dims, f)
-        print(
-            f"Finished preparing data folder {output_dir}.\n Here are the resulting files:"
-        )
-        tree(str(output_dir))
+        print(f"Finished preparing data folder {output_dir}.")
 
 
 if __name__ == "__main__":
