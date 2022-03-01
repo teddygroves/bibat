@@ -5,7 +5,7 @@ A small statistical statistical analysis can often be done by a single script or
 Luckily [Stan](https://mc-stan.org/) and python libraries like
 [cmdstanpy](https://cmdstanpy.readthedocs.io/) and
 [arviz](https://arviz-devs.github.io/arviz/) support splitting your analysis up
-into multiple files when it starts getting unwieldy. Still, how exactly to do this is left up to the user and it can be tricky and tedious to decide and then remember the best way every time you start a new project.
+into multiple files when it starts getting unwieldy. Still, lots of decisions need to be made about how exactly to do this and it can be tricky and tedious to choose and implement a good layout and then remember it at the start of every new project.
 
 cookiecutter-cmdstanpy attempts to address this problem by implementing a
 flexible but still effort-saving template for medium to largish statistical
@@ -18,6 +18,13 @@ fitting arbitrary combinations of models and datasets in prior, posterior and kf
 
 ## How to use cookiecutter-cmdstanpy
 
+The steps are:
+
+1. Install cookiecutter
+2. Load the cookiecutter-cmdstanpy template
+3. Install other dependencies (e.g. cmdstanpy, cmdstan)
+4. Customise the template so that it implements your analysis
+
 ### Get cookiecutter
 
 First ensure you are using a recent python version (3.7 or above should work)
@@ -29,10 +36,8 @@ pip install cookiecutter
 
 ```
 
-Now download the template and customise it for your project by going to the
-directory where you want to put your project and entering the following command:
-
-### Use the template
+### Load cookiecutter-cmdstanpy
+To load cookiecutter-cmdstanpy, go to the directory where you want to put your project and run the following command:
 
 ```sh
 cookiecutter gh:teddygroves/cookiecutter-cmdstanpy
