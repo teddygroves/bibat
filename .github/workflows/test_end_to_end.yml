@@ -23,7 +23,7 @@ jobs:
       run: pip install cookiecutter
     - name: Use cookiecutter
       run: |
-        cookiecutter --no-input --config-file tests/example_config.yml .
+        cookiecutter --no-input --config-file tests/data/example_config.yml .
     - name: install dependencies
       run: pip install -r my_cool_project/requirements.txt
     - name: Install cmdstan

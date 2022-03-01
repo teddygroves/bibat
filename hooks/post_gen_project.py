@@ -1,10 +1,11 @@
 import os
+from shutil import rmtree
 
 REMOVE_PATHS = [
-    '{% if cookiecutter.create_writing_dir != "y" %} writing {% endif %}',
+    '{% if cookiecutter.create_writing_directory != "y" %} writing {% endif %}',
 ]
 
 for path in REMOVE_PATHS:
     path = path.strip()
     if path and os.path.exists(path):
-        os.rmdir(path)
+        rmtree(path)
