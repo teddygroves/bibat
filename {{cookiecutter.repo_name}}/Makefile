@@ -1,12 +1,13 @@
 .PHONY: clean-results clean-stan clean-all clean-report results report
 
-BIBLIOGRAPHY = bibliography.bib
-MARKDOWN_FILE = report.md
-PDF_FILE = report.pdf
+BIBLIOGRAPHY = writing/bibliography.bib
+MARKDOWN_FILE = writing/report.md
+PDF_FILE = writing/report.pdf
 PANDOCFLAGS =                         \
   --from=markdown                     \
   --highlight-style=pygments          \
   --pdf-engine=xelatex                \
+  --citeproc                          \
   --bibliography=$(BIBLIOGRAPHY)      
 
 analysis:
