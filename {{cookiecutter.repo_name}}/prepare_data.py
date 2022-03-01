@@ -7,6 +7,7 @@ import pandas as pd
 from cmdstanpy import write_stan_json
 
 from src.data_preparation import (
+    get_stan_inputs,
     prepare_data_fake_interaction,
     prepare_data_interaction,
     prepare_data_no_interaction,
@@ -46,12 +47,11 @@ def main():
             os.mkdir(output_dir)
         if not os.path.exists(cv_dir):
             os.mkdir(cv_dir)
+        si_prior, si_posterior, sis_cv = get_stan_inputs(prepared_data)
         prepared_data.measurements.to_csv(measurements_file)
-        write_stan_json(
-            input_file_posterior, prepared_data.stan_input_posterior
-        )
-        write_stan_json(input_file_prior, prepared_data.stan_input_prior)
-        for i, si in enumerate(prepared_data.stan_inputs_cv):
+        write_stan_json(input_file_posterior, si_posterior)
+        write_stan_json(input_file_prior, si_prior)
+        for i, si in enumerate(sis_cv):
             f = os.path.join(cv_dir, f"split_{str(i)}.json")
             write_stan_json(f, si)
         with open(os.path.join(output_dir, "coords.json"), "w") as f:

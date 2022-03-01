@@ -10,10 +10,11 @@ the corresponding code in the file prepare_data.py accordingly.
 """
 
 from functools import partial
-from typing import List
+from typing import List, Tuple
 
 import numpy as np
 import pandas as pd
+from sklearn.model_selection import KFold
 
 from src.prepared_data import PreparedData
 from src.util import (
@@ -131,3 +132,31 @@ def get_stan_input(
             "likelihood": int(likelihood),
         }
     )
+
+
+def get_stan_inputs(
+    prepared_data: PreparedData,
+) -> Tuple[StanInput, StanInput, List[StanInput]]:
+    """Get Stan input dictionaries for all modes from a PreparedData object."""
+    ix_all = list(range(len(prepared_data.measurements)))
+    stan_input_prior, stan_input_posterior = (
+        prepared_data.stan_input_function(
+            measurements=prepared_data.measurements,
+            train_ix=ix_all,
+            test_ix=ix_all,
+            likelihood=likelihood,
+        )
+        for likelihood in (False, True)
+    )
+    stan_inputs_cv = []
+    kf = KFold(prepared_data.number_of_cv_folds, shuffle=True)
+    for train, test in kf.split(prepared_data.measurements):
+        stan_inputs_cv.append(
+            prepared_data.stan_input_function(
+                measurements=prepared_data.measurements,
+                likelihood=True,
+                train_ix=list(train),
+                test_ix=list(test),
+            )
+        )
+    return stan_input_prior, stan_input_posterior, stan_inputs_cv
