@@ -52,14 +52,14 @@ information:
 - Author name (the name of your organisation/company/team will also work)
 - Project description
 - Open source license (can be one of MIT, BSD-3 or none)
+- Whether to create a writing directory
 
 A folder with the repo name you chose should now appear in your current working
-directory, containing a lot of the writing you would otherwise have had to do
-yourself. 
+directory, with a lot of the boilerplate work of setting up a cmdstanpy project already done. 
 
 ### Install dependencies
 
-The template project requires the following python libraries:
+The template project uses the following python libraries:
 
 - arviz
 - cmdstanpy
@@ -75,16 +75,13 @@ directory and running this command:
 pip install -r requirements.txt
 ```
 
-Cmdstanpy depends on [cmdstan](https://mc-stan.org/users/interfaces/cmdstan) and
-provides helpful utilities for installing it: see
-[here](https://cmdstanpy.readthedocs.io/en/v0.9.68/installation.html#install-cmdstan)
-for details.
+Cmdstanpy depends on [cmdstan](https://mc-stan.org/users/interfaces/cmdstan) and provides helpful utilities for installing it: see [here](https://cmdstanpy.readthedocs.io/en/v0.9.68/installation.html#install-cmdstan) for details.
 
-Finally, the project also comes with a recipe for generating a pdf report file `report.pdf` from the markdown file `report.md` using the command `make report.pdf`. This recipe requires [pandoc](https://pandoc.org/).
-
-Now you can get started with tweaking the defaults so that they implement your analysis.
+Finally, if you chose the option `y` at the prompt `create_writing_directory`, there will be a report file `writing/report.md` and a makefile recipe for building the target `writing/report.pdf` with [pandoc](https://pandoc.org/). Running this recipe with the command `make report` will only work if pandoc is installed.
 
 ## Intended workflow
+
+Now you can get started with tweaking the defaults so that they implement your analysis.
 
 The idea behind the template is to take advantage of cmdstanpy's file-based
 workflow to ensure reproducibility and persistence while using a standard
@@ -100,7 +97,6 @@ The template creates the following file structure:
 ├── Makefile
 ├── README.md
 ├── analyse.py
-├── bibliography.bib
 ├── data
 │   ├── prepared
 │   │   └── readme.md
@@ -113,23 +109,28 @@ The template creates the following file structure:
 │   └── no_interaction.toml
 ├── prepare_data.py
 ├── pyproject.toml
-├── report.md
 ├── requirements.txt
 ├── results
 │   └── runs
 │       └── readme.md
 ├── sample.py
-└── src
-    ├── data_preparation.py
-    ├── model_configuration.py
-    ├── prepared_data.py
-    ├── readme.md
-    ├── sampling.py
-    ├── stan
-    │   ├── custom_functions.stan
-    │   ├── model.stan
+├── src
+│   ├── data_preparation.py
+│   ├── model_configuration.py
+│   ├── prepared_data.py
+│   ├── readme.md
+│   ├── sampling.py
+│   ├── stan
+│   │   ├── custom_functions.stan
+│   │   ├── model.stan
+│   │   └── readme.md
+│   └── util.py
+└── writing
+    ├── bibliography.bib
+    ├── img
+    │   ├── example.png
     │   └── readme.md
-    └── util.py
+    └── report.md
 ```
 
 Entry-points to your analysis should live in `.py` files in the project root, such as `prepare_data.py`, `sample.py` and `analyse.py`. Most logic should go in python files in the `src` directory. Stan code should go in the directory `src/stan`.
