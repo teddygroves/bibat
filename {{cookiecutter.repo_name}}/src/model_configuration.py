@@ -25,6 +25,12 @@ class ModelConfiguration:
     :param modes: which modes to run the model in. Choose one or more of
     "prior", "posterior" and "cross_validation"
 
+    :param cpp_options: valid choices for the `cpp_options` argument to
+    CmdStanModel
+
+    :param stanc_options: valid choices for the `cpp_options` argument to
+    CmdStanModel
+
     """
 
     name: str
