@@ -382,3 +382,24 @@ request.
 Alternatively, if you have any more general thoughts or questions, please post
 them in the [discussions
 page](https://github.com/teddygroves/cookiecutter-cmdstanpy/discussions).
+
+If you'd like to contribute code changes, just follow the normal github workflow.
+
+To test changes to the template locally, I recommend avoiding having to complete the wizard every time by making a [yaml](https://yaml.org/) config file like this (copied from the file tests/data/example_config.yml):
+
+```yaml
+default_context:
+  project_name: "My Cool Project"
+  repo_name: "my_cool_project"
+  author_name: "Dr Statistics"
+  description: "I used cookiecutter, cmdstanpy and arviz to do an analysis."
+  open_source_license: "MIT"
+  create_writing_directory: "y"
+
+```
+
+You should now be able to create a `my_cool_project` cmdstanpy project like this:
+
+```
+cookiecutter --no-input --config-file path/to/config.yml path/to/cookiecutter-cmdstanpy
+```
