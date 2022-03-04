@@ -95,7 +95,7 @@ def process_measurements(measurements: pd.DataFrame) -> pd.DataFrame:
             check_is_df(measurements.rename(columns=NEW_COLNAMES))
             .pipe(make_columns_lower_case)
             .dropna(subset=DROPNA_COLS, axis=0)
-        ).drop_duplicates()
+        )
     ).copy()
     out["x1:x2"] = out["x1"] * out["x2"]
     return out

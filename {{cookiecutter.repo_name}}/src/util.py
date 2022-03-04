@@ -5,9 +5,10 @@ from typing import Dict, List, NewType, Union
 import numpy as np
 import pandas as pd
 
-StanInput = NewType(
-    "StanInput", Dict[str, Union[float, int, List[float], List[int]]]
-)
+StanInputNumber = Union[float, int]
+StanInputList = List[Union[StanInputNumber, "StanInputList"]]
+StanInputValue = Union[StanInputNumber, StanInputList]
+StanInput = NewType("StanInput", Dict[str, StanInputValue])
 CoordDict = NewType("CoordDict", Dict[str, List[str]])
 
 
@@ -26,15 +27,15 @@ def make_columns_lower_case(df: pd.DataFrame) -> pd.DataFrame:
     :param df: a pandas DataFrame
     """
     new = df.copy()
-    if isinstance(new.columns, pd.Index):
-        new.columns = pd.Index([c.lower() for c in new.columns])
-    elif isinstance(new.columns, pd.MultiIndex):
+    if isinstance(new.columns, pd.MultiIndex):
         new.columns = pd.MultiIndex.from_arrays(
             [
-                [c.lower() for c in new.columns.get_level_values(l)]
-                for l in new.columns.levels
+                [c.lower() for c in new.columns.get_level_values(i)]
+                for i in range(len(new.columns.levels))
             ]
         )
+    else:
+        new.columns = pd.Index([c.lower() for c in new.columns])
     return new
 
 
@@ -59,6 +60,6 @@ def stanify_dict(d: Dict) -> StanInput:
             out[k] = v.values.tolist()
         elif isinstance(v, np.ndarray):
             out[k] = v.tolist()
-        elif isinstance(v, (list, int, float)):
+        else:
             out[k] = v
     return StanInput(out)
