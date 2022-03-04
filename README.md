@@ -93,6 +93,7 @@ The template creates the following file structure:
 
 ```sh
 .
+├── CODE_OF_CONDUCT.md
 ├── LICENSE
 ├── Makefile
 ├── README.md
