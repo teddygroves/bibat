@@ -29,6 +29,6 @@ jobs:
     - name: Install cmdstan
       run: install_cmdstan -v 2.29.0
     - name: Run pytest
-      run: pytest
+      run: cd my_cool_project && pytest
     - name: Run analysis
       run: cd my_cool_project && make analysis
