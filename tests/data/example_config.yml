@@ -6,4 +6,5 @@ default_context:
   description: "I used cookiecutter, cmdstanpy and arviz to do an analysis."
   open_source_license: "MIT"
   create_writing_directory: "y"
+  create_tests_directory: "y"
 

@@ -3,6 +3,7 @@ from shutil import rmtree
 
 REMOVE_PATHS = [
     '{% if cookiecutter.create_writing_directory != "y" %} writing {% endif %}',
+    '{% if cookiecutter.create_tests_directory != "y" %} tests {% endif %}',
 ]
 
 for path in REMOVE_PATHS:
