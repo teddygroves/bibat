@@ -128,12 +128,9 @@ The template creates the following file structure:
 │   │   └── readme.md
 │   └── util.py
 ├── tests
-│   ├── __init__.py
 │   ├── test_integration
-│   │   ├── __init__.py
 │   │   └── test_data_preparation.py
 │   └── test_unit
-│       ├── __init__.py
 │       └── test_util.py
 └── writing
     ├── bibliography.bib
@@ -145,7 +142,7 @@ The template creates the following file structure:
 
 Entry-points to your analysis should live in `.py` files in the project root, such as `prepare_data.py`, `sample.py` and `analyse.py`. Most logic should go in python files in the `src` directory. Stan code should go in the directory `src/stan`. 
 
-Tests should go in the the optional `tests` directory. Some example tests are provided and can be triggered by running the command `pytest` from the project root.
+Tests should go in the the optional `tests` directory. Some example tests are provided and can be triggered by running the command `python -m pytest` from the project root.
 
 In particular, the file `data_preparation.py` should contain a function for each data-preparation variation you would like to investigate. These functions can be imported by the script `prepare_data.py` and used to write prepared data to subdirectories of `data/prepared`. The example logic in these files aims to cover a wide range of data preparation workflows and carry out boilerplate tasks like reading and writing files, splitting data for cross-validation and handling boolean `likelihood` variables, so that adapting the code for your use case should hopefully be mostly a matter of changing substantive details in the file `src/data_preparation.py`.
 

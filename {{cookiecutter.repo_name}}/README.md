@@ -21,8 +21,8 @@ This will run the following python scripts:
 - `prepare_data.py`
 - `sample.py`
 - `analyse.py`
-{% if cookiecutter.create_writing_directory == "y" %}
-# How to create a pdf report
+
+{% if cookiecutter.create_writing_directory == "y" %}# How to create a pdf report
 
 First make sure you have installed [pandoc](https://pandoc.org).
 
@@ -30,5 +30,14 @@ Now run this command from the project root:
 
 ```
 make report
+```
+{% endif %}
+
+{% if cookiecutter.create_tests_directory == "y" %}# How to run tests
+
+Run this command from the project root:
+
+```
+python -m pytest
 ```
 {% endif %}
