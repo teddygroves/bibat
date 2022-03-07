@@ -7,4 +7,5 @@ default_context:
   open_source_license: "MIT"
   create_writing_directory: "y"
   create_tests_directory: "y"
+  create_dotgithub_directory: "y"
 

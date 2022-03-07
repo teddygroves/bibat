@@ -1,0 +1,34 @@
+# GitHub workflow to install python 3.8, python libraries from requirements.txt
+# and cmdstanpy, then run pytest.
+
+# The "runs-on" and "strategy" headings make the workflow run on both ubuntu
+# and windows.
+
+# See here for more about GitHub workflows:
+# https://docs.github.com/en/actions/using-workflows
+
+name: Run pytest
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: {{ "${{"}} matrix.os {{ "}}" }}
+
+    strategy:
+        matrix:
+            os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install dependencies
+      run: pip install -r requirements.txt
+    - name: Install cmdstan
+      run: install_cmdstan -v 2.29.0
+    - name: Run pytest
+      run: python -m pytest
