@@ -90,10 +90,14 @@ directory structure to keep things organised.
 
 The template is set up already filled in with an analysis of a linear regression problem, comparing the results of fitting a model with and without an interaction effect, and also seeing what happens when the model with the interaction effect is fit to fake data generated using its assumptions.
 
-The template creates the following file structure:
+The template creates the following file structure (assuming you chose "y" at all the prompts starting `create`):
 
 ```sh
 .
+├── .github
+│   └── workflows
+│       └── run_pytest.yml
+├── .gitignore
 ├── CODE_OF_CONDUCT.md
 ├── LICENSE
 ├── Makefile

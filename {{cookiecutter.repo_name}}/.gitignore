@@ -1,11 +1,9 @@
-# Keep data, results and stan build files out of version control by default
+# Keep non-raw data out of version control by default
 data/*/*
-!data/*/*.md
-results/*/*
-!results/*/*.md
-src/stan/*
-!src/stan/*.stan
-!src/stan/*.md
+!data/raw/*
+
+# Keep results of model runs out of version control by default
+results/runs/*
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -55,9 +53,6 @@ coverage.xml
 # Translations
 *.mo
 *.pot
-
-# Django stuff:
-*.log
 
 # Sphinx documentation
 docs/_build/
