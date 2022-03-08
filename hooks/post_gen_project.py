@@ -2,15 +2,18 @@ import os
 from shutil import rmtree
 
 SPHINX_ONLY_PATHS = [
-    os.path.join("docs", "_build"),
-    os.path.join("docs", "_static"),
-    os.path.join("docs", "_templates"),
-    os.path.join("docs", "index.rst"),
-    os.path.join("docs", "make.bat"),
+    os.path.join("docs", f)
+    for f in (
+        "_build",
+        "_static",
+        "_templates",
+        "conf.py",
+        "index.rst",
+        "make.bat",
+    )
 ]
 MARKDOWN_ONLY_PATHS = [
-    os.path.join("docs", "report.md"),
-    os.path.join("docs", "bibliography.bib"),
+    os.path.join("docs", f) for f in ("report.md", "bibliography.bib")
 ]
 
 REMOVE_PATHS = [
