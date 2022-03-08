@@ -52,7 +52,7 @@ information:
 - Author name (the name of your organisation/company/team will also work)
 - Project description
 - Open source license (can be one of MIT, BSD-3 or none)
-- Whether to create a writing directory
+- Whether to create a docs directory, and if so in what format
 
 A folder with the repo name you chose should now appear in your current working
 directory, with a lot of the boilerplate work of setting up a cmdstanpy project already done. 
@@ -78,7 +78,7 @@ pip install -r requirements.txt
 
 Cmdstanpy depends on [cmdstan](https://mc-stan.org/users/interfaces/cmdstan) and provides helpful utilities for installing it: see [here](https://cmdstanpy.readthedocs.io/en/v0.9.68/installation.html#install-cmdstan) for details.
 
-Finally, if you chose the option `y` at the prompt `create_writing_directory`, there will be a report file `writing/report.md` and a makefile recipe for building the target `writing/report.pdf` with [pandoc](https://pandoc.org/). Running this recipe with the command `make report` will only work if pandoc is installed.
+Finally, if you chose the option `Markdown` at the prompt `docs_format`, there will be a directory called `docs` containing a report file `report.md` and a makefile with a recipe for building the target `report.pdf` with [pandoc](https://pandoc.org/). You should only choose this option if pandoc is installed.
 
 ## Intended workflow
 
@@ -90,7 +90,7 @@ directory structure to keep things organised.
 
 The template is set up already filled in with an analysis of a linear regression problem, comparing the results of fitting a model with and without an interaction effect, and also seeing what happens when the model with the interaction effect is fit to fake data generated using its assumptions.
 
-The template creates the following file structure (assuming you chose "y" at all the prompts starting `create`):
+The template creates the following file structure (assuming you chose `Markdown` at the `docs_format` prompt and `y` at all the `create` prompts):
 
 ```sh
 .
@@ -136,11 +136,12 @@ The template creates the following file structure (assuming you chose "y" at all
 │   │   └── test_data_preparation.py
 │   └── test_unit
 │       └── test_util.py
-└── writing
+└── docs
     ├── bibliography.bib
     ├── img
     │   ├── example.png
     │   └── readme.md
+    ├── Makefile
     └── report.md
 ```
 
@@ -177,7 +178,7 @@ The script `sample.py` will run each model configurations in all specified modes
 
 The example script `analyse.py` looks at all completed model runs and compares their approximate leave-one-out cross-validation and exact k-fold cross-validation performance. This script could also contain code for drawing plots based on the results.
 
-The file `Makefile` has instructions for building the target `report.pdf` with pandoc, as well as phony targets for conveniently running the whole analysis (`make analysis`) and deleting files (`clean-stan`, `clean-report`, `clean-prepared-data`, `clean-results` and `clean-all`)
+The file `Makefile` contains phony targets for conveniently running the whole analysis (`make analysis`) and deleting files (`clean-stan`, `clean-report`, `clean-prepared-data`, `clean-results` and `clean-all`).
 
 Finally, the file `pyproject.toml` contains some default configuration for the common python developer tools `black`, `isort`, `pylint` and `pyright`.
 
@@ -407,7 +408,9 @@ default_context:
   author_name: "Dr Statistics"
   description: "I used cookiecutter, cmdstanpy and arviz to do an analysis."
   open_source_license: "MIT"
-  create_writing_directory: "y"
+  docs_format: "Markdown"
+  create_tests_directory: "y"
+  create_dotgithub_directory: "y"
 
 ```
 

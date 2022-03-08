@@ -3,6 +3,7 @@ cmdstanpy>=1.0.1
 numpy
 pandas
 {% if cookiecutter.create_tests_directory == 'y' %}pytest{% endif %}
+{% if cookiecutter.docs_format == 'Sphinx' %}sphinx{% endif %}
 scipy
 sklearn
 toml

@@ -5,7 +5,7 @@ default_context:
   coc_contact: "dr@statistics.com"
   description: "I used cookiecutter, cmdstanpy and arviz to do an analysis."
   open_source_license: "MIT"
-  create_writing_directory: "y"
+  docs_format: "Markdown"
   create_tests_directory: "y"
   create_dotgithub_directory: "y"
 

@@ -22,11 +22,11 @@ This will run the following python scripts:
 - `sample.py`
 - `analyse.py`
 
-{% if cookiecutter.create_writing_directory == "y" %}# How to create a pdf report
+{% if cookiecutter.docs_format == "Markdown" %}# How to create a pdf report
 
 First make sure you have installed [pandoc](https://pandoc.org).
 
-Now run this command from the project root:
+Now run this command from the `docs` directory:
 
 ```
 make report
