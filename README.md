@@ -1,4 +1,4 @@
-# cookiecutter-cmdstanpy
+# cookiecutter-cmdstanpy-analysis
 
 A small statistical statistical analysis can often be done by a single script or notebook file. This is really nice because the file is easy to keep track of and work with. Unfortunately it usually happens that the single file starts to get a bit big: a few models have to be compared, there are a few data input options to consider, several plots need drawing, it would be nice to test the models against some fake data, and so on.
 
@@ -7,7 +7,7 @@ Luckily [Stan](https://mc-stan.org/) and python libraries like
 [arviz](https://arviz-devs.github.io/arviz/) support splitting your analysis up
 into multiple files when it starts getting unwieldy. Still, lots of decisions need to be made about how exactly to do this and it can be tricky and tedious to choose and implement a good layout and then remember it at the start of every new project.
 
-cookiecutter-cmdstanpy attempts to address this problem by implementing a
+cookiecutter-cmdstanpy-analysis attempts to address this problem by implementing a
 flexible but still effort-saving template for medium to largish statistical
 analyis projects. Instead of writing everything from scratch, you can start with
 this template and edit it to match your specific use case.
@@ -16,12 +16,12 @@ The structure is meant to be general enough to support a range of typical
 statistical workflows, from fitting a single model once to a single dataset to
 fitting arbitrary combinations of models and datasets in prior, posterior and kfold-cross-validation modes. 
 
-## How to use cookiecutter-cmdstanpy
+## How to use cookiecutter-cmdstanpy-analysis
 
 The steps are:
 
 1. Install cookiecutter
-2. Load the cookiecutter-cmdstanpy template
+2. Load the cookiecutter-cmdstanpy-analysis template
 3. Install other dependencies (e.g. cmdstanpy, cmdstan)
 4. Customise the template so that it implements your analysis
 
@@ -36,11 +36,11 @@ pip install cookiecutter
 
 ```
 
-### Load cookiecutter-cmdstanpy
-To load cookiecutter-cmdstanpy, go to the directory where you want to put your project and run the following command:
+### Load cookiecutter-cmdstanpy-analysis
+To load cookiecutter-cmdstanpy-analysis, go to the directory where you want to put your project and run the following command:
 
 ```sh
-cookiecutter gh:teddygroves/cookiecutter-cmdstanpy
+cookiecutter gh:teddygroves/cookiecutter-cmdstanpy-analysis
 
 ```
 
@@ -389,13 +389,13 @@ Now when you run the python script `sample.py`, results for the new model config
 
 All contributions are very welcome!
 
-If you have a specific suggestion for how cookiecutter-cmdstanpy could be
+If you have a specific suggestion for how cookiecutter-cmdstanpy-analysis could be
 improved, or if you find a bug then please file an issue or submit a pull
 request.
 
 Alternatively, if you have any more general thoughts or questions, please post
 them in the [discussions
-page](https://github.com/teddygroves/cookiecutter-cmdstanpy/discussions).
+page](https://github.com/teddygroves/cookiecutter-cmdstanpy-analysis/discussions).
 
 If you'd like to contribute code changes, just follow the normal github workflow.
 
@@ -417,5 +417,5 @@ default_context:
 You should now be able to create a `my_cool_project` cmdstanpy project like this:
 
 ```
-cookiecutter --no-input --config-file path/to/config.yml path/to/cookiecutter-cmdstanpy
+cookiecutter --no-input --config-file path/to/config.yml path/to/cookiecutter-cmdstanpy-analysis
 ```
