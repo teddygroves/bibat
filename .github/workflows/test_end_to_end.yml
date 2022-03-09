@@ -1,6 +1,6 @@
 # This workflow tests the cookiecutter.
 
-name: Test cookiecutter-cmdstanpy
+name: Test cookiecutter-cmdstanpy-analysis
 
 on: push
 
