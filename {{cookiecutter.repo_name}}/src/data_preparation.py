@@ -28,6 +28,12 @@ from src.util import (
 NEW_COLNAMES = {"yButIThoughtIdAddSomeLetters": "y"}
 DROPNA_COLS = ["y"]
 N_CV_FOLDS = 10
+DIMS = {
+    "b": ["covariate"],
+    "y": ["observation"],
+    "yrep": ["observation"],
+    "llik": ["observation"],
+}
 
 
 def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
@@ -36,8 +42,10 @@ def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     measurements = process_measurements(measurements_raw)
     return PreparedData(
         name="interaction",
-        coords=CoordDict({"covariate": x_cols}),
-        dims={"b": ["covariate"]},
+        coords=CoordDict(
+            {"covariate": x_cols, "observation": measurements.index.tolist()}
+        ),
+        dims=DIMS,
         measurements=measurements,
         number_of_cv_folds=N_CV_FOLDS,
         stan_input_function=partial(get_stan_input, x_cols=x_cols),
@@ -50,8 +58,10 @@ def prepare_data_no_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     measurements = process_measurements(measurements_raw)
     return PreparedData(
         name="no_interaction",
-        coords=CoordDict({"covariate": x_cols}),
-        dims={"b": ["covariate"]},
+        coords=CoordDict(
+            {"covariate": x_cols, "observation": measurements.index.tolist()}
+        ),
+        dims=DIMS,
         measurements=measurements,
         number_of_cv_folds=N_CV_FOLDS,
         stan_input_function=partial(get_stan_input, x_cols=x_cols),
@@ -69,8 +79,10 @@ def prepare_data_fake_interaction(
     measurements["y"] = np.random.normal(yhat, TRUE_PARAMS["sigma"])
     return PreparedData(
         name="fake_interaction",
-        coords=CoordDict({"covariate": x_cols}),
-        dims={"b": ["covariate"]},
+        coords=CoordDict(
+            {"covariate": x_cols, "observation": measurements.index.tolist()}
+        ),
+        dims=DIMS,
         measurements=measurements,
         number_of_cv_folds=N_CV_FOLDS,
         stan_input_function=partial(get_stan_input, x_cols=x_cols),
@@ -108,15 +120,7 @@ def get_stan_input(
     train_ix: List[int],
     test_ix: List[int],
 ) -> StanInput:
-    """Turn a processed dataframe into a Stan input.
-
-    You can change the inputs to this function, but remember to also edit the
-    PreparedData class accordingly. In particular, for analyses involving exact
-    cross-validation you will probably want to keep the `train_ix` and `test_ix`
-    arguments, and for analyses involving both prior and posterior modes you
-    should keep the argument `likelihood`.
-
-    """
+    """Turn a processed dataframe into a Stan input."""
     return stanify_dict(
         {
             "N": len(measurements),

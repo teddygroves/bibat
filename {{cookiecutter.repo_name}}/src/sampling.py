@@ -36,6 +36,7 @@ def sample(
     return az.from_cmdstanpy(
         posterior=mcmc,
         log_likelihood="llik",
+        posterior_predictive="yrep",
         observed_data=stan_input,
         coords=coords,
         dims=dims,

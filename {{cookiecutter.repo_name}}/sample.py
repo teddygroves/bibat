@@ -45,7 +45,11 @@ def main():
                         stanc_options=mc.stanc_options,
                         cpp_options=mc.cpp_options,
                         input_json=input_json_file,
-                        coords=coords,
+                        coords={
+                            k: v
+                            for k, v in coords.items()
+                            if k != "observation"
+                        },
                         dims=dims,
                         sample_kwargs=sample_kwargs,
                     ).get("log_likelihood")
