@@ -38,7 +38,10 @@ EXAMPLE_RAW_MEASUREMENTS = pd.DataFrame(
                     "x1:x2": [1, 4, 9, 1, 4, 9, 1, 4, 9, 1, 4],
                 }
             ),
-            {"covariate": ["x1", "x2", "x1:x2"]},
+            {
+                "covariate": ["x1", "x2", "x1:x2"],
+                "observation": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            },
         ),
         (
             prepare_data_no_interaction,
@@ -52,7 +55,10 @@ EXAMPLE_RAW_MEASUREMENTS = pd.DataFrame(
                     "x1:x2": [1, 4, 9, 1, 4, 9, 1, 4, 9, 1, 4],
                 }
             ),
-            {"covariate": ["x1", "x2"]},
+            {
+                "covariate": ["x1", "x2", "x1:x2"],
+                "observation": [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            },
         ),
     ],
 )
