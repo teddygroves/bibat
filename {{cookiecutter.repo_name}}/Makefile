@@ -1,18 +1,21 @@
-.PHONY: clean-results clean-stan clean-all results 
+.PHONY: clean-runs clean-plots clean-stan clean-all analysis
 
 analysis:
 	python prepare_data.py
 	python sample.py
-	python analyse.py
+	jupyter execute investigate.ipynb
 
 clean-stan:
 	$(RM) $(shell find ./src/stan -perm +100 -type f) # remove binary files
 	$(RM) ./src/stan/*.hpp
 
-clean-results:
+clean-runs:
 	$(RM) -r results/runs/*/
+
+clean-plots:
+	$(RM) -r results/plots/*.png
 
 clean-prepared-data:
 	$(RM) -r data/prepared/*/
 
-clean-all: clean-prepared-data clean-stan clean-results
+clean-all: clean-prepared-data clean-stan clean-runs clean-plots

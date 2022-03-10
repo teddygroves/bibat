@@ -63,6 +63,7 @@ The template project uses the following python libraries:
 
 - arviz
 - cmdstanpy
+- jupyter
 - numpy
 - sklearn
 - pandas
@@ -102,7 +103,7 @@ The template creates the following file structure (assuming you chose `Markdown`
 ├── LICENSE
 ├── Makefile
 ├── README.md
-├── analyse.py
+├── investigate.ipynb
 ├── data
 │   ├── prepared
 │   │   └── readme.md
@@ -145,7 +146,7 @@ The template creates the following file structure (assuming you chose `Markdown`
     └── report.md
 ```
 
-Entry-points to your analysis should live in `.py` files in the project root, such as `prepare_data.py`, `sample.py` and `analyse.py`. Most logic should go in python files in the `src` directory. Stan code should go in the directory `src/stan`. 
+Entry-points to your analysis should live in `.py` files in the project root, such as `prepare_data.py` and `sample.py`, or perhaps Jupyter notebooks like `investigate.ipynb`. Most logic should go in python files in the `src` directory. Stan code should go in the directory `src/stan`. 
 
 Tests should go in the the optional `tests` directory. Some example tests are provided and can be triggered by running the command `python -m pytest` from the project root.
 
@@ -176,13 +177,13 @@ This model configuration is called "interaction", and uses the model at `src/sta
 
 The script `sample.py` will run each model configurations in all specified modes, convert the results to arviz InferenceData objects and save them in netcdf format in the directory `results/runs/<name-of-model-configuration>/`.
 
-The example script `analyse.py` looks at all completed model runs and compares their approximate leave-one-out cross-validation and exact k-fold cross-validation performance. This script could also contain code for drawing plots based on the results.
+The example Jupyter notebook `investigate.py` looks at all completed model runs and compares their approximate leave-one-out cross-validation and exact k-fold cross-validation performance. It also plots the runs' marginal posterior predictive distributions.
 
 The file `Makefile` contains phony targets for conveniently running the whole analysis (`make analysis`) and deleting files (`clean-stan`, `clean-report`, `clean-prepared-data`, `clean-results` and `clean-all`).
 
 Finally, the file `pyproject.toml` contains some default configuration for the common python developer tools `black`, `isort`, `pylint` and `pyright`.
 
-To get a better idea of how everything works, why not try running the example yourself, checking out the output and then tweaking something? You can do this by running `make analysis`: this will run `prepare_data.py`, then `sample.py` and then `analyse.py`.
+To get a better idea of how everything works, why not try running the example yourself, checking out the output and then tweaking something? You can do this by running `make analysis`: this will run `prepare_data.py`, then `sample.py` and then `investigate.ipynb`.
 
 ## Customising the template
 
@@ -269,7 +270,7 @@ Now when you run the script `prepare_data.py`, a new folder should be created at
 
 ### Adding a partially pooled intercept effect for a categorical variable
 
-You might like to write a new statistical model including a term capturing the effect of a cat's hat type on its measurement. There are five types - "bowler", "trucker", "beanie", "stetson" and "wizard" - and you don't think they naturally fit on a cardinal or even ordinal scale.
+You might like to write a new statistical model including a term capturing the effect of a cat's hat type on its measurement. There are five hat types and you don't think they naturally fit on a cardinal or even ordinal scale: a nice option is to add a partially-pooled intercept parameter to the model.
 
 The first step is to write a Stan program `src/stan/model_cats_hats.stan` including the effect. This can be done by adding the following lines to the packaged program `model.stan`.
 
