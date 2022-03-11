@@ -16,11 +16,11 @@ install_cmdstan
 
 To run the analysis, run the command `make analysis` from the project root.
 
-This will run the following python scripts:
+This will run the following commands
 
-- `prepare_data.py`
-- `sample.py`
-- `analyse.py`
+- `python prepare_data.py`
+- `python sample.py`
+- `jupyter execute investigate.ipynb`
 
 {% if cookiecutter.docs_format == "Markdown" %}# How to create a pdf report
 
