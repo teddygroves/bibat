@@ -6,7 +6,7 @@ cookiecutter-cmdstanpy analysis is a `cookiecutter <https://cookiecutter.readthe
 
 Documentation
 =============
-Check out cookiecutter-cmdstanpy-analysis's documentation at XXXXXXXX.
+Check out cookiecutter-cmdstanpy-analysis's documentation at `https://cookiecutter-cmdstanpy-analysis.readthedocs.io <https://cookiecutter-cmdstanpy-analysis.readthedocs.io>`_.
 
 Quick Start
 ===========
