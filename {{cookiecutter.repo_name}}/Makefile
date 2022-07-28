@@ -12,10 +12,6 @@ endif
 $(ACTIVATE_VENV_BINARY):
 	python -m venv .venv --prompt={{cookiecutter.repo_name}}
 
-$(REQUIREMENTS_FILE): $(ACTIVATE_VENV_BINARY)
-	pip install --upgrade pip
-	pip install -r $(REQUIREMENTS_FILE)
-
 analysis: $(ACTIVATE_VENV_BINARY) $(REQUIREMENTS_FILE) $(CMDSTAN)
 	. $(ACTIVATE_VENV_BINARY) && python -m pip install --upgrade pip && python -m pip install -r $(REQUIREMENTS_FILE)
 	install_cmdstan $(INSTALL_CMDSTAN_FLAGS)
