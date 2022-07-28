@@ -26,5 +26,3 @@ jobs:
         cookiecutter --no-input --config-file tests/data/example_config.yml .
     - name: Run analysis
       run: cd my_cool_project && make analysis
-    - name: Run pytest
-      run: cd my_cool_project && python -m pytest
