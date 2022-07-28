@@ -2,6 +2,8 @@
 
 ACTIVATE_VENV_BINARY = .venv/bin/activate
 REQUIREMENTS_FILE = requirements.txt
+PIP=.venv/bin/pip
+
 
 ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS = --compiler
@@ -17,7 +19,7 @@ $(REQUIREMENTS_FILE): $(ACTIVATE_VENV_BINARY)
 	pip install -r $(REQUIREMENTS_FILE)
 
 analysis: $(ACTIVATE_VENV_BINARY) $(REQUIREMENTS_FILE) $(CMDSTAN)
-	. $(ACTIVATE_VENV_BINARY) && pip install --upgrade pip && pip install -r $(REQUIREMENTS_FILE)
+	. $(ACTIVATE_VENV_BINARY) && $(PIP) install -r $(REQUIREMENTS_FILE)
 	install_cmdstan $(INSTALL_CMDSTAN_FLAGS)
 	python prepare_data.py
 	python sample.py
