@@ -3,12 +3,10 @@
 ACTIVATE_VENV_BINARY = .venv/bin/activate
 REQUIREMENTS_FILE = requirements.txt
 
-ifndef CMDSTAN
-	CMDSTAN = ~/.cmdstan
-endif
-
 ifeq ($(OS),Windows_NT)
-	INSTALL_CMDSTAN_CMD += --compiler
+	INSTALL_CMDSTAN_FLAGS = --compiler
+else
+	INSTALL_CMDSTAN_FLAGS =
 endif
 
 $(ACTIVATE_VENV_BINARY):
@@ -18,15 +16,9 @@ $(REQUIREMENTS_FILE): $(ACTIVATE_VENV_BINARY)
 	pip install --upgrade pip
 	pip install -r $(REQUIREMENTS_FILE)
 
-$(CMDSTAN):
-	ifeq ($(OS),Windows_NT)
-		install_cmdstan --compiler
-	else
-		install_cmdstan
-	endif
-
 analysis: $(ACTIVATE_VENV_BINARY) $(REQUIREMENTS_FILE) $(CMDSTAN)
 	. $(ACTIVATE_VENV_BINARY) && pip install --upgrade pip && pip install -r $(REQUIREMENTS_FILE)
+	install_cmdstan $(INSTALL_CMDSTAN_FLAGS)
 	python prepare_data.py
 	python sample.py
 	jupyter execute investigate.ipynb
