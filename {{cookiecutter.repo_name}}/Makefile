@@ -1,6 +1,6 @@
 .PHONY: clean-runs clean-plots clean-stan clean-all analysis
 
-ACTIVATE_VENV = source .venv/bin/activate
+ACTIVATE_VENV = .venv/bin/activate
 REQUIREMENTS_FILE = requirements.txt
 
 ifeq ($(OS),Windows_NT)
