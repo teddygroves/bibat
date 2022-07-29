@@ -3,20 +3,12 @@
 
 {{cookiecutter.description}}
 
-# How to install dependencies
-
-Run this command from the project root:
-
-```
-pip install -r requirements.txt
-install_cmdstan
-```
-
 # How to run the analysis
 
-To run the analysis, run the command `make analysis` from the project root.
-
-This will run the following commands
+To run the analysis, run the command `make analysis` from the project root. This
+will install a fresh virtual environment if one doesn't exist already, activate
+it and install python dependencies and cmdstan, then run the analysis with the
+following commands:
 
 - `python prepare_data.py`
 - `python sample.py`

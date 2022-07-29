@@ -24,11 +24,5 @@ jobs:
     - name: Use cookiecutter
       run: |
         cookiecutter --no-input --config-file tests/data/example_config.yml .
-    - name: Install dependencies
-      run: pip install -r my_cool_project/requirements.txt
-    - name: Install cmdstan
-      run: install_cmdstan -v 2.29.0
-    - name: Run pytest
-      run: cd my_cool_project && python -m pytest
     - name: Run analysis
       run: cd my_cool_project && make analysis

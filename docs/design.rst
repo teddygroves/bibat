@@ -94,7 +94,7 @@ The project root directory contains project-level configuration files, a Makefil
 
 The script `prepare_data.py` imports data preparation functions from :literal:`src/data_preparation.py` and uses them to convert raw data from the directory :literal:`data/raw` into subdirectories of `data/prepared`.
 
-The script `sample.py` runs each model configuration file in the `model_configurations` in all specified modes, converts the results to arviz :literal:`InferenceData` objects and save them in netcdf format in the directory :literal:`results/runs/<name-of-model-configuration>/`.
+The script `sample.py` runs each model configuration file in the `model_configurations` in all specified modes, converts the results to arviz :literal:`InferenceData` objects and save them in json format in the directory :literal:`results/runs/<name-of-model-configuration>/`.
 
 The example Jupyter notebook `investigate.py` looks at all completed model runs and compares their approximate leave-one-out cross-validation and exact k-fold cross-validation performance. It also plots the runs' marginal posterior predictive distributions.
 
