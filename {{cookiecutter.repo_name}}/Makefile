@@ -5,7 +5,7 @@ REQUIREMENTS_FILE = requirements.txt
 
 ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS = --compiler
-	ACTIVATE_VENV = .venv\Scripts\Activate.ps1
+	ACTIVATE_VENV = .venv/Scripts/Activate.ps1
 else
 	INSTALL_CMDSTAN_FLAGS =
 endif
