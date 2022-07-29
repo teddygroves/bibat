@@ -1,11 +1,11 @@
 .PHONY: clean-runs clean-plots clean-stan clean-all analysis
 
-ACTIVATE_VENV = .venv/bin/activate
+ACTIVATE_VENV = source .venv/bin/activate
 REQUIREMENTS_FILE = requirements.txt
 
 ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS = --compiler
-	ACTIVATE_VENV = .venv/Scripts/Activate.bat
+	ACTIVATE_VENV = .venv/Scripts/activate
 else
 	INSTALL_CMDSTAN_FLAGS =
 endif
@@ -14,14 +14,14 @@ $(ACTIVATE_VENV):
 	python -m venv .venv --prompt={{cookiecutter.repo_name}}
 
 env: $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
-	. $(ACTIVATE_VENV) && (\
+	$(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
 	  python -m pip install -r $(REQUIREMENTS_FILE); \
 	  install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
 	)
 
 analysis: env
-	. $(ACTIVATE_VENV) && (\
+	$(ACTIVATE_VENV) && (\
 	  python -m pytest; \
 	  python prepare_data.py; \
 	  python sample.py; \
