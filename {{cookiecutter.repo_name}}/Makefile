@@ -14,14 +14,14 @@ $(ACTIVATE_VENV):
 	python -m venv .venv --prompt={{cookiecutter.repo_name}}
 
 env: $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
-	$(ACTIVATE_VENV) && (\
+	. $(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
 	  python -m pip install -r $(REQUIREMENTS_FILE); \
 	  install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
 	)
 
 analysis: env
-	$(ACTIVATE_VENV) && (\
+	. $(ACTIVATE_VENV) && (\
 	  python -m pytest; \
 	  python prepare_data.py; \
 	  python sample.py; \
