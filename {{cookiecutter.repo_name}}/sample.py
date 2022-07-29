@@ -35,7 +35,7 @@ def main():
             if mode in mc.sample_kwargs.keys():
                 sample_kwargs = {**sample_kwargs, **mc.sample_kwargs[mode]}
             if mode == "cross_validation":
-                llik_file = os.path.join(run_dir, "llik_cv.nc")
+                llik_file = os.path.join(run_dir, "llik_cv.json")
                 lliks = []
                 cv_input_dir = os.path.join(mc.data_dir, "stan_inputs_cv")
                 for f in sorted(os.listdir(cv_input_dir)):
@@ -54,13 +54,14 @@ def main():
                         sample_kwargs=sample_kwargs,
                     ).get("log_likelihood")
                     lliks.append(llik)
-                full_llik = xarray.concat(lliks, dim="ix_test")
+                full_llik = xarray.concat(lliks, dim="ix_test").to_dict()
                 print(
                     f"\n***Writing out-of-sample log likelihoods to {llik_file}***\n"
                 )
-                full_llik.to_netcdf(llik_file)
+                with open(llik_file, "w") as f:
+                    json.dump(full_llik, f)
             else:
-                idata_file = os.path.join(run_dir, f"{mode}.nc")
+                idata_file = os.path.join(run_dir, f"{mode}.json")
                 input_json = os.path.join(
                     mc.data_dir, f"stan_input_{mode}.json"
                 )
@@ -75,7 +76,7 @@ def main():
                     sample_kwargs=sample_kwargs,
                 )
                 print(f"\n***Writing inference data to {idata_file}***\n")
-                idata.to_netcdf(idata_file)
+                idata.to_json(idata_file)
 
 
 if __name__ == "__main__":
