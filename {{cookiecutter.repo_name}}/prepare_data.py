@@ -43,10 +43,9 @@ def main():
             os.path.join(output_dir, f"stan_input_{s}.json")
             for s in ["prior", "posterior"]
         )
-        if not os.path.exists(output_dir):
-            os.mkdir(output_dir)
-        if not os.path.exists(cv_dir):
-            os.mkdir(cv_dir)
+        for d in [PREPARED_DIR, output_dir, cv_dir]:
+            if not os.path.exists(d):
+                os.mkdir(d)
         si_prior, si_posterior, sis_cv = get_stan_inputs(prepared_data)
         prepared_data.measurements.to_csv(measurements_file)
         write_stan_json(input_file_posterior, si_posterior)
