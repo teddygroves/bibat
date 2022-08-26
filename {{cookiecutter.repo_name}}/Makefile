@@ -22,7 +22,7 @@ env: $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
 
 analysis: env
 	. $(ACTIVATE_VENV) && (\
-	  python -m pytest; \
+	  {% if cookiecutter.create_tests_directory %}python -m pytest; \{% endif %}
 	  python prepare_data.py; \
 	  python sample.py; \
 	  jupyter execute investigate.ipynb; \
