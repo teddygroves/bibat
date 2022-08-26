@@ -26,8 +26,9 @@ def main():
         with open(os.path.join(mc.data_dir, "dims.json"), "r") as f:
             dims = json.load(f)
         run_dir = os.path.join(RESULTS_DIR, mc.name)
-        if not os.path.exists(run_dir):
-            os.mkdir(run_dir)
+        for d in [RESULTS_DIR, run_dir]:
+            if not os.path.exists(d):
+                os.mkdir(d)
         for mode in mc.modes:
             sample_kwargs = {
                 k: v for k, v in mc.sample_kwargs.items() if k not in mc.modes
