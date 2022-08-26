@@ -1,6 +1,7 @@
 arviz>=0.11.4
 cmdstanpy>=1.0.1
 jupyter
+LovelyPlots
 numpy
 pandas
 {% if cookiecutter.create_tests_directory == 'y' %}pytest{% endif %}
