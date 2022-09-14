@@ -18,11 +18,11 @@ You can try out cookiecutter-cmdstanpy-analysis like this:
     $ pip install cookiecutter
     $ cookiecutter gh:teddygroves/cookiecutter-cmdstanpy-analysis
 
-After following the wizard's instructions, you should now have a new directory implementing a simple statistical analysis. To try it out, install python dependencies and cmdstan, then run the analysis:
+After following the wizard's instructions, you should now have a new directory
+implementing a simple statistical analysis. To try it out, run the following
+command from the root of the new directory:
 
 .. code:: sh
-    $ cd my_cool_project
-    $ pip install -r requirements.txt
-    $ install_cmdstan
     $ make analysis
+
 
