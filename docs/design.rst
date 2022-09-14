@@ -36,56 +36,54 @@ cookiecutter-cmdstanpy-analysis creates a directory with the following structure
 
 .. code:: sh
 
-    .
-    ├── .github
-    │   └── workflows
-    │       └── run_pytest.yml
-    ├── .gitignore
-    ├── CODE_OF_CONDUCT.md
-    ├── LICENSE
-    ├── Makefile
-    ├── README.md
-    ├── investigate.ipynb
-    ├── data
-    │   ├── prepared
-    │   │   └── readme.md
-    │   └── raw
-    │       ├── raw_measurements.csv
-    │       └── readme.md
-    ├── model_configurations
-    │   ├── interaction.toml
-    │   ├── interaction_fake_data.toml
-    │   └── no_interaction.toml
-    ├── prepare_data.py
-    ├── pyproject.toml
-    ├── requirements.txt
-    ├── results
-    │   └── runs
-    │       └── readme.md
-    ├── sample.py
-    ├── src
-    │   ├── data_preparation.py
-    │   ├── model_configuration.py
-    │   ├── prepared_data.py
-    │   ├── readme.md
-    │   ├── sampling.py
-    │   ├── stan
-    │   │   ├── custom_functions.stan
-    │   │   ├── model.stan
-    │   │   └── readme.md
-    │   └── util.py
-    ├── tests
-    │   ├── test_integration
-    │   │   └── test_data_preparation.py
-    │   └── test_unit
-    │       └── test_util.py
-    └── docs
-        ├── bibliography.bib
-        ├── img
-        │   ├── example.png
-        │   └── readme.md
-        ├── Makefile
-        └── report.md
+.
+├── CODE_OF_CONDUCT.md
+├── LICENSE
+├── Makefile
+├── README.md
+├── data
+│   ├── prepared
+│   │   └── readme.md
+│   └── raw
+│       ├── raw_measurements.csv
+│       └── readme.md
+├── docs
+│   ├── Makefile
+│   ├── bibliography.bib
+│   ├── img
+│   │   ├── example.png
+│   │   └── readme.md
+│   └── report.md
+├── investigate.ipynb
+├── model_configurations
+│   ├── interaction.toml
+│   ├── interaction_fake_data.toml
+│   └── no_interaction.toml
+├── prepare_data.py
+├── pyproject.toml
+├── requirements.txt
+├── results
+│   ├── plots
+│   │   └── readme.md
+│   └── runs
+│       └── readme.md
+├── sample.py
+├── src
+│   ├── data_preparation.py
+│   ├── model_configuration.py
+│   ├── prepared_data.py
+│   ├── readme.md
+│   ├── sampling.py
+│   ├── stan
+│   │   ├── custom_functions.stan
+│   │   ├── model.stan
+│   │   └── readme.md
+│   └── util.py
+└── tests
+    ├── test_integration
+    │   └── test_data_preparation.py
+    └── test_unit
+        └── test_util.py
 
 Top level files
 ...............
