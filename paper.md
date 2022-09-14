@@ -61,7 +61,7 @@ use the standard scientific Python toolbox for data fetching and manipulation,
 Stan for statistical model definitions and computation, `cmdstanpy`
 [@standevelopmentteamCmdStanPy2022] for Python to Stan interface, `arviz`
 [@kumarArviZUnifiedLibrary2019] for storing results and downstream analysis and
-[@make] \citep{stallman1991gnu} for automation. Users can optionally document
+`make` [@stallman1991gnu] for automation. Users can optionally document
 their work using Sphinx [@georgbrandlandthesphinxteamSphinx2022] or markdown,
 test it using pytest [@pytestdevelopersPytest2022] and implement continuous
 integration using github actions
