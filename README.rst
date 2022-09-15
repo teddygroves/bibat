@@ -8,6 +8,8 @@ Documentation
 =============
 Check out cookiecutter-cmdstanpy-analysis's documentation at `https://cookiecutter-cmdstanpy-analysis.readthedocs.io <https://cookiecutter-cmdstanpy-analysis.readthedocs.io>`_.
 
+In particular, you may find it useful to have a look at `some projects that have previously used cookiecutter-cmdstanpy-analysis <https://cookiecutter-cmdstanpy-analysis.readthedocs.io/en/latest/examples.html>`_.
+
 Quick Start
 ===========
 
