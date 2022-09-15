@@ -14,6 +14,7 @@ cookiecutter-cmdstanpy-analysis is a template for statistical analysis projects 
    design
    customisation
    contributing
+   examples
 
 ..
    Indices and tables
