@@ -2,7 +2,9 @@
 cookiecutter-cmdstanpy-analysis
 ===============================
 
-cookiecutter-cmdstanpy analysis is a `cookiecutter <https://cookiecutter.readthedocs.io/>`_ template for statistical analysis templates that use `Stan <https://mc-stan.org/>`_, `cmdstanpy <https://cmdstanpy.readthedocs.io/en/v1.0.1/>`_ and `arviz <https://arviz-devs.github.io/>`_.
+cookiecutter-cmdstanpy analysis is a `cookiecutter <https://cookiecutter.readthedocs.io/>`_ template for statistical analyses that use `Stan <https://mc-stan.org/>`_, `cmdstanpy <https://cmdstanpy.readthedocs.io/en/v1.0.1/>`_ and `arviz <https://arviz-devs.github.io/>`_.
+
+It aims to make it easier for authors of statistical analyses to follow best practices from both software development and statistics, and to be flexible enough that any analysis can be implemented - even ones involving many complex data processing options and statistical models.
 
 Documentation
 =============
@@ -25,6 +27,7 @@ implementing a simple statistical analysis. To try it out, run the following
 command from the root of the new directory:
 
 .. code:: sh
+
     $ make analysis
 
 
