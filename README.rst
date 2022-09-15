@@ -25,6 +25,7 @@ implementing a simple statistical analysis. To try it out, run the following
 command from the root of the new directory:
 
 .. code:: sh
+
     $ make analysis
 
 
