@@ -20,7 +20,7 @@ cookiecutter-cmdstanpy-analysis tries to represent these ingredients as explicit
 - Raw data are files that live in their own directory :literal:`data/raw`
 - Ways of processing raw data are functions in the file :literal:`src/data_preparation.py`
 - Statistical models are Stan programs in the directory :literal:`src/stan`
-- Model configurations are special :literal:`toml` files in the directory `model_configurations`
+- Model configurations are special :literal:`toml` files in the directory :literal:`model_configurations`
 - Post-run investigations are files in the directory :literal:`docs` (or the investigation notebook :literal:`investigate.ipynb`)
   
 To actually perform the analysis, you have to run every data preparation function, then run every model configuration, then make some graphs and do some writing. To make this process as convenient as possible, cookiecutter-cmdstanpy-analysis represents these actions with runnable Python scripts (and a Jupyter notebook) corresponding to each step, and a phony Makefile target :literal:`analysis` that runs them all in sequence.
@@ -36,54 +36,54 @@ cookiecutter-cmdstanpy-analysis creates a directory with the following structure
 
 .. code:: sh
 
-.
-├── CODE_OF_CONDUCT.md
-├── LICENSE
-├── Makefile
-├── README.md
-├── data
-│   ├── prepared
-│   │   └── readme.md
-│   └── raw
-│       ├── raw_measurements.csv
-│       └── readme.md
-├── docs
-│   ├── Makefile
-│   ├── bibliography.bib
-│   ├── img
-│   │   ├── example.png
-│   │   └── readme.md
-│   └── report.md
-├── investigate.ipynb
-├── model_configurations
-│   ├── interaction.toml
-│   ├── interaction_fake_data.toml
-│   └── no_interaction.toml
-├── prepare_data.py
-├── pyproject.toml
-├── requirements.txt
-├── results
-│   ├── plots
-│   │   └── readme.md
-│   └── runs
-│       └── readme.md
-├── sample.py
-├── src
-│   ├── data_preparation.py
-│   ├── model_configuration.py
-│   ├── prepared_data.py
-│   ├── readme.md
-│   ├── sampling.py
-│   ├── stan
-│   │   ├── custom_functions.stan
-│   │   ├── model.stan
-│   │   └── readme.md
-│   └── util.py
-└── tests
-    ├── test_integration
-    │   └── test_data_preparation.py
-    └── test_unit
-        └── test_util.py
+    .
+    ├── CODE_OF_CONDUCT.md
+    ├── LICENSE
+    ├── Makefile
+    ├── README.md
+    ├── data
+    │   ├── prepared
+    │   │   └── readme.md
+    │   └── raw
+    │       ├── raw_measurements.csv
+    │       └── readme.md
+    ├── docs
+    │   ├── Makefile
+    │   ├── bibliography.bib
+    │   ├── img
+    │   │   ├── example.png
+    │   │   └── readme.md
+    │   └── report.md
+    ├── investigate.ipynb
+    ├── model_configurations
+    │   ├── interaction.toml
+    │   ├── interaction_fake_data.toml
+    │   └── no_interaction.toml
+    ├── prepare_data.py
+    ├── pyproject.toml
+    ├── requirements.txt
+    ├── results
+    │   ├── plots
+    │   │   └── readme.md
+    │   └── runs
+    │       └── readme.md
+    ├── sample.py
+    ├── src
+    │   ├── data_preparation.py
+    │   ├── model_configuration.py
+    │   ├── prepared_data.py
+    │   ├── readme.md
+    │   ├── sampling.py
+    │   ├── stan
+    │   │   ├── custom_functions.stan
+    │   │   ├── model.stan
+    │   │   └── readme.md
+    │   └── util.py
+    └── tests
+        ├── test_integration
+        │   └── test_data_preparation.py
+        └── test_unit
+            └── test_util.py
 
 Top level files
 ...............
