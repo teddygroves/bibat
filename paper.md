@@ -55,20 +55,24 @@ their analysis. In addition, `cookiecutter-cmdstanpy-analysis` takes a
 "batteries included" approach, so that users start from a complete working
 example project rather than an incomplete skeleton project.
 
-`cookiecutter-cmdstanpy-analysis` uses the widely-used interactive template
-library `cookiecutter` [@greenfeldCookiecutter2021]. It targets projects that
-use the standard scientific Python toolbox for data fetching and manipulation,
-Stan for statistical model definitions and computation, `cmdstanpy`
+`cookiecutter-cmdstanpy-analysis` uses the popular interactive template library
+`cookiecutter` [@greenfeldCookiecutter2021]. It creates a project that uses the
+standard scientific Python toolbox for data fetching and manipulation, Stan for
+statistical model definitions and computation, `cmdstanpy`
 [@standevelopmentteamCmdStanPy2022] for Python to Stan interface, `arviz`
 [@kumarArviZUnifiedLibrary2019] for storing results and downstream analysis and
-`make` [@stallman1991gnu] for automation. Users can optionally document
-their work using Sphinx [@georgbrandlandthesphinxteamSphinx2022] or markdown,
-test it using pytest [@pytestdevelopersPytest2022] and implement continuous
-integration using github actions
+`make` [@stallman1991gnu] for automation. Users can optionally document their
+work using Sphinx [@georgbrandlandthesphinxteamSphinx2022] or markdown, test it
+using pytest [@pytestdevelopersPytest2022] and implement continuous integration
+using github actions
 [@githubdevelopersGitHubActions2022]. `cookiecutter-cmdstanpy-analysis` itself
 is continuously tested to ensure that it works on the operating systems Linux,
 macos and Windows. Detailed documentation can be found at
 \href{https://cookiecutter-cmdstanpy-analysis.readthedocs.io/en/latest/}{https://cookiecutter-cmdstanpy-analysis.readthedocs.io/en/latest/}.
+
+Cookiecutter-cmdstanpy-analysis is linked on the [cmdstanpy community
+website](https://mc-stan.org/cmdstanpy/community.html) and is used in several
+active research projects: see [this documentation page](https://cookiecutter-cmdstanpy-analysis.readthedocs.io/en/latest/examples.html) for a list.
 
 # Usage
 After installing `cookiecutter` with the command `pip install cookiecutter`,
