@@ -1,0 +1,10 @@
+default_context:
+  project_name: "My Cool Project"
+  repo_name: "my_cool_project"
+  author_name: "Dr Statistics"
+  coc_contact: "dr@statistics.com"
+  description: "I used cookiecutter, cmdstanpy and arviz to do an analysis."
+  open_source_license: "MIT"
+  docs_format: "Sphinx"
+  create_tests_directory: "y"
+  create_dotgithub_directory: "y"

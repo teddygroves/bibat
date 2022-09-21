@@ -1,0 +1,31 @@
+# This workflow tests whether projects with sphinx documentation work correctly.
+
+name: Test pandoc
+
+on: push
+
+jobs:
+  build:
+
+    container:
+      image: pandoc/latex:2.9
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+        matrix:
+            os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.8
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    - name: Install cookiecutter
+      run: pip install cookiecutter
+    - name: Use cookiecutter
+      run: |
+        cookiecutter --no-input --config-file tests/data/example_config.yml .
+    - name: Create pdf docs with pandoc
+      run: cd my_cool_project/docs && make report
