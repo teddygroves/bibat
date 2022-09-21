@@ -1,12 +1,12 @@
 # This workflow tests whether projects with sphinx documentation work correctly.
 
-name: Test sphinx
+name: Docs Check
 
 on: push
 
 jobs:
-  build:
-
+  docs:
+    
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -14,15 +14,7 @@ jobs:
             os: [ubuntu-latest, windows-latest]
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+    - uses: actions/checkout@v1
+    - uses: ammaraskar/sphinx-action@master
       with:
-        python-version: 3.8
-    - name: Install cookiecutter
-      run: pip install cookiecutter
-    - name: Use cookiecutter
-      run: |
-        cookiecutter --no-input --config-file tests/data/config_sphinx.yml .
-    - name: Create html docs
-      run: cd my_cool_project/docs && make html
+        docs-folder: "{{cookiecutter.repo_name}}/docs/"
