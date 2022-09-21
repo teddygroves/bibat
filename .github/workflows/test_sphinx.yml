@@ -16,7 +16,7 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.8
-    - name: directly build sphinx
+    - name: build docs with sphinx
       run: |
         pip install sphinx
-        sphinx-build -D {{cookiecutter.repo_name}}/docs ./{{cookiecutter.repo_name}}/docs/_build/html/
+        sphinx-build -D ./{{cookiecutter.repo_name}}/docs ./{{cookiecutter.repo_name}}/docs/_build/html/
