@@ -9,17 +9,10 @@ jobs:
 
     runs-on: ubuntu-latest
 
+    container: 
+      image: pandoc/latex:2.9
+
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.8
-    - name: Install cookiecutter
-      run: pip install cookiecutter
-    - name: Use cookiecutter
-      run: |
-        cookiecutter --no-input --config-file tests/data/example_config.yml .
     - name: Create pdf docs with pandoc
-      uses: docker://pandoc/latex:2.9
-      run: cd my_cool_project/docs && make report
+      run: cd {{cookiecutter.repo_name}}/docs && make report
