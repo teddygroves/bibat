@@ -7,9 +7,6 @@ on: push
 jobs:
   build:
 
-    container:
-      image: pandoc/latex:2.9
-
     runs-on: ubuntu-latest
 
     steps:
@@ -24,4 +21,5 @@ jobs:
       run: |
         cookiecutter --no-input --config-file tests/data/example_config.yml .
     - name: Create pdf docs with pandoc
+      uses: docker://pandoc/latex:2.9
       run: cd my_cool_project/docs && make report
