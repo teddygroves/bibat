@@ -1,3 +1,5 @@
+/* Stan program implementing multilevel linear regression. */
+
 functions {
 #include custom_functions.stan
 }

@@ -1,0 +1,19 @@
+name = "interaction"
+model_file = "multilevel-linear-regression.stan"
+prepared_data_dir = "interaction"
+modes = ["prior", "posterior", "kfold"]
+
+[stanc_options]
+warn-pedantic = true
+
+[sample_kwargs]
+show_progress = true
+save_warmup = false
+iter_warmup = 2000
+iter_sampling = 2000
+
+[sample_kwargs.kfold]
+chains = 1
+show_progress = false
+iter_warmup = 1000
+iter_sampling = 1000
