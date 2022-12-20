@@ -5,38 +5,55 @@ import json
 import os
 
 import pandas as pd
+import pandera as pa
+
+from pydantic.dataclasses import dataclass
 
 from src.util import CoordDict
 
-COORDS_FILENAME = "coords.json"
-MEASUREMENTS_FILENAME = "measurements.csv"
-PREPARED_DATA_DIR = os.path.join("data", "prepared")
+NAME_FILE = "name.txt"
+COORDS_FILE = "coords.json"
+MEASUREMENTS_FILE = "measurements.csv"
 
 
+class MeasurementsDF(pa.SchemaModel):
+    """A PreparedData should have a measurements dataframe like this.
+
+    Other columns are also allowed!
+    """
+    x1: pa.typing.Series[float]
+    x2: pa.typing.Series[float]
+    x1colonx2: pa.typing.Series[float] = pa.Field(alias="x1:x2")
+    y: pa.typing.Series[float]
+
+
+@dataclass
 class PreparedData:
     """What prepared data looks like in this analysis."""
+    name: str
+    coords: CoordDict
+    measurements: pa.typing.DataFrame[MeasurementsDF]
 
-    def __init__(
-        self, name: str, coords: CoordDict, measurements: pd.DataFrame
-    ):
-        self.name = name
-        self.coords = coords
-        self.measurements = measurements
-
-    def write_files(self, directory: str):
+    def write_files(self, directory):
         """Write prepared data files to a directory."""
-        measurements_file = os.path.join(directory, MEASUREMENTS_FILENAME)
-        coords_file = os.path.join(directory, COORDS_FILENAME)
-        self.measurements.to_csv(measurements_file)
-        with open(coords_file, "w") as f:
+        if not os.path.exists(directory):
+            os.mkdir(directory)
+        self.measurements.to_csv(os.path.join(directory, MEASUREMENTS_FILE))
+        with open(os.path.join(directory, COORDS_FILE), "w") as f:
             json.dump(self.coords, f)
+        with open(os.path.join(directory, NAME_FILE), "w") as f:
+            f.write(self.name)
 
 
-def load_prepared_data(name) -> PreparedData:
+def load_prepared_data(directory: str) -> PreparedData:
     """Load prepared data from files in directory"""
-    coords_file = os.path.join(PREPARED_DATA_DIR, name, COORDS_FILENAME)
-    measurements_file = os.path.join(PREPARED_DATA_DIR, name, MEASUREMENTS_FILENAME)
-    with open(coords_file, "r") as f:
+    with open(os.path.join(directory, COORDS_FILE), "r") as f:
         coords = json.load(f)
-    measurements = pd.read_csv(measurements_file)
-    return PreparedData(name=name, coords=coords, measurements=measurements)
+    with open(os.path.join(directory, NAME_FILE), "r") as f:
+        name = f.read()
+    measurements = pd.read_csv(os.path.join(directory, MEASUREMENTS_FILE))
+    return PreparedData(
+        name=name,
+        coords=coords,
+        measurements=measurements,
+    )

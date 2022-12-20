@@ -17,11 +17,11 @@ MARKDOWN_ONLY_PATHS = [
 ]
 
 REMOVE_PATHS = [
+#    '{% if cookiecutter.install_python_tooling != "y" %} requirements-tooling.txt {% endif %}',
     '{% if cookiecutter.docs_format == "No docs" %} docs {% endif %}',
     '{% if cookiecutter.create_tests_directory != "y" %} tests {% endif %}',
     '{% if cookiecutter.create_dotgithub_directory != "y" %} .github {% endif %}',
 ]
-
 if "{{ cookiecutter.docs_format }}" not in ["Sphinx", "No docs"]:
     REMOVE_PATHS += SPHINX_ONLY_PATHS
 

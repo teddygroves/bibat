@@ -7,7 +7,7 @@ import pytest
 from pandas.testing import assert_frame_equal, assert_series_equal
 
 from src.util import (
-    StanInput,
+    StanInputDict,
     make_columns_lower_case,
     one_encode,
     stanify_dict,
@@ -57,22 +57,22 @@ def test_make_columns_lower_case(df_in: pd.DataFrame, expected: pd.DataFrame):
 @pytest.mark.parametrize(
     "d_in,expected",
     [
-        ({"a": pd.Series([1, 2, 3])}, StanInput({"a": [1, 2, 3]})),
+        ({"a": pd.Series([1, 2, 3])}, {"a": [1, 2, 3]}),
         (
             {"a": pd.DataFrame([[1, 2, 3], [4, 5, 6]])},
-            StanInput({"a": [[1, 2, 3], [4, 5, 6]]}),
+            {"a": [[1, 2, 3], [4, 5, 6]]},
         ),
         (
             {
                 "a": np.array([[1, 2, 3], [4, 5, 6]]),
             },
-            StanInput({"a": [[1, 2, 3], [4, 5, 6]]}),
+            {"a": [[1, 2, 3], [4, 5, 6]]},
         ),
         (
             {"a": [[1, 2, 3], [4, 5, 6]]},
-            StanInput({"a": [[1, 2, 3], [4, 5, 6]]}),
+            {"a": [[1, 2, 3], [4, 5, 6]]},
         ),
     ],
 )
-def test_stanify_dict(d_in: dict, expected: StanInput):
+def test_stanify_dict(d_in: dict, expected: StanInputDict):
     assert stanify_dict(d_in) == expected

@@ -1,0 +1,1 @@
+{{cookiecutter.bibat_version}}

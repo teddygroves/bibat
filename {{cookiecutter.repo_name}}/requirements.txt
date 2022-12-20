@@ -4,22 +4,12 @@ jupyter
 LovelyPlots
 numpy
 pandas
+pandera
+pydantic
 scipy
-sklearn
+scikit-learn
 toml
-{% if cookiecutter.create_tests_directory == 'y' %}pytest{% endif %}
+{% if cookiecutter.create_tests_directory == 'y' %}pytest
+black{% endif %}
 {% if cookiecutter.docs_format == 'Sphinx' %}sphinx{% endif %}
-{% if cookiecutter.install_python_tooling = 'y'}
-black
-pandas-stubs
-ipython
-types-toml
-flake8
-flake8-bugbear
-flake8-docstrings
-mypy
-python-lsp-server[all]
-python-lsp-black
-pylsp-mypy
-pyls-isort
-{% endif %}
+

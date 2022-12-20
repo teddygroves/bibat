@@ -4,7 +4,13 @@ import os
 
 import pandas as pd
 
-from src import data_preparation
+from src import data_preparation_functions
+
+DATA_PREPARATION_FUNCTIONS_TO_RUN = [
+    data_preparation_functions.prepare_data_fake_interaction,
+    data_preparation_functions.prepare_data_interaction,
+    data_preparation_functions.prepare_data_no_interaction,
+]
 
 
 RAW_DIR = os.path.join("data", "raw")
@@ -12,11 +18,6 @@ RAW_DATA_FILES = {
     "raw_measurements": os.path.join(RAW_DIR, "raw_measurements.csv"),
 }
 PREPARED_DIR = os.path.join("data", "prepared")
-DATA_PREPARATION_FUNCTIONS = [
-    data_preparation.prepare_data_fake_interaction,
-    data_preparation.prepare_data_interaction,
-    data_preparation.prepare_data_no_interaction,
-]
 
 
 def main():
@@ -26,7 +27,7 @@ def main():
         k: pd.read_csv(v, index_col=None) for k, v in RAW_DATA_FILES.items()
     }
     print("Preparing data...")
-    for dpf in DATA_PREPARATION_FUNCTIONS:
+    for dpf in DATA_PREPARATION_FUNCTIONS_TO_RUN:
         print(f"Running data preparation function {dpf.__name__}...")
         prepared_data = dpf(raw_data["raw_measurements"])
         output_dir = os.path.join(PREPARED_DIR, prepared_data.name)

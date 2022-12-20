@@ -16,7 +16,7 @@ $(ACTIVATE_VENV):
 env: $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
 	. $(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
-	  python -m pip install -r $(REQUIREMENTS_FILE); \
+	  python -m pip install -r $(REQUIREMENTS_FILE) --quiet; \
 	  install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
 	)
 
