@@ -1,3 +1,6 @@
+# .clocignore
+.clocignore
+
 # .dir_locals.el
 *.dir_locals.el
 
