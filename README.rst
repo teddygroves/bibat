@@ -1,26 +1,37 @@
-===============================
-cookiecutter-cmdstanpy-analysis
-===============================
+====================================================
+Bibat: Batteries-Included Bayesian Analysis Template
+====================================================
 
-cookiecutter-cmdstanpy analysis is a `cookiecutter <https://cookiecutter.readthedocs.io/>`_ template for statistical analyses that use `Stan <https://mc-stan.org/>`_, `cmdstanpy <https://cmdstanpy.readthedocs.io/en/v1.0.1/>`_ and `arviz <https://arviz-devs.github.io/>`_.
+Bibat is a Python package that wraps a `cookiecutter
+<https://cookiecutter.readthedocs.io/>`_ template for Bayesian statistical
+analyses. 
 
-It aims to make it easier for authors of statistical analyses to follow best practices from both software development and statistics, and to be flexible enough that any analysis can be implemented - even ones involving many complex data processing options and statistical models.
+It aims to make it easier for authors of statistical analyses to follow best
+practices from both software development and statistics, and to be flexible
+enough that any analysis can be implemented - even ones involving many complex
+data processing options and statistical models.
+
+Bibat is "batteries-included" in the sense that the template provides a complete
+statistical analysis that you can run immediately.
 
 Documentation
 =============
-Check out cookiecutter-cmdstanpy-analysis's documentation at `https://cookiecutter-cmdstanpy-analysis.readthedocs.io <https://cookiecutter-cmdstanpy-analysis.readthedocs.io>`_.
 
-In particular, you may find it useful to have a look at `some projects that have previously used cookiecutter-cmdstanpy-analysis <https://cookiecutter-cmdstanpy-analysis.readthedocs.io/en/latest/examples.html>`_.
+Check out bibat's documentation at `https://bibat.readthedocs.io
+<https://bibat.readthedocs.io>`_.
+
+In particular, you may find it useful to have a look at `some projects that have
+previously used bibat <https://bibat.readthedocs.io/en/latest/examples.html>`_.
 
 Quick Start
 ===========
 
-You can try out cookiecutter-cmdstanpy-analysis like this:
+You can try out bibat like this:
 
 .. code:: sh
 
-    $ pip install cookiecutter
-    $ cookiecutter gh:teddygroves/cookiecutter-cmdstanpy-analysis
+    $ pip install bibat
+    $ bibat
 
 After following the wizard's instructions, you should now have a new directory
 implementing a simple statistical analysis. To try it out, run the following

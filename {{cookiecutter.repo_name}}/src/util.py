@@ -1,15 +1,12 @@
 """Some handy python functions."""
 
-from typing import Dict, List, NewType, Union
+from typing import Dict, List, NewType, Optional, Union
 
 import numpy as np
 import pandas as pd
 
-StanInputNumber = Union[float, int]
-StanInputList = List[Union[StanInputNumber, "StanInputList"]]
-StanInputValue = Union[StanInputNumber, StanInputList]
-StanInput = NewType("StanInput", Dict[str, StanInputValue])
 CoordDict = NewType("CoordDict", Dict[str, List[str]])
+StanInputDict = Dict["str", Union[int, float, List]]
 
 
 def one_encode(s: pd.Series) -> pd.Series:
@@ -40,17 +37,17 @@ def make_columns_lower_case(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def check_is_df(maybe_df) -> pd.DataFrame:
-    """Shut up the type checker!"""
+    """Shut up the type checker."""
     assert isinstance(maybe_df, pd.DataFrame)
     return maybe_df
 
 
-def stanify_dict(d: Dict) -> StanInput:
+def stanify_dict(d: Dict) -> StanInputDict:
     """Make sure a dictionary is a valid Stan input.
 
     :param d: input dictionary, possibly with wrong types
     """
-    out = {}
+    out: StanInputDict = {}
     for k, v in d.items():
         if not isinstance(k, str):
             raise ValueError(f"key {str(k)} is not a string!")
@@ -62,4 +59,25 @@ def stanify_dict(d: Dict) -> StanInput:
             out[k] = v.tolist()
         else:
             out[k] = v
-    return StanInput(out)
+    return out
+
+
+def standardise(
+    s: pd.Series, mu: Optional[float] = None, std: Optional[float] = None
+) -> pd.Series:
+    """Standardise a series by subtracting mu and dividing by sd."""
+    if mu is None:
+        mu = s.mean()
+    if std is None:
+        std = s.std()
+    return s.subtract(mu).divide(std)
+
+
+def center(
+    s: pd.Series,
+    mu: Optional[float] = None,
+) -> pd.Series:
+    """Center a series by subtracting mu."""
+    if mu is None:
+        mu = s.mean()
+    return s.subtract(mu)

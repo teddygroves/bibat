@@ -1,0 +1,24 @@
+name = "interaction"
+stan_file = "multilevel-linear-regression.stan"
+prepared_data_dir = "interaction"
+stan_input_function = "get_stan_input_interaction"
+modes = ["prior", "posterior", "kfold"]
+kfold_folds = 5
+
+[dims]
+b = ["covariate"]
+y = ["observation"]
+x = ["observation", "covariate"]
+
+[stanc_options]
+warn-pedantic = true
+
+[sample_kwargs]
+save_warmup = false
+iter_warmup = 2000
+iter_sampling = 2000
+
+[sample_kwargs.kfold]
+chains = 1
+iter_warmup = 1000
+iter_sampling = 1000

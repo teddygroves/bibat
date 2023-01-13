@@ -1,11 +1,13 @@
 default_context:
-  project_name: "My Cool Project"
-  repo_name: "my_cool_project"
-  author_name: "Dr Statistics"
-  coc_contact: "dr@statistics.com"
-  description: "I used cookiecutter, cmdstanpy and arviz to do an analysis."
-  open_source_license: "MIT"
-  docs_format: "Markdown"
-  create_tests_directory: "y"
-  create_dotgithub_directory: "y"
-
+  project_name: My cool project
+  repo_name: my_cool_project
+  author_name: Author Name
+  author_email: author@email.com
+  coc_contact: author@email.com
+  description: A short description of the project
+  open_source_license: MIT
+  docs_format: Markdown
+  create_tests_directory: y
+  create_dotgithub_directory: y
+  install_python_tooling: y
+  bibat_version: unknown version

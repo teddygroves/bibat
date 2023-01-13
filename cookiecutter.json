@@ -2,10 +2,13 @@
     "project_name": "project_name",
     "repo_name": "{{ cookiecutter.project_name.lower().replace(' ', '_') }}",
     "author_name": "Your name (or your organization/company/team)",
+    "author_email": "Author email",
     "coc_contact": "Code of conduct contact",
     "description": "A short description of the project.",
     "open_source_license": ["MIT", "BSD-3-Clause", "No license file"],
     "docs_format": ["Markdown", "Sphinx", "No docs"],
     "create_tests_directory": "y",
-    "create_dotgithub_directory": "y"
+    "create_dotgithub_directory": "y",
+    "install_python_tooling": "y",
+    "bibat_version": "unknown version"
 }

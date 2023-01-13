@@ -1,3 +1,18 @@
+# .clocignore
+.clocignore
+
+# .dir_locals.el
+*.dir_locals.el
+
+# venv
+.venv
+
+# json files
+*.json
+
+# hpp files
+*.hpp
+
 # Keep non-raw data out of version control by default
 data/*/*
 !data/raw/*
