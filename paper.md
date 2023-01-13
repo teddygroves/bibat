@@ -1,5 +1,5 @@
 ---
-title: 'cookiecutter-cmdstanpy-analysis: an interactive template for statisical analysis projects'
+title: 'Bibat: batteries-included Bayesian analysis template'
 tags:
   - Python
   - Statistical computing
@@ -24,38 +24,36 @@ bibliography: bibliography.bib
 ---
 
 # Summary
-A common task in many applied scientific fields is to write software that
-carries out a statistical analysis involving a range of statistical models and
-data-processing options. It is important for this software to have the best
-possible quality, both to avoid errors and so that others can contribute,
-borrow, extend and reproduce it. Unfortunately, writing a high quality software
-project from scratch is time-consuming and difficult.
+Software implementing one-off Bayesian statistical analyses is ubiquitous in
+applied sceince, but it is typically written from scratch rather than using any
+form of template, as is generally considered the best practice among software
+developers.
 
-Interactive templates make it possible to avoid starting software projects from
-scratch: instead, a custom project is created automatically after executing a
-command and completing a short interactive form. If the template is
-well-crafted, it is easier to edit the resulting files and folders so that they
-implement a desired target project than it is to create the target project from
-scratch. In addition to the saved effort, interactive project templates promote
-the use of sensible defaults, thereby improving software quality. Popular
-interactive project templates include [@drivendataCookiecutterdatascience2022],
-[@salemTensorflowProjectTemplate2018], [@huangPytorchtemplate2020] and
-[@cookiecutter-cmsdevelopersCookiecuttercmsCookiecutterComputational2022]. However,
-interactive project templates are not widely used for statistical analysis
-projects.
+Bibat is a Python package providing a flexible interactive template for one-off
+Bayesian statistical analyses, thereby saving time and improving the quality of
+the final software. Bibat comes with "batteries included" in the sense that the
+provided analysis works from end to end; we believe this approach to template
+design makes for better usability and testing than the alternative approach of providing an incomplete skeleton project.
 
 # Statement of need
-`cookiecutter-cmdstanpy-analysis` is an interactive template for statistical
-analysis projects written with Python 3 [@vanrossumPythonReferenceManual2009]
-and Stan [@carpenterStanProbabilisticProgramming2017]. It aims to make it easier
-for users to follow the workflow set out in [@gelmanBayesianWorkflow2020] for
-any statistical analysis that can be implemented using these tools, and provides
-functionality for users to automate, test, document and continuously integrate
-their analysis. In addition, `cookiecutter-cmdstanpy-analysis` takes a
-"batteries included" approach, so that users start from a complete working
-example project rather than an incomplete skeleton project.
+Interactive project templates are widely popular for general software
+development and for machine learning, but there is currently no popular
+interactive project template that specifically targets one-off Bayesian
+statistical analysis.
 
-`cookiecutter-cmdstanpy-analysis` uses the popular interactive template library
+An interactive template for Bayesian statistical analysis projects is particularly needed because of these projects' intrinsic complexity.
+
+`bibat` is an interactive template for statistical analysis projects written
+with Python 3 [@vanrossumPythonReferenceManual2009] and Stan
+[@carpenterStanProbabilisticProgramming2017]. It aims to make it easier for
+users to follow the workflow set out in [@gelmanBayesianWorkflow2020] for any
+statistical analysis that can be implemented using these tools, and provides
+functionality for users to automate, test, document and continuously integrate
+their analysis. In addition, `bibat` takes a "batteries included" approach, so
+that users start from a complete working example project rather than an
+incomplete skeleton project.
+
+`bibat` uses the popular interactive template library
 `cookiecutter` [@greenfeldCookiecutter2021]. It creates a project that uses the
 standard scientific Python toolbox for data fetching and manipulation, Stan for
 statistical model definitions and computation, `cmdstanpy`
@@ -65,19 +63,19 @@ statistical model definitions and computation, `cmdstanpy`
 work using Sphinx [@georgbrandlandthesphinxteamSphinx2022] or markdown, test it
 using pytest [@pytestdevelopersPytest2022] and implement continuous integration
 using github actions
-[@githubdevelopersGitHubActions2022]. `cookiecutter-cmdstanpy-analysis` itself
+[@githubdevelopersGitHubActions2022]. `bibat` itself
 is continuously tested to ensure that it works on the operating systems Linux,
 macos and Windows. Detailed documentation can be found at
-\href{https://cookiecutter-cmdstanpy-analysis.readthedocs.io/en/latest/}{https://cookiecutter-cmdstanpy-analysis.readthedocs.io/en/latest/}.
+\href{https://bibat.readthedocs.io/en/latest/}{https://bibat.readthedocs.io/en/latest/}.
 
-Cookiecutter-cmdstanpy-analysis is linked on the [cmdstanpy community
+bibat is linked on the [cmdstanpy community
 website](https://mc-stan.org/cmdstanpy/community.html) and is used in several
-active research projects: see [this documentation page](https://cookiecutter-cmdstanpy-analysis.readthedocs.io/en/latest/examples.html) for a list.
+active research projects: see [this documentation page](https://bibat.readthedocs.io/en/latest/examples.html) for a list.
 
 # Usage
 After installing `cookiecutter` with the command `pip install cookiecutter`,
-`cookiecutter-cmdstanpy-analysis` can be used by running the command
-`cookiecutter gh:teddygroves/cookiecutter-cmdstanpy-analysis`. An interactive
+`bibat` can be used by running the command
+`cookiecutter gh:teddygroves/bibat`. An interactive
 form then prompts the user for configuration information including project and
 repository name, author name, a short description and choices of open source
 license options, documentation formats and whether or not to include tests and
@@ -101,7 +99,7 @@ of these inferences and perform downstream analysis.
 The next step is to edit the project so that it implements the target analysis
 rather than the provided one. This can be done incrementally: after any change
 the user can check that the whole analysis works by repeating the command `make
-analysis`. Since `cookiecutter-cmdstanpy-analysis` follows a modular design,
+analysis`. Since `bibat` follows a modular design,
 individual steps of the analysis can easily be tested in isolation by running
 the corresponding Python script.
 
@@ -113,7 +111,7 @@ the corresponding Python script.
   ](fig.png)
 
 Figure \autoref{fig:01} shows the results of a case study demonstrating how
-`cookiecutter-cmdstanpy-analysis` can be used in applied science. The full
+`bibat` can be used in applied science. The full
 analysis can be found at
 [https://github.com/teddygroves/mrna](https://github.com/teddygroves/mrna).
 
@@ -126,7 +124,7 @@ likelihood, which was fitted using approximate Bayesian computation. This approa
 cannot explicitly represent information about measurement error and generated
 unrealistically jagged timecourses as shown in frame b.
 
-The author used `cookiecutter-cmdstanpy-analysis` to augment the original
+The author used `bibat` to augment the original
 statistical model with a plausible explicit likelihood and fit it using
 Hamiltonian Monte Carlo in prior and posterior modes. A sample of the resulting
 timecourses is shown in frame c. This revealed problems with the statistical
@@ -158,8 +156,7 @@ The author wishes to thank Lars Keld Nielsen for helpful feedback, and Mitzi
 Morris, Bob Carpenter, Brian Ward for development advice.
 
 # Funding
-The development of `cookiecutter-cmdstanpy-analysis` was supported by the Novo
-Nordisk Foundation, specifically by grant numbers NNF20CC0035580 and
-NNF14OC0009473.
+The development of `bibat` was supported by the Novo Nordisk Foundation,
+specifically by grant numbers NNF20CC0035580 and NNF14OC0009473.
 
 # References

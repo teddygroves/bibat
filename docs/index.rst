@@ -1,7 +1,6 @@
-=================================
-Welcome to bibat's documentation!
-=================================
-
+===================================
+ Welcome to bibat's documentation!
+===================================
 
 bibat is an interactive template for Bayesian statistical analysis projects that
 uses `cookiecutter <https://cookiecutter.readthedocs.io/en/latest/>`_, `Stan
@@ -55,7 +54,7 @@ Intended workflow
 bibat assumes that a statistical analysis consists of the following components:
 
 - **Raw data**
-- **Data prepratation functions** each of which take in raw data and produce prepared data
+- **Data preparation functions** each of which take in raw data and produce prepared data
   that fit a common structure.
 - **Statistical models**
 - **Inferences**, i.e. combinations of a prepared dataset, a statistical model,
@@ -232,7 +231,8 @@ Adding a new statistical model
 To add a new statistical model, first write a new Stan program in the folder
 :code:`src/stan`, then check whether the model is compatible with any of the
 functions in the folder :code:`src/stan_input_functions.py`; if not, write a new
-function. Finally, create a new inference folder and configure it to use the new model and a suitable stan input function, for example like this:
+function. Finally, create a new inference folder and configure it to use the new
+model and a suitable stan input function, for example like this:
 
 .. code:: toml
 
@@ -264,8 +264,19 @@ function. Finally, create a new inference folder and configure it to use the new
 
 .. _vignettes:
 
-Vignettes
+Examples
 =========
+Check out these examples to see how :literal:`bibat` can be used in practice.
+
+* `mrna <https://github.com/teddygroves/mrna>`_ A published analysis of mRNA
+  regulation, made fully Bayesian and then improved.
+* `putting <https://github.com/teddygroves/putting>`_ A Bayesian analysis of putting data
+* `km-stats <https://github.com/biosustain/km-stats>`_ Statistical analysis of
+  Michaelis constant measurements from online databases
+* `biothermostat <https://github.com/biosustain/biothermostat>`_ Statistical
+  analysis of biochemical thermodynamics data.
+
+  If you used :literal:`bibat` to start your analysis, feel free to `add it to this list <https://github.com/teddygroves/bibat/docs/index.rst>`_!
 
 .. _motivation:
 
@@ -308,7 +319,7 @@ No! Here are some things that bibat does which are pretty hard, in my opinion:
   based on real and fake data.
 - Ensuring that the analysis can be run from end to end with a single command
   :code:`make analysis` for easy reproducibility
-p
+
 But is bibat *research* software?
 ---------------------------------
 
@@ -366,8 +377,8 @@ that is specifically aimed at statistical analysis projects is considered within
 scope, as is software that creates a custom directory structure and that defines
 conventions that abstract parts of a data analysis workflow.
 
-Why not just shrink my analysis to a managable size using formulas?
--------------------------------------------------------------------
+Why not just shrink my analysis to a manageable size using formulas?
+--------------------------------------------------------------------
 
 One approach to making statistical modelling projects easier is to trivialise
 the process of defining statistical models. Packages like `lme4
@@ -407,9 +418,8 @@ Contributing
 
 All contributions are very welcome!
 
-If you have a specific suggestion for how cookiecutter-cmdstanpy-analysis could
-be improved, or if you find a bug then please file an issue or submit a pull
-request.
+If you have a specific suggestion for how bibat could be improved, or if you
+find a bug then please file an issue or submit a pull request.
 
 Alternatively, if you have any more general thoughts or questions, please post
 them in the `discussions page
@@ -429,7 +439,7 @@ You should now be able to create a :literal:`my_cool_project` cmdstanpy project 
 
 .. code:: sh
 
-    $ cookiecutter --no-input --config-file path/to/config.yml path/to/cookiecutter-cmdstanpy-analysis
+    $ cookiecutter --no-input --config-file path/to/config.yml path/to/bibat
 
 
 
