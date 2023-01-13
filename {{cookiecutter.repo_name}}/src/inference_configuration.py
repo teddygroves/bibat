@@ -5,7 +5,6 @@ from typing import Callable, Dict, List, Optional
 
 import toml
 from pydantic import BaseModel, Field, root_validator, validator
-
 from src import stan_input_functions
 
 AVAILABLE_MODES = ["prior", "posterior", "kfold"]
@@ -63,6 +62,7 @@ class InferenceConfiguration(BaseModel):
     stanc_options: Optional[dict] = None
 
     def __init__(self, **data):
+        """Initialise an InferenceConfiguration."""
         data["stan_input_function"] = getattr(
             stan_input_functions, data["stan_input_function"]
         )
@@ -70,18 +70,21 @@ class InferenceConfiguration(BaseModel):
 
     @root_validator
     def check_folds(cls, values):
+        """Check that there is a number of folds if required."""
         if "kfold" in values["modes"] and values["kfold_folds"] is None:
             raise ValueError("Set kfold_folds in order to run in kfold mode.")
         return values
 
     @validator("stan_file")
     def check_stan_file_exists(cls, v):
+        """Check that the stan file exists."""
         if not os.path.exists(os.path.join("src", "stan", v)):
             raise ValueError(f"{v} is not a file in src/stan.")
         return v
 
     @validator("modes")
     def check_modes(cls, v):
+        """Check that the provided modes exist."""
         for mode in v:
             if mode not in AVAILABLE_MODES:
                 raise ValueError(

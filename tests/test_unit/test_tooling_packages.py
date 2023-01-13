@@ -10,6 +10,7 @@ TOOLING_PACKAGE_FILE = os.path.join(
 
 
 def test_tooling_packages():
+    """Check that the tooling packages in the cli match the template."""
     with open(TOOLING_PACKAGE_FILE, "r") as f:
         from_txt = f.readlines()
     for p_from_txt, p_from_cli in zip(from_txt, from_cli):

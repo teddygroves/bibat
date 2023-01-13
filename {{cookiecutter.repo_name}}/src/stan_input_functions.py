@@ -1,10 +1,9 @@
 """Functions for generating input to Stan from prepared data."""
 
 
+from typing import Dict, List
+
 import pandas as pd
-
-from typing import List, Dict
-
 from src.prepared_data import PreparedData
 
 
@@ -23,8 +22,10 @@ def get_stan_input(measurements: pd.DataFrame, x_cols: List[str]) -> Dict:
 
 
 def get_stan_input_interaction(prepared_data: PreparedData) -> Dict:
+    """Get a Stan input with an interaction predictor."""
     return get_stan_input(prepared_data.measurements, ["x1", "x2", "x1:x2"])
 
 
 def get_stan_input_no_interaction(prepared_data: PreparedData) -> Dict:
+    """Get a Stan input without an interaction predictor."""
     return get_stan_input(prepared_data.measurements, ["x1", "x2"])

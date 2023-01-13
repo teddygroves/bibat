@@ -1,6 +1,6 @@
-# This workflow tests bibat.
+# This workflow tests bibat by using it to make a project, then running the new project's tests.
 
-name: Test cookiecutter-cmdstanpy-analysis
+name: Test end to end
 
 on: push
 

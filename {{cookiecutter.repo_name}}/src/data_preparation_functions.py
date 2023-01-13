@@ -7,10 +7,8 @@ PreparedData object.
 
 import numpy as np
 import pandas as pd
-
 from src.prepared_data import PreparedData
-from src.util import make_columns_lower_case, CoordDict
-
+from src.util import CoordDict, make_columns_lower_case
 
 NEW_COLNAMES = {"yButIThoughtIdAddSomeLetters": "y"}
 DROPNA_COLS = ["y"]
@@ -28,26 +26,27 @@ def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     measurements = process_measurements(measurements_raw)
     return PreparedData(
         name="interaction",
-        coords=CoordDict({
-            "covariate": ["x1", "x2", "x1:x2"],
-            "observation": measurements.index.tolist(),
-        }),
+        coords=CoordDict(
+            {
+                "covariate": ["x1", "x2", "x1:x2"],
+                "observation": measurements.index.tolist(),
+            }
+        ),
         measurements=measurements,
     )
 
 
-def prepare_data_no_interaction(
-    measurements_raw: pd.DataFrame
-) -> PreparedData:
+def prepare_data_no_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     """Prepare data with no interaction column."""
-
     measurements = process_measurements(measurements_raw)
     return PreparedData(
         name="no_interaction",
-        coords=CoordDict({
-            "covariate": ["x1", "x2"],
-            "observation": measurements.index.tolist(),
-        }),
+        coords=CoordDict(
+            {
+                "covariate": ["x1", "x2"],
+                "observation": measurements.index.tolist(),
+            }
+        ),
         measurements=measurements,
     )
 
@@ -60,13 +59,17 @@ def prepare_data_fake_interaction(
     x_cols = ["x1", "x2", "x1:x2"]
     measurements = process_measurements(measurements_raw)
     yhat = TRUE_PARAMS["a"] + measurements[x_cols] @ np.array(TRUE_PARAMS["b"])
-    measurements["y"] = np.random.normal(yhat, TRUE_PARAMS["sigma"])  # type: ignore
+    measurements["y"] = np.random.normal(
+        yhat, TRUE_PARAMS["sigma"]
+    )  # type: ignore
     return PreparedData(
         name="fake_interaction",
-        coords=CoordDict({
-            "covariate": x_cols,
-            "observation": measurements.index.tolist(),
-        }),
+        coords=CoordDict(
+            {
+                "covariate": x_cols,
+                "observation": measurements.index.tolist(),
+            }
+        ),
         measurements=measurements,
     )
 

@@ -1,3 +1,5 @@
+"""Configure bibat's docs."""
+
 # Configuration file for the Sphinx documentation builder.
 #
 # This file only contains a selection of the most common options. For a full
@@ -54,25 +56,24 @@ html_theme = "pydata_sphinx_theme"
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 html_theme_options = {
-   "logo": {
-       "text": "bibat: Batteries-Included Bayesian Analysis Template",
-       "image_light": "bibat-light.svg",
-       "image_dark": "bibat-dark.svg",
-   }
+    "logo": {
+        "text": "bibat: Batteries-Included Bayesian Analysis Template",
+        "image_light": "bibat-light.svg",
+        "image_dark": "bibat-dark.svg",
+    }
 }
 
 
-
 # html_theme_options = {
-    # "logo_only": False,
-    # "display_version": True,
-    # "prev_next_buttons_location": "bottom",
-    # "style_external_links": False,
-    # "vcs_pageview_mode": "",
-    # # Toc options
-    # "collapse_navigation": True,
-    # "sticky_navigation": True,
-    # "navigation_depth": 4,
-    # "includehidden": True,
-    # "titles_only": False,
+# "logo_only": False,
+# "display_version": True,
+# "prev_next_buttons_location": "bottom",
+# "style_external_links": False,
+# "vcs_pageview_mode": "",
+# # Toc options
+# "collapse_navigation": True,
+# "sticky_navigation": True,
+# "navigation_depth": 4,
+# "includehidden": True,
+# "titles_only": False,
 # }

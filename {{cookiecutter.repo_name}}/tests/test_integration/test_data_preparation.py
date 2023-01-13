@@ -1,11 +1,10 @@
-"""Integration tests for functions in src/data_preparation.py"""
+"""Integration tests for functions in src/data_preparation.py."""
 
 from typing import Callable
 
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
-
 from src.data_preparation_functions import (
     prepare_data_interaction,
     prepare_data_no_interaction,
@@ -22,7 +21,8 @@ EXAMPLE_RAW_MEASUREMENTS = pd.DataFrame(
 
 
 @pytest.mark.parametrize(
-    "prepare_data_function,name,raw_measurements,expected_measurements,expected_coords",
+    "prepare_data_function,name,raw_measurements,expected_measurements,"
+    "expected_coords",
     [
         (
             prepare_data_interaction,
@@ -67,6 +67,7 @@ def test_prepare_data_function(
     expected_measurements: pd.DataFrame,
     expected_coords: CoordDict,
 ):
+    """Check that a prepare data function behaves as expected."""
     prepped = prepare_data_function(raw_measurements)
     assert prepped.name == name
     assert prepped.coords == expected_coords

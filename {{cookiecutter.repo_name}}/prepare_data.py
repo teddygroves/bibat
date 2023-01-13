@@ -3,7 +3,6 @@
 import os
 
 import pandas as pd
-
 from src import data_preparation_functions
 
 DATA_PREPARATION_FUNCTIONS_TO_RUN = [

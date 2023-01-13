@@ -37,7 +37,7 @@ def make_columns_lower_case(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def check_is_df(maybe_df) -> pd.DataFrame:
-    """Shut up the type checker!"""
+    """Shut up the type checker."""
     assert isinstance(maybe_df, pd.DataFrame)
     return maybe_df
 
@@ -74,7 +74,8 @@ def standardise(
 
 
 def center(
-    s: pd.Series, mu: Optional[float] = None,
+    s: pd.Series,
+    mu: Optional[float] = None,
 ) -> pd.Series:
     """Center a series by subtracting mu."""
     if mu is None:

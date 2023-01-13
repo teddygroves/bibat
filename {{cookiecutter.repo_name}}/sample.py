@@ -1,6 +1,5 @@
 """Run all the configs in the model_configurations folder."""
 
-import logging
 import os
 from typing import Dict
 
@@ -9,7 +8,6 @@ import cmdstanpy
 import numpy as np
 import xarray as xr
 from sklearn.model_selection import KFold
-
 from src.inference_configuration import (
     AVAILABLE_MODES,
     InferenceConfiguration,
@@ -75,6 +73,7 @@ def get_kfold_llik(
 
 
 def main():
+    """Run the main script."""
     run_dirs = [
         os.path.join(RUNS_DIR, d)
         for d in os.listdir(RUNS_DIR)

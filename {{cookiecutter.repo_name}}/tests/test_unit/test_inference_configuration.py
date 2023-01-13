@@ -1,8 +1,8 @@
 """Unit tests for the ModelConfiguration class."""
+
 import os
 
 import pytest
-
 from src.inference_configuration import InferenceConfiguration
 
 SAMPLE_KWARGS = {
@@ -18,6 +18,7 @@ MODES_BAD = ["prio", "prserior", "cross-validation"]
 
 
 def test_model_configuration_good_modes():
+    """Check that an inference configuration with good modes initialises."""
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
@@ -33,6 +34,7 @@ def test_model_configuration_good_modes():
 
 @pytest.mark.xfail
 def test_model_configuration_bad_modes():
+    """Check that an inference configuration with bad modes fails."""
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
@@ -48,14 +50,15 @@ def test_model_configuration_bad_modes():
 
 @pytest.mark.xfail
 def test_model_configuration_no_k():
+    """Check that an inference configuration with no kfold options fails."""
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
         prepared_data_dir=os.path.join("hi", "hello", "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
-        modes=MODES_GOOD,
         kfold_options=None,  # this is the bad field!
+        modes=MODES_GOOD,  # it would be ok if 'kfold' weren't in here.
         cpp_options=None,
         stanc_options=None,
     )
@@ -63,6 +66,7 @@ def test_model_configuration_no_k():
 
 @pytest.mark.xfail
 def test_model_configuration_no_stan_file():
+    """Check that an inference configuration with absent Stan file fails."""
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="XXXXXXXXXXXXXXXXXXXX",
@@ -78,6 +82,7 @@ def test_model_configuration_no_stan_file():
 
 @pytest.mark.xfail
 def test_model_configuration_no_stan_input_function():
+    """Check that absent Stan input function causes failure."""
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",

@@ -65,6 +65,8 @@ FIELD_TO_PROMPT_AND_DEFAULT = {
 
 
 def input_with_default(prompt: str, options: Union[str, List]):
+    """Get a user input if provided, otherwise return a default."""
+
     def i_to_str(i):
         return str(i + 1) if i > 0 else f"[{str(i+1)}]"
 
@@ -81,6 +83,7 @@ def input_with_default(prompt: str, options: Union[str, List]):
 
 
 def main():
+    """Run bibat's cli."""
     parser = argparse.ArgumentParser(
         description="Generate a Bayesian statistical analysis project."
     )

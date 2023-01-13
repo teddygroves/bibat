@@ -1,4 +1,4 @@
-"""Do the setup!"""
+"""Do the setup."""
 
 from setuptools import setup
 

@@ -1,14 +1,11 @@
-""""Class defining what prepared data looks like."""
-
+"""Class defining what prepared data looks like."""
 
 import json
 import os
 
 import pandas as pd
 import pandera as pa
-
 from pydantic.dataclasses import dataclass
-
 from src.util import CoordDict
 
 NAME_FILE = "name.txt"
@@ -21,6 +18,7 @@ class MeasurementsDF(pa.SchemaModel):
 
     Other columns are also allowed!
     """
+
     x1: pa.typing.Series[float]
     x2: pa.typing.Series[float]
     x1colonx2: pa.typing.Series[float] = pa.Field(alias="x1:x2")
@@ -30,6 +28,7 @@ class MeasurementsDF(pa.SchemaModel):
 @dataclass
 class PreparedData:
     """What prepared data looks like in this analysis."""
+
     name: str
     coords: CoordDict
     measurements: pa.typing.DataFrame[MeasurementsDF]
@@ -46,7 +45,7 @@ class PreparedData:
 
 
 def load_prepared_data(directory: str) -> PreparedData:
-    """Load prepared data from files in directory"""
+    """Load prepared data from files in directory."""
     with open(os.path.join(directory, COORDS_FILE), "r") as f:
         coords = json.load(f)
     with open(os.path.join(directory, NAME_FILE), "r") as f:
