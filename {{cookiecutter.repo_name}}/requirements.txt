@@ -1,4 +1,5 @@
-arviz>=0.11.4
+ git+https://github.com/arviz-devs/arviz.git@main  # released arviz is currently broken
+# arviz>=0.11.4
 cmdstanpy>=1.0.1
 jupyter
 LovelyPlots
