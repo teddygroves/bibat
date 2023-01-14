@@ -11,12 +11,12 @@ DATA_PREPARATION_FUNCTIONS_TO_RUN = [
     data_preparation_functions.prepare_data_no_interaction,
 ]
 
-
-RAW_DIR = os.path.join("data", "raw")
+DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
+RAW_DIR = os.path.join(DATA_DIR, "raw")
+PREPARED_DIR = os.path.join(DATA_DIR, "prepared")
 RAW_DATA_FILES = {
     "raw_measurements": os.path.join(RAW_DIR, "raw_measurements.csv"),
 }
-PREPARED_DIR = os.path.join("data", "prepared")
 
 
 def main():
