@@ -32,6 +32,8 @@ def main():
         prepared_data = dpf(raw_data["raw_measurements"])
         output_dir = os.path.join(PREPARED_DIR, prepared_data.name)
         print(f"\twriting files to {output_dir}")
+        print(os.listdir(DATA_DIR))
+        print(os.listdir(PREPARED_DIR))
         write_prepared_data(prepared_data, output_dir)
 
 
