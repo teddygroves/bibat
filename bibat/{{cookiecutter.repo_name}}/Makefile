@@ -22,10 +22,10 @@ env: $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
 
 analysis: env
 	. $(ACTIVATE_VENV) && (\
-	  {% if cookiecutter.create_tests_directory %}python -m pytest; \{% endif %}
-	  python prepare_data.py; \
-	  python sample.py; \
-	  jupyter execute investigate.ipynb; \
+	  {% if cookiecutter.create_tests_directory %}python -m pytest || exit 1; \{% endif %}
+	  python prepare_data.py || exit 1; \
+	  python sample.py || exit 1; \
+	  jupyter execute investigate.ipynb || exit 1; \
 	)
 
 clean-stan:
