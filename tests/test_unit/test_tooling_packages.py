@@ -5,7 +5,7 @@ import os
 from bibat.cli import TOOLING_PACKAGES as from_cli
 
 TOOLING_PACKAGE_FILE = os.path.join(
-    "{{cookiecutter.repo_name}}", "requirements-tooling.txt"
+    "bibat", "{{cookiecutter.repo_name}}", "requirements-tooling.txt"
 )
 
 
