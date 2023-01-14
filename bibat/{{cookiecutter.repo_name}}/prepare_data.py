@@ -4,6 +4,7 @@ import os
 
 import pandas as pd
 from src import data_preparation_functions
+from src.prepared_data import write_prepared_data
 
 DATA_PREPARATION_FUNCTIONS_TO_RUN = [
     data_preparation_functions.prepare_data_fake_interaction,
@@ -31,7 +32,7 @@ def main():
         prepared_data = dpf(raw_data["raw_measurements"])
         output_dir = os.path.join(PREPARED_DIR, prepared_data.name)
         print(f"\twriting files to {output_dir}")
-        prepared_data.write_files(output_dir)
+        write_prepared_data(prepared_data, output_dir)
 
 
 if __name__ == "__main__":

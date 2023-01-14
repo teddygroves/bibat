@@ -33,16 +33,6 @@ class PreparedData:
     coords: CoordDict
     measurements: pa.typing.DataFrame[MeasurementsDF]
 
-    def write_files(self, directory):
-        """Write prepared data files to a directory."""
-        if not os.path.exists(directory):
-            os.mkdir(directory)
-        self.measurements.to_csv(os.path.join(directory, MEASUREMENTS_FILE))
-        with open(os.path.join(directory, COORDS_FILE), "w") as f:
-            json.dump(self.coords, f)
-        with open(os.path.join(directory, NAME_FILE), "w") as f:
-            f.write(self.name)
-
 
 def load_prepared_data(directory: str) -> PreparedData:
     """Load prepared data from files in directory."""
@@ -56,3 +46,14 @@ def load_prepared_data(directory: str) -> PreparedData:
         coords=coords,
         measurements=measurements,
     )
+
+
+def write_prepared_data(prepped: PreparedData, directory):
+    """Write prepared data files to a directory."""
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+        prepped.measurements.to_csv(os.path.join(directory, MEASUREMENTS_FILE))
+    with open(os.path.join(directory, COORDS_FILE), "w") as f:
+        json.dump(prepped.coords, f)
+    with open(os.path.join(directory, NAME_FILE), "w") as f:
+        f.write(prepped.name)
