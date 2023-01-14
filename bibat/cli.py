@@ -12,7 +12,7 @@ from cookiecutter.main import cookiecutter
 
 from bibat import __version__ as bibat_version
 
-PARENT = os.path.dirname(os.path.dirname(__file__))
+THIS_DIR = os.path.dirname(__file__)
 TOOLING_PACKAGES = [
     "pandas-stubs",
     "types-toml",
@@ -96,7 +96,7 @@ def main():
     args = parser.parse_args()
     config_file = args.config_file
     if config_file is not None:
-        cookiecutter(PARENT, no_input=True, config_file=config_file)
+        cookiecutter(THIS_DIR, no_input=True, config_file=config_file)
         return
     print("Welcome to the Batteries-Included Bayesian Analysis Template!")
     context = {
@@ -106,7 +106,7 @@ def main():
     context["repo_name"] = context["project_name"].lower().replace(" ", "_")
     context["bibat_version"] = bibat_version
     cookiecutter(
-        PARENT, no_input=True, extra_context=context, config_file=config_file
+        THIS_DIR, no_input=True, extra_context=context, config_file=config_file
     )
 
 
