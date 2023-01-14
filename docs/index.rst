@@ -388,6 +388,23 @@ You should now be able to create a :literal:`my_cool_project` cmdstanpy project 
 
     $ cookiecutter --no-input --config-file path/to/config.yml path/to/bibat
 
+To release a new version of bibat, edit the field :code:`version` in the file
+:code:`setup.cfg`, e.g. to :code:`0.2.1`then make a pull request with this
+change.
+
+Once the changes are merged into the :code:`origin/master` branch, add a tag
+whose name begins with :code:`v`, followed by the new version number to your
+local :code:`master` branch, for example like this:
+
+.. code:: bash
+
+          git tag v0.2.1
+
+Now push the new tag to github:
+
+.. code:: bash
+
+          git push origin "v0.2.1"
 
 
 .. toctree::
