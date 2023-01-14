@@ -1,6 +1,6 @@
 # This workflow tests whether projects with sphinx documentation work correctly.
 
-name: Docs Check
+name: Sphinx Check
 
 on: push
 
@@ -20,5 +20,5 @@ jobs:
       run: pip install -e .\[development\]
     - name: build docs with sphinx
       run: |
-        cd \{\{cookiecutter.repo_name\}\}
+        cd bibat/\{\{cookiecutter.repo_name\}\}
         sphinx-build docs ./docs/_build/html/
