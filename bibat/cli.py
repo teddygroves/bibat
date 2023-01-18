@@ -8,7 +8,10 @@ import os
 from pathlib import Path
 from typing import List, Union
 
+import click
 from cookiecutter.main import cookiecutter
+from pydantic import root_validator
+from pydantic.dataclasses import dataclass
 
 from bibat import __version__ as bibat_version
 
@@ -25,61 +28,90 @@ TOOLING_PACKAGES = [
     "pylsp-mypy",
     "pyls-isort",
 ]
-FIELD_TO_PROMPT_AND_DEFAULT = {
-    "project_name": (
-        "What would you like your project to be called?",
-        "project_name",
+
+
+@dataclass
+class WizardFieldStr:
+    name: str
+    prompt: str
+    default: str
+
+
+@dataclass
+class WizardFieldChoice:
+    name: str
+    prompt: str
+    options: List[str]
+    default: str
+
+    @root_validator
+    def default_is_an_option(cls, values):
+        msg = f"default {values['default']} not in options {values['options']}"
+        assert values["default"] in values["options"], msg
+        return values
+
+
+WIZARD_FIELDS = [
+    WizardFieldStr(
+        "project_name", "What is your project called?", "Project Name"
     ),
-    "author_name": ("What is your name?", "Author name"),
-    "author_email": ("What is your email?", "Author email"),
-    "coc_contact": (
+    WizardFieldStr("author_name", "What is your name?", "Author name"),
+    WizardFieldStr("author_email", "What is your email?", "Author email"),
+    WizardFieldStr(
+        "coc_contact",
         "Who should be the code of conduct contact?",
         "Code of conduct contact",
     ),
-    "description": (
+    WizardFieldStr(
+        "description",
         "Please briefly describe your project",
         "A short description of the project.",
     ),
-    "open_source_license": (
-        "Choose an open source license",
+    WizardFieldChoice(
+        "open_source_license",
+        "Choose an open source license from these options:",
         ["MIT", "BSD-3-Clause", "No license file"],
+        "MIT",
     ),
-    "docs_format": (
+    WizardFieldChoice(
+        "docs_format",
         "How would you like to document your project?",
         ["Markdown", "Sphinx", "No docs"],
+        "Sphinx",
     ),
-    "create_tests_directory": (
+    WizardFieldStr(
+        "create_tests_directory",
         "Would you like to create a tests directory?",
         "y",
     ),
-    "create_dotgithub_directory": (
+    WizardFieldStr(
+        "create_dotgithub_directory",
         "Would you like to create a .github directory?",
         "y",
     ),
-    "install_python_tooling": (
+    WizardFieldStr(
+        "install_python_tooling",
         "Would you like to install these handy Python tools?\n\t"
         + "\n\t".join(TOOLING_PACKAGES),
         "y",
     ),
-}
+]
 
 
-def input_with_default(prompt: str, options: Union[str, List]):
-    """Get a user input if provided, otherwise return a default."""
-
-    def i_to_str(i):
-        return str(i + 1) if i > 0 else f"[{str(i+1)}]"
-
-    if isinstance(options, List):
-        option_lines = [f"{o} - {i_to_str(i)}" for i, o in enumerate(options)]
-        option_lines[0] = option_lines[0]
-        prompt += "\n\t" + "\n\t".join(option_lines) + " "
-        default = options[0]
+def prompt_user(wf: Union[WizardFieldStr, WizardFieldChoice]) -> str:
+    if isinstance(wf, WizardFieldStr):
+        return click.prompt(wf.prompt, default=wf.default, type=str)
+    elif isinstance(wf, WizardFieldChoice):
+        return click.prompt(
+            wf.prompt,
+            default=wf.default,
+            type=click.Choice(wf.options),
+            show_choices=True,
+        )
     else:
-        prompt += f" [{options}] "
-        default = options
-    user_input = input(prompt)
-    return user_input if user_input != "" else default
+        raise ValueError(
+            f"input {wf} is not a WizardFieldStr or a WizardFieldChoice"
+        )
 
 
 def main():
@@ -99,10 +131,7 @@ def main():
         cookiecutter(THIS_DIR, no_input=True, config_file=config_file)
         return
     print("Welcome to the Batteries-Included Bayesian Analysis Template!")
-    context = {
-        field: input_with_default(prompt, default)
-        for field, (prompt, default) in FIELD_TO_PROMPT_AND_DEFAULT.items()
-    }
+    context = {wf.name: prompt_user(wf) for wf in WIZARD_FIELDS}
     context["repo_name"] = context["project_name"].lower().replace(" ", "_")
     context["bibat_version"] = bibat_version
     cookiecutter(
