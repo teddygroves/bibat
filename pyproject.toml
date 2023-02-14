@@ -37,6 +37,14 @@ line_length = 80
 [tool.pylint.messages_control]
 disable = "C0330, C0326"
 
-[tool.pylint.format]
-max-line-length = "80"
+[tool.mypy]
+ignore_missing_imports = true
+plugins = ["pydantic.mypy"]
+follow_imports = "skip"
+strict_optional = true
 
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true
+warn_untyped_fields = true

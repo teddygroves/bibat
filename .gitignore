@@ -21,7 +21,7 @@ data/*/*
 results/runs/*
 
 # Byte-compiled / optimized / DLL files
-__pycache__/
+**/__pycache__/
 *.py[cod]
 
 # C extensions
@@ -92,7 +92,7 @@ target/
 .spyproject/
 
 # Jupyter NB Checkpoints
-.ipynb_checkpoints/
+**/.ipynb_checkpoints/
 
 # Mac OS-specific storage files
 .DS_Store
@@ -102,5 +102,7 @@ target/
 *.swo
 
 # Mypy cache
-.mypy_cache/
+**/.mypy_cache/
 
+# pytest cache
+**/.pytest_cache/
