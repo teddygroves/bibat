@@ -1,0 +1,40 @@
+---
+title: "{{ cookiecutter.project_name }}"
+subtitle: "A report created using bibat version {{ cookiecutter.bibat_version }}"
+author: "{{ cookiecutter.author_name }}"
+bibliography: bibliography.bib
+reference-location: margin
+format:
+  html: default
+  pdf: default
+---
+
+Write your report here in [pandoc
+markdown](https://pandoc.org/MANUAL.html#pandocs-markdown).
+
+Turn it into a pdf by running `quarto render report.qmd` from the project root.
+
+Refer to entries in `bibliography.bib` using their bibtex keys like
+this: @gelmanBayesianWorkflow2020.
+
+Include images like this: 
+
+![This is an example image](img/example.png)
+
+Include margin notes like this^[I'm a margin note!]
+
+Write inline code like this:
+
+```{python}
+def print_hello():
+    print("Hello!")
+```
+
+Check out the [quarto guide](https://quarto.org/docs/guide/) for more
+information about how to document your work using quarto.
+
+# References
+
+A list of references should appear here:
+
+

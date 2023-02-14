@@ -14,9 +14,9 @@ following commands:
 - `python sample.py`
 - `jupyter execute investigate.ipynb`
 
-{% if cookiecutter.docs_format == "Markdown" %}# How to create a pdf report
+{% if cookiecutter.docs_format == "Quarto" %}# How to create a pdf report
 
-First make sure you have installed [pandoc](https://pandoc.org).
+First make sure you have installed [quarto](https://https://quarto.org/).
 
 Now run this command from the `docs` directory:
 

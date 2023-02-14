@@ -1,4 +1,3 @@
-{% if cookiecutter.docs_format == "Sphinx" %}
 # Minimal makefile for Sphinx documentation
 #
 
@@ -19,25 +18,3 @@ help:
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
 %: Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
-{% endif %}
-{% if cookiecutter.docs_format == "Markdown" %}
-.PHONY: report clean
-
-BIBLIOGRAPHY = bibliography.bib
-MARKDOWN_FILE = report.md
-PDF_FILE = report.pdf
-PANDOCFLAGS =                         \
-  --from=markdown                     \
-  --highlight-style=pygments          \
-  --pdf-engine=xelatex                \
-  --citeproc                          \
-  --bibliography=$(BIBLIOGRAPHY)      
-
-$(PDF_FILE): $(MARKDOWN_FILE) $(BIBLIOGRAPHY)
-	pandoc $< -o $@ $(PANDOCFLAGS)
-
-report: $(PDF_FILE)
-
-clean:
-	$(RM) $(PDF_FILE)
-{% endif %}

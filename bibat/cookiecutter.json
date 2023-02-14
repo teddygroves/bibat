@@ -6,7 +6,7 @@
     "coc_contact": "Code of conduct contact",
     "description": "A short description of the project.",
     "open_source_license": ["MIT", "BSD-3-Clause", "No license file"],
-    "docs_format": ["Markdown", "Sphinx", "No docs"],
+    "docs_format": ["Quarto", "Sphinx", "No docs"],
     "create_tests_directory": "y",
     "create_dotgithub_directory": "y",
     "install_python_tooling": "y",

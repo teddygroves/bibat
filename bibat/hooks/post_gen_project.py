@@ -12,10 +12,11 @@ SPHINX_ONLY_PATHS = [
         "conf.py",
         "index.rst",
         "make.bat",
+        "Makefile",
     )
 ]
-MARKDOWN_ONLY_PATHS = [
-    os.path.join("docs", f) for f in ("report.md", "bibliography.bib")
+QUARTO_ONLY_PATHS = [
+    os.path.join("docs", f) for f in ("report.qmd", "bibliography.bib")
 ]
 
 REMOVE_PATHS = [
@@ -26,8 +27,8 @@ REMOVE_PATHS = [
 if "{{ cookiecutter.docs_format }}" not in ["Sphinx", "No docs"]:
     REMOVE_PATHS += SPHINX_ONLY_PATHS
 
-if "{{ cookiecutter.docs_format }}" not in ["Markdown", "No docs"]:
-    REMOVE_PATHS += MARKDOWN_ONLY_PATHS
+if "{{ cookiecutter.docs_format }}" not in ["Quarto", "No docs"]:
+    REMOVE_PATHS += QUARTO_ONLY_PATHS
 
 for path in REMOVE_PATHS:
     path = path.strip()
