@@ -7,7 +7,7 @@ from typing import List, Union
 
 
 @dataclass
-class WizardFieldStr:
+class WizardStr:
     """A string field."""
 
     name: str
@@ -16,7 +16,7 @@ class WizardFieldStr:
 
 
 @dataclass
-class WizardFieldChoice:
+class WizardChoice:
     """A choice field."""
 
     name: str
@@ -32,11 +32,11 @@ class WizardFieldChoice:
         return values
 
 
-def prompt_user(wf: Union[WizardFieldStr, WizardFieldChoice]) -> str:
+def prompt_user(wf: Union[WizardStr, WizardChoice]) -> str:
     """Prompt the user for an input and parse it with click."""
-    if isinstance(wf, WizardFieldStr):
+    if isinstance(wf, WizardStr):
         return click.prompt(wf.prompt, default=wf.default, type=str)
-    elif isinstance(wf, WizardFieldChoice):
+    elif isinstance(wf, WizardChoice):
         return click.prompt(
             wf.prompt,
             default=wf.default,
@@ -45,5 +45,5 @@ def prompt_user(wf: Union[WizardFieldStr, WizardFieldChoice]) -> str:
         )
     else:
         raise ValueError(
-            f"input {wf} is not a WizardFieldStr or a WizardFieldChoice"
+            f"input {wf} is not a WizardStr or a WizardChoice"
         )

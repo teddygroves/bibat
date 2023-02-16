@@ -7,11 +7,11 @@ import argparse
 import os
 from pathlib import Path
 
-import click
 from cookiecutter.main import cookiecutter
 
 from bibat import __version__ as bibat_version
-from bibat.wizarding import WizardFieldChoice, WizardFieldStr, prompt_user
+from bibat.wizarding import WizardChoice, WizardStr, prompt_user
+
 
 THIS_DIR = os.path.dirname(__file__)
 TOOLING_PACKAGES = [
@@ -28,44 +28,42 @@ TOOLING_PACKAGES = [
 ]
 
 WIZARD_FIELDS = [
-    WizardFieldStr(
-        "project_name", "What is your project called?", "Project Name"
-    ),
-    WizardFieldStr("author_name", "What is your name?", "Author name"),
-    WizardFieldStr("author_email", "What is your email?", "Author email"),
-    WizardFieldStr(
+    WizardStr("project_name", "What is your project called?", "Project Name"),
+    WizardStr("author_name", "What is your name?", "Author name"),
+    WizardStr("author_email", "What is your email?", "Author email"),
+    WizardStr(
         "coc_contact",
         "Who should be the code of conduct contact?",
         "Code of conduct contact",
     ),
-    WizardFieldStr(
+    WizardStr(
         "description",
         "Please briefly describe your project",
         "A short description of the project.",
     ),
-    WizardFieldChoice(
+    WizardChoice(
         "open_source_license",
         "Choose an open source license from these options:",
         ["MIT", "BSD-3-Clause", "No license file"],
         "MIT",
     ),
-    WizardFieldChoice(
+    WizardChoice(
         "docs_format",
         "How would you like to document your project?",
-        ["Markdown", "Sphinx", "No docs"],
-        "Sphinx",
+        ["Quarto", "Sphinx", "No docs"],
+        "Quarto",
     ),
-    WizardFieldStr(
+    WizardStr(
         "create_tests_directory",
         "Would you like to create a tests directory?",
         "y",
     ),
-    WizardFieldStr(
+    WizardStr(
         "create_dotgithub_directory",
         "Would you like to create a .github directory?",
         "y",
     ),
-    WizardFieldStr(
+    WizardStr(
         "install_python_tooling",
         "Would you like to install these handy Python tools?\n\t"
         + "\n\t".join(TOOLING_PACKAGES),
