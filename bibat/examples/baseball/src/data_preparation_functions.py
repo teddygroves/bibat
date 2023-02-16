@@ -11,19 +11,17 @@ from src.prepared_data import PreparedData
 
 def prepare_data_2006(measurements_raw: pd.DataFrame) -> PreparedData:
     """Prepare the 2006 data."""
-    measurements = (
-        measurements_raw
-        .rename(columns={"K": "n_attempt", "y": "n_success"})
-        .assign(
-            season="2006",
-            player=lambda df: [f"2006-player-{i+1}" for i in range(len(df))]
-        )
+    measurements = measurements_raw.rename(
+        columns={"K": "n_attempt", "y": "n_success"}
+    ).assign(
+        season="2006",
+        player=lambda df: [f"2006-player-{i+1}" for i in range(len(df))],
     )
     return PreparedData(
         name="2006",
         coords={
             "player": measurements["player"].tolist(),
-            "season": measurements["season"].tolist()
+            "season": measurements["season"].tolist(),
         },
         measurements=measurements,
     )
@@ -46,21 +44,26 @@ def prepare_data_recent(measurements_raw: pd.DataFrame) -> PreparedData:
     walks.
 
     """
+
     def filter_batters(df: pd.DataFrame):
-        return (
-            (df["AB"] >= 20)
-            & ~df["Pos.Summary"].astype(str).str.contains("1")
+        return (df["AB"] >= 20) & ~df["Pos.Summary"].astype(str).str.contains(
+            "1"
         )
+
     measurements = (
-        measurements_raw
-        .assign(
+        measurements_raw.assign(
             season=lambda df: df["year"].astype(str),
-            player=lambda df: df["Name.additional"].str.cat(df["Tm"]).str.cat(df["Lg"]).str.cat(df["season"]),
-            n_attempt=lambda df: df[["AB", "BB", "HBP", "SF"]].fillna(0).sum(
-                axis=1).astype(int),
+            player=lambda df: df["Name.additional"]
+            .str.cat(df["Tm"])
+            .str.cat(df["Lg"])
+            .str.cat(df["season"]),
+            n_attempt=lambda df: df[["AB", "BB", "HBP", "SF"]]
+            .fillna(0)
+            .sum(axis=1)
+            .astype(int),
             n_success=lambda df: (
                 df[["H", "BB", "HBP"]].fillna(0).sum(axis=1).astype(int)
-            )
+            ),
         )
         .loc[filter_batters, ["player", "season", "n_attempt", "n_success"]]
         .copy()
@@ -69,7 +72,7 @@ def prepare_data_recent(measurements_raw: pd.DataFrame) -> PreparedData:
         name="recent",
         coords={
             "player": measurements["player"].tolist(),
-            "season": measurements["season"].tolist()
+            "season": measurements["season"].tolist(),
         },
         measurements=measurements,
     )

@@ -12,7 +12,6 @@ from cookiecutter.main import cookiecutter
 from bibat import __version__ as bibat_version
 from bibat.wizarding import WizardChoice, WizardStr, prompt_user
 
-
 THIS_DIR = os.path.dirname(__file__)
 TOOLING_PACKAGES = [
     "pandas-stubs",

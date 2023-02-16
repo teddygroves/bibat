@@ -1,9 +1,10 @@
 """Dataclasses and functions for running bibat's command line wizard."""
 
-import click
-from pydantic.dataclasses import dataclass
-from pydantic import root_validator
 from typing import List, Union
+
+import click
+from pydantic import root_validator
+from pydantic.dataclasses import dataclass
 
 
 @dataclass
@@ -44,6 +45,4 @@ def prompt_user(wf: Union[WizardStr, WizardChoice]) -> str:
             show_choices=True,
         )
     else:
-        raise ValueError(
-            f"input {wf} is not a WizardStr or a WizardChoice"
-        )
+        raise ValueError(f"input {wf} is not a WizardStr or a WizardChoice")

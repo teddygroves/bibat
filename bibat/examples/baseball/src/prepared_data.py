@@ -12,6 +12,7 @@ NAME_FILE = "name.txt"
 COORDS_FILE = "coords.json"
 MEASUREMENTS_FILE = "measurements.csv"
 
+
 class MeasurementsDF(pa.SchemaModel):
     """A PreparedData should have a measurements dataframe like this.
 
@@ -20,8 +21,8 @@ class MeasurementsDF(pa.SchemaModel):
 
     player: pa.typing.Series[str]
     season: pa.typing.Series[str] = pa.Field(coerce=True)
-    n_attempt: pa.typing.Series[int] = pa.Field(ge = 1)
-    n_success: pa.typing.Series[int] = pa.Field(ge = 0)
+    n_attempt: pa.typing.Series[int] = pa.Field(ge=1)
+    n_success: pa.typing.Series[int] = pa.Field(ge=0)
 
 
 @dataclass
