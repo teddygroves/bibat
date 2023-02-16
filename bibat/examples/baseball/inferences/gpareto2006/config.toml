@@ -1,0 +1,21 @@
+name = "gpareto2006"
+stan_file = "gpareto.stan"
+prepared_data_dir = "2006"
+stan_input_function = "get_stan_input_gpareto"
+modes = ["prior", "posterior"]
+
+[dims]
+alpha = ["player"]
+
+[stanc_options]
+warn-pedantic = true
+
+[sample_kwargs]
+save_warmup = false
+iter_warmup = 2000
+iter_sampling = 2000
+
+[sample_kwargs.prior]
+chains = 2
+iter_warmup = 1000
+iter_sampling = 1000

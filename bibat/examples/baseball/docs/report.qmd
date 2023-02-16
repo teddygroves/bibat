@@ -1,0 +1,420 @@
+---
+title: "Modelling at-bats in baseball using the generalised Pareto distribution"
+subtitle: "A report created using bibat version 0.0.4"
+author: "Teddy Groves"
+bibliography: bibliography.bib
+reference-location: margin
+format:
+  html: default
+  pdf: default
+filters:
+  - include-code-files
+---
+
+I used to do a lot of statistical analyses of sports data where there was a
+latent parameter for the player's ability. You can see an example
+[here](https://github.com/teddygroves/cricket).
+
+It was a natural choice to use a Bayesian hierarchical model where the abilities
+have a location/scale type distribution with support on the whole real line, and
+in fact this worked pretty well! You would see the kind of players at the top
+and bottom of the ability scale that you would expect.
+
+Still, there were a few problems. In particular the data were typically
+unbalanced because better players tended to fproduce more data than worse
+players. The result of this was that my models would often inappropriately think
+the bad players were like the good players: they would not only tend to be too
+certain about the abilities of low-data players, but also be biased, thinking
+that these players are probably a bit better than they actually are. I never
+came up with a good way to solve this problem, despite trying a lot of things!
+
+Even though I don't work with sports data very much any more, the problem still
+haunted me, so when I read [this great case
+study](https://mc-stan.org/users/documentation/case-studies/gpareto_functions.html#conclusion-on-the-data-analysis)
+about geomagnetic storms it gave me an idea for yet another potential solution.
+
+The idea was this: just as data about intense storms that cause electricity
+problems tell us about a tail of the bigger solar magnetism distribution, maybe
+data about professional sportspeople is best thought about as coming from a tail
+of the general sports ability distribution. If so, maybe something like the
+[generalised pareto
+distribution](https://en.wikipedia.org/wiki/Generalized_Pareto_distribution)
+might be better than the bog standard normal distribution for describing the
+pros' abilities.
+
+I thought I'd test this out with some sports data, and luckily there is a really
+nice baseball example on [the Stan case studies
+website](https://mc-stan.org/users/documentation/case-studies/pool-binary-trials.html),
+complete with [data from the 2006 Major league
+season])https://github.com/stan-dev/example-models/blob/master/knitr/pool-binary-trials/baseball-hits-2006.csv).
+After I posted some early results [on the Stan discourse
+forum](https://discourse.mc-stan.org/t/baseball-analysis-using-latent-generalised-pareto-distribution/29222),
+user jd_c kindly gathered and posted [even more
+data](https://discourse.mc-stan.org/uploads/short-url/cRJtia2jKxiX01ZEraHUVK7jbHI.RData),
+covering 5 full major league baseball seasons.
+
+With a few datasets and at least two different statistical models to consider,
+the full analysis looked like it would be a little too big to fit in a trivial
+file structure, so it seemed like a good opportunity to showcase my
+batteries-included Bayesian analysis template package
+[bibat](https://github.com/teddygroves/bibat).
+
+The rest of this vignette describes how I used bibat to (relatively) painlessly
+see if my generalised Pareto distribution idea would work.
+
+Check out the analysis's [github
+repository](https://github.com/teddygroves/baseball) for all the details.
+
+# Setup
+
+First I installed bibat in my global Python 3.11 environment with this command:
+
+```{sh}
+$ pip install bibat
+```
+
+Next I started bibat's wizard like this:
+
+```{sh}
+bibat
+```
+
+After I answered the wizard's questions bibat creted a new folder called
+`baseball` that looked like this:
+
+```{sh}
+baseball
+├── CODE_OF_CONDUCT.md
+├── LICENSE
+├── Makefile
+├── README.md
+├── bibat_version.txt
+├── data
+│   └── raw
+│       ├── raw_measurements.csv
+│       └── readme.md
+├── docs
+│   ├── bibliography.bib
+│   ├── img
+│   │   ├── example.png
+│   │   └── readme.md
+│   └── report.qmd
+├── inferences
+│   ├── fake_interaction
+│   │   └── config.toml
+│   ├── interaction
+│   │   └── config.toml
+│   └── no_interaction
+│       └── config.toml
+├── investigate.ipynb
+├── plots
+│   ├── posterior_ll_comparison.png
+│   └── posterior_predictive_comparison.png
+├── prepare_data.py
+├── pyproject.toml
+├── requirements-tooling.txt
+├── requirements.txt
+├── sample.py
+├── src
+│   ├── __init__.py
+│   ├── data_preparation_functions.py
+│   ├── inference_configuration.py
+│   ├── prepared_data.py
+│   ├── readme.md
+│   ├── stan
+│   │   ├── custom_functions.stan
+│   │   ├── multilevel-linear-regression.stan
+│   │   └── readme.md
+│   ├── stan_input_functions.py
+│   └── util.py
+└── tests
+    ├── test_integration
+    │   └── test_data_preparation.py
+    └── test_unit
+        ├── test_inference_configuration.py
+        └── test_util.py
+```
+
+This folder implements bibat's example analysis - a comparison of linear
+regression with two different design matrices. To check that everything was
+working correctly I ran the analysis like this:
+
+```{sh}
+$ cd baseball
+$ make analysis
+```
+
+Some cogs turned, some new lines appeared in my terminal and some new files were
+created - nice, the setup worked!
+
+# Getting raw data
+
+I added a line with the text `pyreadr` to the file `requirements.txt`, then
+added the following code to a new script called `fetch_data.py`:
+
+```{.python include="../fetch_data.py"}
+```
+
+To get the files I ran the script:
+
+```{sh}
+$ source .venv/bin/activate
+$ python fetch_data.py
+```
+
+Finally I removed the example analysis's raw data:
+
+```{sh}
+$ rm data/raw/raw_measurements.csv
+```
+
+# Preparing the data
+The first step in preparing data is to decide what prepared data looks like for
+the purposes of our analysis. Bibat provides dataclasses called `PreparedData`
+and `MeasurementsDF ` in the file `src/prepared_data.py` which can help get us
+started with this.
+
+As it happens, prepared data looks very similar in our analysis and the example.
+All we need to do is change the `MeasurementsDF` definition a little^[note that
+this class uses [pandera](https://pandera.readthedocs.io), a handy library for
+defining what a pandas dataframe should look like]:
+
+```{python}
+from typing import Optional
+import pandera as pa
+
+# ...
+
+class MeasurementsDF(pa.SchemaModel):
+    """A PreparedData should have a measurements dataframe like this.
+
+    Other columns are also allowed!
+    """
+
+    player: pa.typing.Series[str]
+    season: pa.typing.Series[str]
+    n_attempt: pa.typing.Series[int] = pa.Field(ge = 1)
+    n_success: pa.typing.Series[int] = pa.Field(ge = 0)
+```
+
+Next we can write some functions that create `PreparedData` objects. These
+should live in the file `data_preparation_functions.py`. In this case we write a
+couple of data preparation functions: `prepare_data_2006` and
+`prepare_data_recent`:
+
+```{.python include="../src/data_preparation_functions.py"}
+```
+
+Finally we need to update `prepare_data.py`, the script that runs the data
+preparation functions. Again there isn't much to change from the example
+analysis.
+
+```{.python include="../prepare_data.py"}
+```
+
+To check that all this works, we can run the script `prepare_data.py` manually
+or using `make analysis`. Now if we look in the file
+`data/prepared/recent/measurements.csv` we should see some lines that look like
+this:
+
+```{csv}
+,player,season,n_attempt,n_success
+0,abreujo02,2018,553,180
+1,acunaro01,2018,487,178
+3,adamewi01,2018,322,112
+6,adamsla01,2018,29,10
+7,adamsma01,2018,337,104
+8,adamsma01,2018,277,92
+9,adamsma01,2018,60,12
+```
+
+# Specifying statistical models
+
+I wanted to test two statistical models: one with the modelling the distribution
+of per-player logit-scale at-bat success rates as a normal distbution with
+unknown mean and standard deviation, and another where the same logit-scale
+rates have a generalised pareto distribution.
+
+So, genve a table of $N$ player profiles, with each player has $y$ successes out
+of $K$ at-bats and an unknown latent success rate $\alpha$, I wanted to use this
+measurement model:
+
+$$
+y \sim \text{binomial logit}(K, \alpha)
+$$
+
+In the generalised pareto model I would give the $\alpha$s this prior model,
+with the hyperparameter $\text{min }\alpha$ assumed to be known exactly and $k$
+and $\sigma$ given prior distributions that put the $\alpha$s in the generally
+plausible range of between roughly 0.1 and 0.4.
+
+\begin{align*}
+\alpha &\sim GPareto(\text{min }\alpha, k, \sigma)
+\end{align*}
+
+In the normal model I would use a standard hierarchical regression model with an
+effect for the log-scale number of at-bats to attempt to explicitly model the
+tendency of players with more appearances to be better:
+
+\begin{align*}
+\alpha &\sim Normal(\mu + b_{K} \cdot \ln{K}, \tau) \\
+\end{align*}
+
+Again I would choose priors for the hyperparameters that put most of the alphas
+between 0.1 and 0.4.
+
+To implement these models using Stan I first added the following function to the
+file `custom_functions.stan`. This was simply copied from [the relevant part of
+the geomagnetic storms case
+study](https://mc-stan.org/users/documentation/case-studies/gpareto_functions.html#conclusion-on-the-data-analysis).
+
+```{stan}
+real gpareto_lpdf(vector y, real ymin, real k, real sigma) {
+  // generalised Pareto log pdf 
+  int N = rows(y);
+  real inv_k = inv(k);
+  if (k<0 && max(y-ymin)/sigma > -inv_k)
+    reject("k<0 and max(y-ymin)/sigma > -1/k; found k, sigma =", k, ", ", sigma);
+  if (sigma<=0)
+    reject("sigma<=0; found sigma =", sigma);
+  if (fabs(k) > 1e-15)
+    return -(1+inv_k)*sum(log1p((y-ymin) * (k/sigma))) -N*log(sigma);
+  else
+    return -sum(y-ymin)/sigma -N*log(sigma); // limit k->0
+}
+```
+
+Next I wrote a file `gpareto-reg.stan`:
+
+```{.stan include="../src/stan/gpareto-reg.stan"}
+```
+
+Finally I wrote a file `normal.stan`:
+
+```{.stan include="../src/stan/normal.stan"}
+```
+
+# Generating Stan inputs
+Next we need to tell our analysis how to turn some prepared data into a
+dictionary that can be used as input for Stan. Bibat assumes that this task is
+handled by functions that live in the file `src/stan_input_functions.py`, each
+of which takes in a `PreparedData` and returns a Python dictionary. You can
+write as many Stan input functions as you like and choose which one to run for
+any given inference.
+
+We can start by defining some Stan input functions that pass arbitary prepared data
+on to each of the models:
+
+```{.python include="../src/stan_input_functions.py" start-line=12 end-line=34}
+```
+
+But why stop there? It can also be useful to generate Stan inputs consistently
+with a model, based on some hardcoded hyperparameter values. Here are some
+functions that do this for both of our models:
+
+```{.python include="../src/stan_input_functions.py" start-line=37}
+```
+
+# Specifying inferences
+Now all the building blocks for making statistical inferences - raw data, data
+preparation rules, statistical models and recipes for turning prepared data into
+model inputs - are in place. The last step before actually running Stan is to
+write down how put these blocks together. Bibat has another concept for this,
+called 'inferences'.
+
+An inference in bibat is a folder containing a special file called
+`config.toml`. This file sets out what inferences you want to make: which
+statistical model, which prepared data function, which Stan input function,
+which parameters have which dimensions, which sampling modes to use and how to
+configure the sampler. The folder will later be filled up with the results of
+performing the specified inferences.
+
+I started by deleting the example inferences and creating two fresh folders,
+leaving me with an `inferences` folder looking like this:
+
+```{sh}
+.
+├── gpareto2006
+│   └── config.toml
+└── normal2006
+    └── config.toml
+```
+
+Here is the file `inferences/gpareto2006/config.toml`:
+
+```{.toml include="../inferences/gpareto2006/config.toml"}
+```
+
+Here is the file `inferences/normal2006/config.toml`:
+
+```{.toml include="../inferences/normal2006/config.toml"}
+```
+
+Note that:
+* The Stan file, prepared data folder and stan input function are referred to by
+  strings. The analysis should raise an error if you enter a non-existing value.
+* Both inferences are set to run in "prior" and "posterior" modes - the other
+  pre-defined mode is "kfold", but you can also write your own!
+* You can enter arbitrary arguments to cmdstanpy's `CmdStanModel.sample` method
+  in the `[sample_kwargs]` table.
+* You can enter mode-specific overrides in `[sample_kwargs.<MODE>]`. This can be
+  handy if you want to run more or fewer iterations for a certain mode.
+
+Now when I ran `make analysis` again, I saw messages indicating that Stan had
+run, and found that the `inferences` subfolders had been populated:
+
+```{sh}
+inferences
+├── gpareto2006
+│   ├── config.toml
+│   └── idata.json
+└── normal2006
+    ├── config.toml
+    └── idata.json
+```
+
+# Investigating the inferences
+Now that the inferences are ready it's time to check them out. Bibat provides a
+jupyter notebook called `investigate.ipynb` for exactly this purpose.
+
+A lot of code from the example analysis's notebook was reusable, so I largely
+followed its structure, with a few tweaks.
+
+# Choosing priors using push-forward calibration
+
+The trickiest thing about my analysis was setting prior distributions for the
+parameters $k$ and $\sigma$ in the generalised Pareto models. To choose some
+more or less plausible values I did a few prior-mode model runs and checked the
+distributions of the resulting `alpha` variables. I wanted to make sure that
+they all lay in the range corresponding to batting averages between about 0.15
+and a little over 0.4. Here is a graph that shows the 1% to 99% prior quantiles
+for each player's latent success percentage in the 2006 dataset alongside their
+actually realised success rate.
+
+![](img/prior_quantiles.png)
+
+# Extending the analysis to the recent data
+
+To model the more recent data, all I had to do was create some new inference
+folders with appropriate `prepared_data_dir` fields in their `config.toml`
+files. For example, here is the `config.toml` file for the `gparetorecent`
+inference:
+
+```{.toml include="../inferences/gparetorecent/config.toml"}
+```
+
+After running `make analysis` one more time, I went back to the notebook
+`investigate.ipynb` and made plots of both models' posterior 1%-99% success rate
+intervals for both datasets:
+
+![](img/posterior_quantiles.png)
+
+I think this is very interesting. Both models' prior distributions had similar
+regularisation levels, and they more or less agree about the abilities of the
+players with the most at-bats, both in terms of locations and the widths of the
+plausible intervals for the true success rate. However, the models ended up with
+dramatically different certainty levels about the abilities of players with few
+at-bats. This pattern was true both for the small 2006 dataset and the much
+larger 'recent' dataset.
+
+
