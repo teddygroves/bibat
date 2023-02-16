@@ -284,9 +284,9 @@ real gpareto_lpdf(vector y, real ymin, real k, real sigma) {
 }
 ```
 
-Next I wrote a file `gpareto-reg.stan`:
+Next I wrote a file `gpareto.stan`:
 
-```{.stan include="../src/stan/gpareto-reg.stan"}
+```{.stan include="../src/stan/gpareto.stan"}
 ```
 
 Finally I wrote a file `normal.stan`:
