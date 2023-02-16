@@ -1,10 +1,9 @@
 """Functions for generating input to Stan from prepared data."""
 
 
-from typing import Dict, List
+from typing import Dict
 
 import numpy as np
-import pandas as pd
 from scipy.special import expit, logit
 from src.prepared_data import PreparedData
 
@@ -61,13 +60,16 @@ def get_stan_input_gpareto_fake(ppd: PreparedData) -> Dict:
     K = ppd.measurements["n_attempt"].values
     min_alpha = 0.1
     rng = np.random.default_rng(seed=1234)
-    true_param_values = {
-        "sigma": -1.098,
-        "k": 0.18,
-        "alpha": gpareto_rvs(rng, N, min_alpha, k, sigma),
-    }
-    y = rng.binomial(k, expit(alpha))
-    return {"N": N, "K": k, "y": y, "min_alpha": min_alpha} | true_param_values
+    true_param_values = {"sigma": -1.098, "k": 0.18}
+    true_param_values["alpha"] = gpareto_rvs(
+        rng,
+        N,
+        min_alpha,
+        true_param_values["k"],
+        true_param_values["sigma"],
+    )
+    y = rng.binomial(K, expit(true_param_values["alpha"]))
+    return {"N": N, "K": K, "y": y, "min_alpha": min_alpha} | true_param_values
 
 
 def gpareto_rvs(

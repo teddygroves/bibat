@@ -1,12 +1,15 @@
+"""Fetch raw data from the internet."""
+
 import os
 
 import pandas as pd
-import pyreadr
 import requests
 
 URLS = {
-    "2006": "https://raw.githubusercontent.com/stan-dev/example-models/master/knitr/pool-binary-trials/baseball-hits-2006.csv",
-    "recent": "https://discourse.mc-stan.org/uploads/short-url/cRJtia2jKxiX01ZEraHUVK7jbHI.RData",
+    "2006": "https://raw.githubusercontent.com/stan-dev/"
+    "example-models/master/knitr/pool-binary-trials/baseball-hits-2006.csv",
+    "recent": "https://discourse.mc-stan.org/uploads/short-url/"
+    "cRJtia2jKxiX01ZEraHUVK7jbHI.RData",
 }
 OUT_FILES = {
     "2006": os.path.join("data", "raw", "baseball-hits-2006.csv"),
