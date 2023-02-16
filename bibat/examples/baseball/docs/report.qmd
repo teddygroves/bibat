@@ -1,6 +1,6 @@
 ---
 title: "Modelling at-bats in baseball using the generalised Pareto distribution"
-subtitle: "A report created using bibat version 0.0.5"
+subtitle: "A report created using bibat version 0.0.6"
 author: "Teddy Groves"
 bibliography: bibliography.bib
 reference-location: margin
