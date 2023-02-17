@@ -3,10 +3,9 @@
 I used this approach because I wanted to make longer prompts.
 """
 
-import argparse
 import os
-from pathlib import Path
 
+import click
 from cookiecutter.main import cookiecutter
 
 from bibat import __version__ as bibat_version
@@ -71,24 +70,22 @@ WIZARD_FIELDS = [
 ]
 
 
-def main():
-    """Run bibat's cli."""
-    parser = argparse.ArgumentParser(
-        description="Generate a Bayesian statistical analysis project."
-    )
-    parser.add_argument(
-        "--config-file",
-        type=Path,
-        default=None,
-        help="path to a yaml file with prefilled cookiecutter fields",
-    )
-    args = parser.parse_args()
-    config_file = args.config_file
+@click.command()
+@click.option(
+    "--config-file",
+    type=click.Path(exists=True),
+    default=None,
+    help="Path to a yaml file with prefilled cookiecutter fields.",
+)
+def main(config_file):
+    """Generate a Bayesian statistical analysis project."""
     if config_file is not None:
         cookiecutter(THIS_DIR, no_input=True, config_file=config_file)
         return
-    print("Welcome to the Batteries-Included Bayesian Analysis Template!")
-    context = {wf.name: prompt_user(wf) for wf in WIZARD_FIELDS}
+    click.echo("Welcome to the Batteries-Included Bayesian Analysis Template!")
+    context = {}
+    for wizard_field in WIZARD_FIELDS:
+        context[wizard_field.name] = prompt_user(wizard_field)
     context["repo_name"] = context["project_name"].lower().replace(" ", "_")
     context["bibat_version"] = bibat_version
     cookiecutter(
