@@ -96,7 +96,8 @@ follows:
 - Investigations are performed literately using the notebook file
   :code:`investigate.ipynb`, which saves plots to the directory :code:`plots`.
 - Documentation lives in the directory :code:`docs`, and can be written using a
-  range of standard formats including markdown and Sphinx.
+  range of standard formats including `quarto <https://quarto.org/>` and `Sphinx
+  <https://www.sphinx-doc.org/en/master/>`.
 
 The analysis is performed by setting up a suitable programming environment and
 then running the Python scripts :code:`prepare_data.py` and :code:`sample.py`,
@@ -106,7 +107,9 @@ using the makefile :code:`Makefile`, so that the entire analysis can be
 performed using the command :code:`make analysis` while avoiding unnecessarily
 re-running any tasks.
 
-After running the analysis, the next step is to make some changes and run a new analysis. This can be done by editing any of the files representing the analysis's component parts, then re-running the command :code:`make analysis`.
+After running the analysis, the next step is to make some changes and run a new
+analysis. This can be done by editing any of the files representing the
+analysis's component parts, then re-running the command :code:`make analysis`.
 
 .. _editing the example analysis:
 
@@ -269,7 +272,14 @@ model and a suitable stan input function, for example like this:
 
 Examples
 =========
-Check out these examples to see how :literal:`bibat` can be used in practice.
+
+To illustrate the process of creating a custom analysis starting with
+:literal:`bibat`'s provided template, you can find some example analyses `here
+<https://github.com/teddygroves/bibat/examples>`. These projects are the best
+place to start as they are kept up to date as :literal:`bibat` is developed.
+
+For even more inspiration, check out these projecs that used :literal:`bibat` in
+practice.
 
 * `mrna <https://github.com/teddygroves/mrna>`_ A published analysis of mRNA
   regulation, made fully Bayesian and then improved.
@@ -279,7 +289,8 @@ Check out these examples to see how :literal:`bibat` can be used in practice.
 * `biothermostat <https://github.com/biosustain/biothermostat>`_ Statistical
   analysis of biochemical thermodynamics data.
 
-  If you used :literal:`bibat` to start your analysis, feel free to `add it to this list <https://github.com/teddygroves/bibat/docs/index.rst>`_!
+If you used :literal:`bibat` to start your analysis, feel free to `add it to
+this list <https://github.com/teddygroves/bibat/docs/index.rst>`_!
 
 .. _motivation:
 
