@@ -96,8 +96,8 @@ follows:
 - Investigations are performed literately using the notebook file
   :code:`investigate.ipynb`, which saves plots to the directory :code:`plots`.
 - Documentation lives in the directory :code:`docs`, and can be written using a
-  range of standard formats including `quarto <https://quarto.org/>` and `Sphinx
-  <https://www.sphinx-doc.org/en/master/>`.
+  range of standard formats including `quarto <https://quarto.org/>`_ and
+  `Sphinx <https://www.sphinx-doc.org/en/master/>`_.
 
 The analysis is performed by setting up a suitable programming environment and
 then running the Python scripts :code:`prepare_data.py` and :code:`sample.py`,
@@ -275,7 +275,7 @@ Examples
 
 To illustrate the process of creating a custom analysis starting with
 :literal:`bibat`'s provided template, you can find some example analyses `here
-<https://github.com/teddygroves/bibat/examples>`. These projects are the best
+<https://github.com/teddygroves/bibat/examples>`_. These projects are the best
 place to start as they are kept up to date as :literal:`bibat` is developed.
 
 For even more inspiration, check out these projecs that used :literal:`bibat` in
