@@ -14,7 +14,7 @@ authors:
 affiliations:
  - name: The Novo Nordisk Foundation Center for Biosustainability
    index: 1
-date: 13 Jan 2023
+date: 17 Feb 2023
 bibliography: bibliography.bib
 
 # Optional fields if submitting to a AAS journal too, see this blog post:
@@ -25,23 +25,25 @@ bibliography: bibliography.bib
 
 # Summary
 Software implementing one-off Bayesian statistical analyses is ubiquitous in
-applied sceince, but it is typically written from scratch rather than using any
-form of template, as is generally considered the best practice among software
-developers.
+applied sceince, but it is typically written from scratch rather than using a
+template.
 
-Bibat is a Python package providing a flexible interactive template for one-off
-Bayesian statistical analyses, thereby saving time and improving the quality of
-the final software. Bibat comes with "batteries included" in the sense that the
-provided analysis works from end to end; we believe this approach to template
-design makes for better usability and testing than the alternative approach of providing an incomplete skeleton project.
+Bibat is a Python package providing a flexible interactive template for Bayesian
+statistical analyses, thereby saving time and improving the quality of the final
+software. Bibat creates a working example analysis with minimal effort, which
+the user can then adapt so as to implement their desired analysis. In this sense
+bibat comes with "batteries included". We believe this workflow makes for better
+usability and easier testing compared with the alternative approach of providing
+an incomplete skeleton project.
 
 # Statement of need
-Interactive project templates are widely popular for general software
-development and for machine learning, but there is currently no popular
-interactive project template that specifically targets one-off Bayesian
-statistical analysis.
-
-An interactive template for Bayesian statistical analysis projects is particularly needed because of these projects' intrinsic complexity.
+Interactive project templates are widespread in general software development and
+machine learning, but there is currently no popular interactive project template
+that specifically targets Bayesian statistical analyses. Interactive templates
+are particularly useful for Bayesian statistical analyses, which require
+specialised data structures for input and output information. Templates make it
+easier to use the appropriate formats while maintaining readability and avoiding
+errors.
 
 `bibat` is an interactive template for statistical analysis projects written
 with Python 3 [@vanrossumPythonReferenceManual2009] and Stan
@@ -49,37 +51,34 @@ with Python 3 [@vanrossumPythonReferenceManual2009] and Stan
 users to follow the workflow set out in [@gelmanBayesianWorkflow2020] for any
 statistical analysis that can be implemented using these tools, and provides
 functionality for users to automate, test, document and continuously integrate
-their analysis. In addition, `bibat` takes a "batteries included" approach, so
-that users start from a complete working example project rather than an
-incomplete skeleton project.
+their analysis.
 
-`bibat` uses the popular interactive template library
-`cookiecutter` [@greenfeldCookiecutter2021]. It creates a project that uses the
-standard scientific Python toolbox for data fetching and manipulation, Stan for
+`bibat` uses the popular interactive template library `cookiecutter`
+[@greenfeldCookiecutter2021]. It creates a project that uses the standard
+scientific Python toolbox for data fetching and manipulation, Stan for
 statistical model definitions and computation, `cmdstanpy`
 [@standevelopmentteamCmdStanPy2022] for Python to Stan interface, `arviz`
 [@kumarArviZUnifiedLibrary2019] for storing results and downstream analysis and
 `make` [@stallman1991gnu] for automation. Users can optionally document their
-work using Sphinx [@georgbrandlandthesphinxteamSphinx2022] or markdown, test it
-using pytest [@pytestdevelopersPytest2022] and implement continuous integration
-using github actions
-[@githubdevelopersGitHubActions2022]. `bibat` itself
-is continuously tested to ensure that it works on the operating systems Linux,
-macos and Windows. Detailed documentation can be found at
+work using Sphinx [@georgbrandlandthesphinxteamSphinx2022] or Quarto
+[@Allaire_Quarto_2022], test it using pytest [@pytestdevelopersPytest2022] and
+implement continuous integration using github actions
+[@githubdevelopersGitHubActions2022]. `bibat` itself is continuously tested to
+ensure that it works on the operating systems Linux, macos and Windows. Detailed
+documentation can be found at
 \href{https://bibat.readthedocs.io/en/latest/}{https://bibat.readthedocs.io/en/latest/}.
 
 bibat is linked on the [cmdstanpy community
 website](https://mc-stan.org/cmdstanpy/community.html) and is used in several
 active research projects: see [this documentation page](https://bibat.readthedocs.io/en/latest/examples.html) for a list.
 
-# Usage
-After installing `cookiecutter` with the command `pip install cookiecutter`,
-`bibat` can be used by running the command
-`cookiecutter gh:teddygroves/bibat`. An interactive
-form then prompts the user for configuration information including project and
-repository name, author name, a short description and choices of open source
-license options, documentation formats and whether or not to include tests and
-continuous integration.
+# Installation and usage
+`bibat` is installed by running the command `pip install bibat` and then used by running the command `bibat`.
+
+This command triggers an interactive form which prompts the user for
+configuration information including project and repository name, author name, a
+short description and choices of open source license options, documentation
+formats and whether or not to include tests and continuous integration.
 
 A folder with the chosen repository name will then be created in the current
 working directory, containing code that implements the provided example
@@ -103,12 +102,12 @@ analysis`. Since `bibat` follows a modular design,
 individual steps of the analysis can easily be tested in isolation by running
 the corresponding Python script.
 
-# Case study: mRNA regulation
+# Case study: mRNA 
 ![(a) Target system 
   (b) Sample of mRNA timecourses from the original analysis using ABC 
   (c) Sample of mRNA timecourses from a reproduction of the original analysis using MCMC. Note prior bias (most timecourses are too low) and posterior overfitting (every posterior timecourse is very close to every observation). 
   (d) Samples of mRNA timecourses from an improved analysis using lognormal priors and simulated data incorporating noise. \label{fig:01}
-  ](fig.png)
+  ](docs/_static/fig.png)
 
 Figure \autoref{fig:01} shows the results of a case study demonstrating how
 `bibat` can be used in applied science. The full
