@@ -30,49 +30,49 @@ WIZARD_FIELDS = [
     WizardStr(
         "repo_name",
         "What should the project repository be called",
-        default=lambda context: context["project_name"]
+        default_function=lambda context: context["project_name"]
         .lower()
         .replace(" ", "_"),
     ),
-    WizardStr("author_name", "What is your name?", "Author name"),
-    WizardStr("author_email", "What is your email?", "Author email"),
+    WizardStr("author_name", "What is your name?", default="Author name"),
+    WizardStr("author_email", "What is your email?", default="Author email"),
     WizardStr(
         "coc_contact",
         "Who should be the code of conduct contact?",
-        default=lambda context: context["author_email"],
+        default_function=lambda context: context["author_email"],
     ),
     WizardStr(
         "description",
         "Please briefly describe your project",
-        "A short description of the project.",
+        default="A short description of the project.",
     ),
     WizardChoice(
         "open_source_license",
         "Choose an open source license from these options:",
         ["MIT", "BSD-3-Clause", "No license file"],
-        "MIT",
+        default="MIT",
     ),
     WizardChoice(
         "docs_format",
         "How would you like to document your project?",
         ["Quarto", "Sphinx", "No docs"],
-        "Quarto",
+        default="Quarto",
     ),
     WizardStr(
         "create_tests_directory",
         "Would you like to create a tests directory?",
-        "y",
+        default="y",
     ),
     WizardStr(
         "create_dotgithub_directory",
         "Would you like to create a .github directory?",
-        "y",
+        default="y",
     ),
     WizardStr(
         "install_python_tooling",
         "Would you like to install these handy Python tools?\n\t"
         + "\n\t".join(TOOLING_PACKAGES),
-        "y",
+        default="y",
     ),
 ]
 
@@ -92,8 +92,7 @@ def main(config_file):
     click.echo("Welcome to the Batteries-Included Bayesian Analysis Template!")
     context = {}
     for wizard_field in WIZARD_FIELDS:
-        context[wizard_field.name] = prompt_user(wizard_field)
-    context["repo_name"] = context["project_name"].lower().replace(" ", "_")
+        context[wizard_field.name] = prompt_user(wizard_field, context)
     context["bibat_version"] = bibat_version
     cookiecutter(
         THIS_DIR, no_input=True, extra_context=context, config_file=config_file
