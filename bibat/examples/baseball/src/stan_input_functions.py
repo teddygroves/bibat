@@ -26,7 +26,7 @@ def get_stan_input_gpareto(ppd: PreparedData) -> Dict:
         "N": len(ppd.measurements),
         "K": ppd.measurements["n_attempt"].values,
         "y": ppd.measurements["n_success"].values,
-        "min_alpha": logit(0.1),
+        "min_alpha": logit(0.07),
         "max_alpha": logit(0.5),
         "prior_sigma": [1.5, 0.4],
         "prior_k": [-0.5, 1],

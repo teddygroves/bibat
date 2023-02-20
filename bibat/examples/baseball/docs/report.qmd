@@ -49,9 +49,9 @@ complete with [data from the 2006 Major league
 season])https://github.com/stan-dev/example-models/blob/master/knitr/pool-binary-trials/baseball-hits-2006.csv).
 After I posted some early results [on the Stan discourse
 forum](https://discourse.mc-stan.org/t/baseball-analysis-using-latent-generalised-pareto-distribution/29222),
-user jd_c kindly gathered and posted [even more
-data](https://discourse.mc-stan.org/uploads/short-url/cRJtia2jKxiX01ZEraHUVK7jbHI.RData),
-covering 5 full major league baseball seasons.
+other users suggested that it might be interesting to model similar data from
+different seasons. This data can now be found quite easily on the [baseball
+databank](https://baseballdb.lawlesst.net/).
 
 With a few datasets and at least two different statistical models to consider,
 the full analysis looked like it would be a little too big to fit in a trivial
@@ -149,8 +149,7 @@ created - nice, the setup worked!
 
 # Getting raw data
 
-I added a line with the text `pyreadr` to the file `requirements.txt`, then
-added the following code to a new script called `fetch_data.py`:
+To fetch raw data from the internet, I wrote a new script called `fetch_data.py`:
 
 ```{.python include="../fetch_data.py"}
 ```
@@ -160,6 +159,14 @@ To get the files I ran the script:
 ```{sh}
 $ source .venv/bin/activate
 $ python fetch_data.py
+```
+
+Since this worked, I added a new makefile target for the raw data files:
+
+```{Makefile}
+RAW_DATA = data/raw/2006.csv data/raw/bdb-main.csv data/raw/bdb-post.csv data/raw/bdb-apps.csv
+...
+$(RAW_DATA): $(ACTIVATE_VENV) && python fetch_data.py
 ```
 
 Finally I removed the example analysis's raw data:
@@ -191,7 +198,7 @@ class MeasurementsDF(pa.SchemaModel):
     Other columns are also allowed!
     """
 
-    player: pa.typing.Series[str]
+    player_season: pa.typing.Series[str]
     season: pa.typing.Series[str]
     n_attempt: pa.typing.Series[int] = pa.Field(ge = 1)
     n_success: pa.typing.Series[int] = pa.Field(ge = 0)
@@ -200,7 +207,7 @@ class MeasurementsDF(pa.SchemaModel):
 Next we can write some functions that create `PreparedData` objects. These
 should live in the file `data_preparation_functions.py`. In this case we write a
 couple of data preparation functions: `prepare_data_2006` and
-`prepare_data_recent`:
+`prepare_data_bdb`:
 
 ```{.python include="../src/data_preparation_functions.py"}
 ```
@@ -214,11 +221,11 @@ analysis.
 
 To check that all this works, we can run the script `prepare_data.py` manually
 or using `make analysis`. Now if we look in the file
-`data/prepared/recent/measurements.csv` we should see some lines that look like
+`data/prepared/bdb/measurements.csv` we should see some lines that look like
 this:
 
 ```{csv}
-,player,season,n_attempt,n_success
+,player_season,season,n_attempt,n_success
 0,abreujo02,2018,553,180
 1,acunaro01,2018,487,178
 3,adamewi01,2018,322,112
@@ -393,14 +400,14 @@ actually realised success rate.
 
 ![](img/prior_quantiles.png)
 
-# Extending the analysis to the recent data
+# Extending the analysis to the baseballdatabank data
 
 To model the more recent data, all I had to do was create some new inference
 folders with appropriate `prepared_data_dir` fields in their `config.toml`
-files. For example, here is the `config.toml` file for the `gparetorecent`
+files. For example, here is the `config.toml` file for the `gparetobdb`
 inference:
 
-```{.toml include="../inferences/gparetorecent/config.toml"}
+```{.toml include="../inferences/gparetobdb/config.toml"}
 ```
 
 After running `make analysis` one more time, I went back to the notebook
@@ -415,6 +422,6 @@ players with the most at-bats, both in terms of locations and the widths of the
 plausible intervals for the true success rate. However, the models ended up with
 dramatically different certainty levels about the abilities of players with few
 at-bats. This pattern was true both for the small 2006 dataset and the much
-larger 'recent' dataset.
+larger baseballdatabank dataset.
 
 

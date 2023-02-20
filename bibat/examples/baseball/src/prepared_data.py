@@ -19,7 +19,7 @@ class MeasurementsDF(pa.SchemaModel):
     Other columns are also allowed!
     """
 
-    player: pa.typing.Series[str]
+    player_season: pa.typing.Series[str]
     season: pa.typing.Series[str] = pa.Field(coerce=True)
     n_attempt: pa.typing.Series[int] = pa.Field(ge=1)
     n_success: pa.typing.Series[int] = pa.Field(ge=0)

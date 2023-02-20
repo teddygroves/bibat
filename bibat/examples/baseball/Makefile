@@ -2,6 +2,7 @@
 
 ACTIVATE_VENV = .venv/bin/activate
 REQUIREMENTS_FILE = requirements.txt
+RAW_DATA = data/raw/2006.csv data/raw/bdb-main.csv data/raw/bdb-post.csv data/raw/bdb-apps.csv
 
 ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS = --compiler
@@ -19,6 +20,8 @@ env: $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
 	  python -m pip install -r $(REQUIREMENTS_FILE) --quiet; \
 	  install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
 	)
+
+$(RAW_DATA): $(ACTIVATE_VENV) && python fetch_data.py
 
 analysis: env
 	. $(ACTIVATE_VENV) && (\
