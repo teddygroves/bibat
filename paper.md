@@ -24,56 +24,80 @@ bibliography: bibliography.bib
 ---
 
 # Summary
-Software implementing one-off Bayesian statistical analyses is ubiquitous in
-applied sceince, but it is typically written from scratch rather than using a
-template.
-
 Bibat is a Python package providing a flexible interactive template for Bayesian
-statistical analyses, thereby saving time and improving the quality of the final
-software. Bibat creates a working example analysis with minimal effort, which
-the user can then adapt so as to implement their desired analysis. In this sense
-bibat comes with "batteries included". We believe this workflow makes for better
-usability and easier testing compared with the alternative approach of providing
-an incomplete skeleton project.
+statistical analysis projects. 
+
+It aims to make it easier to create software projects that implement a Bayesian
+workflow that scales to arbitrarily many inter-related statistical models, data
+transformations, inferences and computations. Bibat also aims to promote
+software quality by providing a modular, automated and reproducible project that
+takes advantage of and integrates together the most up to date statistical
+software.
+
+Bibat comes with "batteries included" in the sense that it creates a working
+example project, which the user can adapt so that it implements their desired
+analysis. We believe this style of template makes for better usability and
+easier testing of Bayesian workflow projects compared with the alternative
+approach of providing an incomplete skeleton project.
 
 # Statement of need
-Interactive project templates are widespread in general software development and
-machine learning, but there is currently no popular interactive project template
-that specifically targets Bayesian statistical analyses. Interactive templates
-are particularly useful for Bayesian statistical analyses, which require
-specialised data structures for input and output information. Templates make it
-easier to use the appropriate formats while maintaining readability and avoiding
-errors.
+[@gelmanBayesianWorkflow2020] makes a compelling argument that, both in theory
+and practice, statisticians should explicitly recognise that applied data
+analysis projects typically involve many inter-related statistical models, data
+transformations, inferences and computations.
 
-`bibat` is an interactive template for statistical analysis projects written
-with Python 3 [@vanrossumPythonReferenceManual2009] and Stan
-[@carpenterStanProbabilisticProgramming2017]. It aims to make it easier for
-users to follow the workflow set out in [@gelmanBayesianWorkflow2020] for any
-statistical analysis that can be implemented using these tools, and provides
-functionality for users to automate, test, document and continuously integrate
-their analysis.
+However, there is currently little software that addresses Bayesian data
+analysis at the level of workflows. As a result, software that implements a
+Bayesian workflow for the purposes of a particular analysis is largely written
+by hand from scratch, following the design choices of an individual practitioner
+or team at the time they wrote the project. This practice wastes effort as much
+work is duplicated, and leads to sub-optimal software quality as expertise is
+not shared between practitioners (or between the same practitioner at different
+times).
 
-`bibat` uses the popular interactive template library `cookiecutter`
-[@greenfeldCookiecutter2021]. It creates a project that uses the standard
-scientific Python toolbox for data fetching and manipulation, Stan for
-statistical model definitions and computation, `cmdstanpy`
-[@standevelopmentteamCmdStanPy2022] for Python to Stan interface, `arviz`
-[@kumarArviZUnifiedLibrary2019] for storing results and downstream analysis and
-`make` [@stallman1991gnu] for automation. Users can optionally document their
-work using Sphinx [@georgbrandlandthesphinxteamSphinx2022] or Quarto
-[@Allaire_Quarto_2022], test it using pytest [@pytestdevelopersPytest2022] and
-implement continuous integration using github actions
-[@githubdevelopersGitHubActions2022]. `bibat` itself is continuously tested to
-ensure that it works on the operating systems Linux, macos and Windows. Detailed
-documentation can be found at
-\href{https://bibat.readthedocs.io/en/latest/}{https://bibat.readthedocs.io/en/latest/}.
+Interactive project templates are an obvious solution to this problem, as they
+are already commonly used by software developers and machine learning
+practitioners to avoid wasted effort and share best practices when creating
+software projects that implement complex workflows. 
+
+There is currently there is no popular interactive project template that
+specifically targets software implementing a Bayesian workflow. There are some
+templates that arguably encompass Bayesian workflow as a special case of data
+analysis project, such as [@drivendataCookiecutterdatascience2022], but these
+are of limited use compared with a specialised template due to the many
+specificities of Bayesian workflow. For example, MCMC sampling produces data
+that is best represented using more-than-two-dimensional labelled arrays, which
+are not part of many data analysis workflows and are therefore not addressed by
+[@drivendataCookiecutterdatascience2022].
+
+Bibat targets projects that use Python 3 [@vanrossumPythonReferenceManual2009]
+and its standard scientific toolbox for data manipulation, Stan
+[@carpenterStanProbabilisticProgramming2017] for specifying statistical models
+and performing inference, cmdstanpy [@standevelopmentteamCmdStanPy2022] for
+interfacing between Python and Stan, arviz [@kumarArviZUnifiedLibrary2019] for
+storing and analysing completed inferences, pydantic
+[@pydanticdevelopersPydantic2022] and pandera [@niels_bantilan-proc-scipy-2020]
+for validation and make [@stallman1991gnu] for automation. Bibat also optionally
+provides for documentation using Sphinx [@georgbrandlandthesphinxteamSphinx2022]
+or Quarto [@Allaire_Quarto_2022], testing using pytest
+[@pytestdevelopersPytest2022] and continuous integration using github actions
+[@githubdevelopersGitHubActions2022].
+
+Bibat is implemented using Python 3, the popular interactive template library
+`cookiecutter` [@greenfeldCookiecutter2021], as well as pydantic and click
+[@clickdevelopersClickPythonComposable2022]. Bibat is continuously tested to
+ensure that it works on the operating systems Linux, macos and Windows. 
+
+Detailed documentation can be found at
+<https://bibat.readthedocs.io/en/latest/>.
 
 bibat is linked on the [cmdstanpy community
 website](https://mc-stan.org/cmdstanpy/community.html) and is used in several
 active research projects: see [this documentation page](https://bibat.readthedocs.io/en/latest/examples.html) for a list.
 
 # Installation and usage
-`bibat` is installed by running the command `pip install bibat` and then used by running the command `bibat`.
+Bibat is installed by running the command `pip install bibat` and then used by
+running the command `bibat`.
 
 This command triggers an interactive form which prompts the user for
 configuration information including project and repository name, author name, a
@@ -98,40 +122,32 @@ of these inferences and perform downstream analysis.
 The next step is to edit the project so that it implements the target analysis
 rather than the provided one. This can be done incrementally: after any change
 the user can check that the whole analysis works by repeating the command `make
-analysis`. Since `bibat` follows a modular design,
-individual steps of the analysis can easily be tested in isolation by running
-the corresponding Python script.
+analysis`. Since bibat follows a modular design, individual steps of the
+analysis can easily be tested in isolation by running the corresponding Python
+script.
 
-# Case study: mRNA 
-![(a) Target system 
-  (b) Sample of mRNA timecourses from the original analysis using ABC 
-  (c) Sample of mRNA timecourses from a reproduction of the original analysis using MCMC. Note prior bias (most timecourses are too low) and posterior overfitting (every posterior timecourse is very close to every observation). 
-  (d) Samples of mRNA timecourses from an improved analysis using lognormal priors and simulated data incorporating noise. \label{fig:01}
-  ](docs/_static/fig.png)
+# Case study: baseball
+![Results of a statistical analysis implemented using bibat, involving two
+models and two datasets. The blue and orange lines show the 1% to 99% marginal
+posterior quantiles for latent success probabilities from two statistical
+models, alongside the actually realised probabilities, represented as black
+dots. \label{fig:01}](docs/_static/posterior_quantiles.png)
 
 Figure \autoref{fig:01} shows the results of a case study demonstrating how
-`bibat` can be used in applied science. The full
-analysis can be found at
-[https://github.com/teddygroves/mrna](https://github.com/teddygroves/mrna).
+bibat can be used in a Bayesian workflow.
 
-The case study builds on an example in
-[@liepeFrameworkParameterEstimation2014] which models measurements of the
-translation and self-regulation of mRNA using the parameterised kinetic
-mechanism shown in figure \ref{fig:01}, frame a. This mechanism was embedded
-within a statistical model with a curated prior distribution and no explicit
-likelihood, which was fitted using approximate Bayesian computation. This approach
-cannot explicitly represent information about measurement error and generated
-unrealistically jagged timecourses as shown in frame b.
+The case study compares two Bayesian hierarchical regression models fit to two
+datasets from major league baseball. One statistical model assumes that batters
+have latent success probabilities that follow a normal distribution on logit
+scale; the other model assumes that these quantities follow a generalised Pareto
+distribution. One dataset is copied from a previous analysis by another author
+for validation and easy comparison with other work, while the other, larger
+dataset is taken from a public data repository. The larger dataset required
+several additional transformation and filtering operations in order to be
+useable.
 
-The author used `bibat` to augment the original
-statistical model with a plausible explicit likelihood and fit it using
-Hamiltonian Monte Carlo in prior and posterior modes. A sample of the resulting
-timecourses is shown in frame c. This revealed problems with the statistical
-model that were not obvious in the original analysis: the prior yielded
-implausible timecourses and the posterior appeared over-fitted due to the
-absence of noise in the original measurements. These problems were addressed by
-adding a new model configuration with better prior distributions and more
-realistic simulated measurements, leading to the timecourses shown in frame d.
+The full analysis, as well as an explanatory vignette, can be found at
+<https://github.com/teddygroves/bibat/bibat/examples/baseball>.
 
 # Discussion
 It is somewhat unusual for an interactive project template to take a "batteries
@@ -144,11 +160,12 @@ be used in more situations.
 The "batteries included" approach was preferred in this case for two main
 reasons. First, it makes it possible to test the template from end to end simply
 by running the provided example. Easy and relevant testing is especially
-important for a statistical analysis project template because of the large
-number of interacting components, many of which are typically under active
-development and may become incompatible with each other over time. Second,
-providing a complete project makes it easier for users to learn how to use the
-template, as the intended end state and usage is immediately visible.
+important for a Bayesian workflow template given the need to integrate many
+state of the art libraries that are under active development. Since the overall
+workflow depends on all these libararies inter-operating, it is important to
+quickly surface and fix bugs or interface changes. Second, providing a complete
+project makes it easier for users to learn how to use the template, as the
+intended end state and usage is immediately visible.
 
 # Acknowledgements
 The author wishes to thank Lars Keld Nielsen for helpful feedback, and Mitzi
