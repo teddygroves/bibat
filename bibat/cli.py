@@ -27,12 +27,19 @@ TOOLING_PACKAGES = [
 
 WIZARD_FIELDS = [
     WizardStr("project_name", "What is your project called?", "Project Name"),
+    WizardStr(
+        "repo_name",
+        "What should the project repository be called",
+        default=lambda context: context["project_name"]
+        .lower()
+        .replace(" ", "_"),
+    ),
     WizardStr("author_name", "What is your name?", "Author name"),
     WizardStr("author_email", "What is your email?", "Author email"),
     WizardStr(
         "coc_contact",
         "Who should be the code of conduct contact?",
-        "Code of conduct contact",
+        default=lambda context: context["author_email"],
     ),
     WizardStr(
         "description",

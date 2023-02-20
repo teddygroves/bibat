@@ -1,6 +1,6 @@
 """Dataclasses and functions for running bibat's command line wizard."""
 
-from typing import List, Union
+from typing import Callable, Dict, List, Optional, Union
 
 import click
 from pydantic import root_validator
@@ -13,7 +13,7 @@ class WizardStr:
 
     name: str
     prompt: str
-    default: str
+    default: Union[str, Callable[[Dict], str]]
 
 
 @dataclass
@@ -23,20 +23,32 @@ class WizardChoice:
     name: str
     prompt: str
     options: List[str]
-    default: str
+    default: Union[str, Callable[[Dict], str]]
 
     @root_validator
     def default_is_an_option(cls, values):
         """Check that the default is one of the options."""
-        msg = f"default {values['default']} not in options {values['options']}"
-        assert values["default"] in values["options"], msg
-        return values
+        if isinstance(values["default"], str):
+            msg = (
+                f"default {values['default']} "
+                f"not in options {values['options']}"
+            )
+            assert values["default"] in values["options"], msg
+            return values
 
 
-def prompt_user(wf: Union[WizardStr, WizardChoice]) -> str:
+def prompt_user(
+    wf: Union[WizardStr, WizardChoice], context: Optional[Dict]
+) -> str:
     """Prompt the user for an input and parse it with click."""
+    if context is not None and callable(wf.default):
+        default = wf.default(context)
+    elif isinstance(wf.default, str):
+        default = wf.default
+    else:
+        raise ValueError("wf.default has unexpected type")
     if isinstance(wf, WizardStr):
-        return click.prompt(wf.prompt, default=wf.default, type=str)
+        return click.prompt(wf.prompt, default=default, type=str)
     elif isinstance(wf, WizardChoice):
         return click.prompt(
             wf.prompt,
