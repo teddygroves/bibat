@@ -270,16 +270,17 @@ model and a suitable stan input function, for example like this:
 
 .. _vignettes:
 
-Examples
+Vignettes
 =========
 
-To illustrate the process of creating a custom analysis starting with
-:literal:`bibat`'s provided template, you can find some example analyses `here
-<https://github.com/teddygroves/bibat/examples>`_. These projects are the best
-place to start as they are kept up to date as :literal:`bibat` is developed.
+`This vignette <_static/report.html>`_ provides a step
+by step description of how to create a complex analysis of baseball data
+starting with :literal:`bibat`'s example project. You can see the complete
+analysis `here <https://github.com/teddygroves/bibat/examples>`_. These projects
+are the best place to start as they are kept up to date as :literal:`bibat` is
+developed.
 
-For even more inspiration, check out these projecs that used :literal:`bibat` in
-practice.
+For even more inspiration, check out these projects that used :literal:`bibat`:
 
 * `mrna <https://github.com/teddygroves/mrna>`_ A published analysis of mRNA
   regulation, made fully Bayesian and then improved.
@@ -400,7 +401,7 @@ You should now be able to create a :literal:`my_cool_project` cmdstanpy project 
     $ cookiecutter --no-input --config-file path/to/config.yml path/to/bibat
 
 To release a new version of bibat, edit the field :code:`version` in the file
-:code:`setup.cfg`, e.g. to :code:`0.2.1`then make a pull request with this
+:code:`setup.cfg`, e.g. to :code:`0.2.1` then make a pull request with this
 change.
 
 Once the changes are merged into the :code:`origin/master` branch, add a tag

@@ -4,7 +4,6 @@ import os
 
 import pandas as pd
 
-
 URLS = {
     "2006": "https://raw.githubusercontent.com/stan-dev/"
     "example-models/master/knitr/pool-binary-trials/baseball-hits-2006.csv",
@@ -13,7 +12,7 @@ URLS = {
     "bdb-post": "https://raw.githubusercontent.com/chadwickbureau/"
     "baseballdatabank/master/core/BattingPost.csv",
     "bdb-apps": "https://raw.githubusercontent.com/chadwickbureau/"
-    "baseballdatabank/master/core/Appearances.csv"
+    "baseballdatabank/master/core/Appearances.csv",
 }
 OUT_FILES = {
     "2006": os.path.join("data", "raw", "2006.csv"),

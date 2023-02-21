@@ -1,12 +1,13 @@
 ---
 title: "Modelling at-bats in baseball using the generalised Pareto distribution"
-subtitle: "A report created using bibat version 0.0.7"
+subtitle: "A report created using bibat version 0.0.12"
 author: "Teddy Groves"
 bibliography: bibliography.bib
 reference-location: margin
+toc: true
 format:
-  html: default
-  pdf: default
+  html:
+    embed-resources: true
 filters:
   - include-code-files
 ---
@@ -69,20 +70,20 @@ repository](https://github.com/teddygroves/baseball) for all the details.
 
 First I installed bibat in my global Python 3.11 environment with this command:
 
-```{sh}
+```zsh
 $ pip install bibat
 ```
 
 Next I started bibat's wizard like this:
 
-```{sh}
+```zsh
 bibat
 ```
 
 After I answered the wizard's questions bibat creted a new folder called
 `baseball` that looked like this:
 
-```{sh}
+```zsh
 baseball
 ├── CODE_OF_CONDUCT.md
 ├── LICENSE
@@ -139,7 +140,7 @@ This folder implements bibat's example analysis - a comparison of linear
 regression with two different design matrices. To check that everything was
 working correctly I ran the analysis like this:
 
-```{sh}
+```zsh
 $ cd baseball
 $ make analysis
 ```
@@ -156,22 +157,27 @@ To fetch raw data from the internet, I wrote a new script called `fetch_data.py`
 
 To get the files I ran the script:
 
-```{sh}
+```zsh
 $ source .venv/bin/activate
 $ python fetch_data.py
 ```
 
 Since this worked, I added a new makefile target for the raw data files:
 
-```{Makefile}
-RAW_DATA = data/raw/2006.csv data/raw/bdb-main.csv data/raw/bdb-post.csv data/raw/bdb-apps.csv
+```makefile
+RAW_DATA = data/raw/2006.csv \
+	data/raw/bdb-main.csv \
+	data/raw/bdb-post.csv \
+	data/raw/bdb-apps.csv
+
 ...
-$(RAW_DATA): $(ACTIVATE_VENV) && python fetch_data.py
+$(RAW_DATA):
+	. $(ACTIVATE_VENV) && python fetch_data.py
 ```
 
 Finally I removed the example analysis's raw data:
 
-```{sh}
+```zsh
 $ rm data/raw/raw_measurements.csv
 ```
 
@@ -186,7 +192,7 @@ All we need to do is change the `MeasurementsDF` definition a little^[note that
 this class uses [pandera](https://pandera.readthedocs.io), a handy library for
 defining what a pandas dataframe should look like]:
 
-```{python}
+```python
 from typing import Optional
 import pandera as pa
 
@@ -339,7 +345,7 @@ performing the specified inferences.
 I started by deleting the example inferences and creating two fresh folders,
 leaving me with an `inferences` folder looking like this:
 
-```{sh}
+```zsh
 .
 ├── gpareto2006
 │   └── config.toml
@@ -370,7 +376,7 @@ Note that:
 Now when I ran `make analysis` again, I saw messages indicating that Stan had
 run, and found that the `inferences` subfolders had been populated:
 
-```{sh}
+```zsh
 inferences
 ├── gpareto2006
 │   ├── config.toml
@@ -393,12 +399,12 @@ The trickiest thing about my analysis was setting prior distributions for the
 parameters $k$ and $\sigma$ in the generalised Pareto models. To choose some
 more or less plausible values I did a few prior-mode model runs and checked the
 distributions of the resulting `alpha` variables. I wanted to make sure that
-they all lay in the range corresponding to batting averages between about 0.15
+they all lay in the range corresponding to batting averages between about 0.1
 and a little over 0.4. Here is a graph that shows the 1% to 99% prior quantiles
-for each player's latent success percentage in the 2006 dataset alongside their
-actually realised success rate.
+for each player's latent success percentage in both datasets alongside their
+actually realised success rates.
 
-![](img/prior_quantiles.png)
+![](../plots/prior_quantiles.png)
 
 # Extending the analysis to the baseballdatabank data
 
@@ -414,7 +420,7 @@ After running `make analysis` one more time, I went back to the notebook
 `investigate.ipynb` and made plots of both models' posterior 1%-99% success rate
 intervals for both datasets:
 
-![](img/posterior_quantiles.png)
+![](../plots/posterior_quantiles.png)
 
 I think this is very interesting. Both models' prior distributions had similar
 regularisation levels, and they more or less agree about the abilities of the
