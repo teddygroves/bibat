@@ -15,12 +15,12 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 RAW_DIR = os.path.join(DATA_DIR, "raw")
 PREPARED_DIR = os.path.join(DATA_DIR, "prepared")
 RAW_DATA_FILES = {
-    "2006": [os.path.join(RAW_DIR, "baseball-hits-2006.csv")],
+    "2006": [os.path.join(RAW_DIR, "2006.csv")],
     "bdb": [
         os.path.join(RAW_DIR, "bdb-main.csv"),
         os.path.join(RAW_DIR, "bdb-post.csv"),
         os.path.join(RAW_DIR, "bdb-apps.csv"),
-    ]
+    ],
 }
 
 
