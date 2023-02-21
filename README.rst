@@ -2,17 +2,21 @@
 Bibat: Batteries-Included Bayesian Analysis Template
 ====================================================
 
-Bibat is a Python package that wraps a `cookiecutter
-<https://cookiecutter.readthedocs.io/>`_ template for Bayesian statistical
-analyses. 
+Bibat is a Python package providing a flexible interactive template for Bayesian
+statistical analysis projects. 
 
-It aims to make it easier for authors of statistical analyses to follow best
-practices from both software development and statistics, and to be flexible
-enough that any analysis can be implemented - even ones involving many complex
-data processing options and statistical models.
+It aims to make it easier to create software projects that implement a Bayesian
+workflow that scales to arbitrarily many inter-related statistical models, data
+transformations, inferences and computations. Bibat also aims to promote
+software quality by providing a modular, automated and reproducible project that
+takes advantage of and integrates together the most up to date statistical
+software.
 
-Bibat is "batteries-included" in the sense that the template provides a complete
-statistical analysis that you can run immediately.
+Bibat comes with "batteries included" in the sense that it creates a working
+example project, which the user can adapt so that it implements their desired
+analysis. We believe this style of template makes for better usability and
+easier testing of Bayesian workflow projects compared with the alternative
+approach of providing an incomplete skeleton project.
 
 Documentation
 =============
@@ -20,13 +24,17 @@ Documentation
 Check out bibat's documentation at `https://bibat.readthedocs.io
 <https://bibat.readthedocs.io>`_.
 
-In particular, you may find it useful to have a look at `some projects that have
-previously used bibat <https://bibat.readthedocs.io/en/latest/examples.html>`_.
+In particular, you may find it useful to have a look at `this vignette
+<https://bibat.readthedocs.io/en/latest/_static/report.html>`_ that
+demonstrates, step by step, how to use bibat to implement a complex statistical
+analysis.
 
 Quick Start
 ===========
 
-You can try out bibat like this:
+You can try out bibat like this (make sure you are in a Python environment where
+you would like to install bibat and `its dependencies
+<https://github.com/teddygroves/bibat/blob/main/setup.cfg#L28>`_):
 
 .. code:: sh
 

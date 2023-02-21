@@ -2,7 +2,7 @@
  Welcome to bibat's documentation!
 ===================================
 
-bibat is an interactive template for Bayesian statistical analysis projects that
+Bibat is an interactive template for Bayesian statistical analysis projects that
 uses `cookiecutter <https://cookiecutter.readthedocs.io/en/latest/>`_, `Stan
 <https://mc-stan.org/>`_, `cmdstanpy <https://cmdstanpy.readthedocs.io/>`_ and
 `arviz <https://arviz-devs.github.io/arviz/>`_. It takes a 'batteries-included'
