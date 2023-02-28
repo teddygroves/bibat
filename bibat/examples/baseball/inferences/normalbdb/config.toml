@@ -1,0 +1,21 @@
+name = "normalbdb"
+stan_file = "normal.stan"
+prepared_data_dir = "bdb"
+stan_input_function = "get_stan_input_normal"
+modes = ["prior", "posterior"]
+
+[dims]
+alpha = ["player"]
+
+[stanc_options]
+warn-pedantic = true
+
+[sample_kwargs]
+save_warmup = false
+iter_warmup = 2000
+iter_sampling = 2000
+
+[sample_kwargs.prior]
+chains = 2
+iter_warmup = 1000
+iter_sampling = 1000
