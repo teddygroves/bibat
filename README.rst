@@ -49,4 +49,8 @@ command from the root of the new directory:
 
     $ make analysis
 
+To install the latest version from github:
 
+.. code:: sh
+
+    $ pip install git+https://github.com/teddygroves/bibat.git@main
