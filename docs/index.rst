@@ -394,11 +394,11 @@ this (copied from the file :literal:`tests/data/example_config.yml`):
 .. literalinclude:: ../tests/data/example_config.yml
     :language: yaml
 
-You should now be able to create a :literal:`my_cool_project` cmdstanpy project like this:
+You should now be able to create a :literal:`my_cool_project` bibat project like this:
 
 .. code:: sh
 
-    $ cookiecutter --no-input --config-file path/to/config.yml path/to/bibat
+    $ bibat --config-file path/to/config.yml
 
 To release a new version of bibat, edit the field :code:`version` in the file
 :code:`setup.cfg`, e.g. to :code:`0.2.1` then make a pull request with this
