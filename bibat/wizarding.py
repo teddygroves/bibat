@@ -9,7 +9,13 @@ from pydantic.dataclasses import dataclass
 
 @dataclass
 class WizardStr:
-    """A string field."""
+    """A wizard question where the answer is a string.
+
+    :param name: name of the field
+    :param prompt: string that the user will be prompted with
+    :param default: default answer
+    :param default_function: function that returns a default answer, given a dictionary.
+    """
 
     name: str
     prompt: str
@@ -27,7 +33,13 @@ class WizardStr:
 
 @dataclass
 class WizardChoice:
-    """A choice field."""
+    """A wizard question where the answer comes from a list of choices.
+
+    :param name: name of the field
+    :param prompt: string that the user will be prompted with
+    :param default: default answer
+    :param default_function: function that returns a default answer, given a dictionary.
+    """
 
     name: str
     prompt: str
@@ -56,23 +68,27 @@ class WizardChoice:
 
 
 def prompt_user(
-    wf: Union[WizardStr, WizardChoice], context: Optional[Dict]
+    wq: Union[WizardStr, WizardChoice], context: Optional[Dict]
 ) -> str:
-    """Prompt the user for an input and parse it with click."""
-    if context is not None and wf.default_function is not None:
-        default = wf.default_function(context)
-    elif isinstance(wf.default, str):
-        default = wf.default
+    """Prompt the user for an input and parse it with click.
+
+    :param wq: A wizard question: should be one of the classes defined in the module wizarding.py.
+    :param context: an optional dictionary containing the answers to previous prompts.
+    """
+    if context is not None and wq.default_function is not None:
+        default = wq.default_function(context)
+    elif isinstance(wq.default, str):
+        default = wq.default
     else:
-        raise ValueError(f"wf.default has unexpected type {type(wf.default)}")
-    if isinstance(wf, WizardStr):
-        return click.prompt(wf.prompt, default=default, type=str)
-    elif isinstance(wf, WizardChoice):
+        raise ValueError(f"wf.default has unexpected type {type(wq.default)}")
+    if isinstance(wq, WizardStr):
+        return click.prompt(wq.prompt, default=default, type=str)
+    elif isinstance(wq, WizardChoice):
         return click.prompt(
-            wf.prompt,
+            wq.prompt,
             default=default,
-            type=click.Choice(wf.options),
+            type=click.Choice(wq.options),
             show_choices=True,
         )
     else:
-        raise ValueError(f"input {wf} is not a WizardStr or a WizardChoice")
+        raise ValueError(f"input {wq} is not a WizardStr or a WizardChoice")

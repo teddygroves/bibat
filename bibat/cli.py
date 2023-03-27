@@ -1,14 +1,17 @@
-"""Cli for constructing the template.
+"""Cli for using bibat.
 
-I used this approach because I wanted to make longer prompts.
+This module contains functions that are exposed to bibat's command line
+interface using click.
+
 """
 
 import os
+from importlib.metadata import version
+from typing import Optional
 
 import click
 from cookiecutter.main import cookiecutter
 
-from bibat import __version__ as bibat_version
 from bibat.wizarding import WizardChoice, WizardStr, prompt_user
 
 THIS_DIR = os.path.dirname(__file__)
@@ -84,8 +87,11 @@ WIZARD_FIELDS = [
     default=None,
     help="Path to a yaml file with prefilled cookiecutter fields.",
 )
-def main(config_file):
-    """Generate a Bayesian statistical analysis project."""
+def generate_project(config_file: Optional[str]):
+    """Generate a Bayesian statistical analysis project.
+
+    :param config_file: Optional string specifying a relative path to a configuration file. See cookiecutter documentation for more about configuration files: https://cookiecutter.readthedocs.io/en/2.0.2/advanced/user_config.html
+    """
     if config_file is not None:
         cookiecutter(THIS_DIR, no_input=True, config_file=config_file)
         return
@@ -93,11 +99,11 @@ def main(config_file):
     context = {}
     for wizard_field in WIZARD_FIELDS:
         context[wizard_field.name] = prompt_user(wizard_field, context)
-    context["bibat_version"] = bibat_version
+    context["bibat_version"] = version("bibat")
     cookiecutter(
         THIS_DIR, no_input=True, extra_context=context, config_file=config_file
     )
 
 
 if __name__ == "__main__":
-    main()
+    generate_project()

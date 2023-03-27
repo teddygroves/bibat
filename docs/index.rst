@@ -24,6 +24,9 @@ explain.
 If you would like to contribute to bibat in any way (please do this!), the
 :ref:`contributing` section has some useful information.
 
+If you are looking for reference information about bibat's :ref:`cli` or
+:ref:`api`, check those out!
+
 .. _getting started:
 
 Getting started
@@ -229,7 +232,6 @@ prepared data, for example by creating a folder
     chains = 1
     iter_warmup = 1000
     iter_sampling = 1000
- 
 
 Adding a new statistical model
 ------------------------------
@@ -419,14 +421,26 @@ Now push the new tag to github:
           git push origin "v0.2.1"
 
 
+.. _cli: 
+
+Command line interface
+======================
+.. click:: bibat.cli:generate_project
+   :prog: bibat
+   :nested: full
+
+
+.. _api: 
+
+Provided Python functions
+=========================
+
+Wizarding module
+----------------
+
+.. automodule:: bibat.wizarding
+   :members:
+
 .. toctree::
    :maxdepth: 2
-              
 
-..
-   Indices and tables
-   ==================
-
-   * :ref:`genindex`
-   * :ref:`modindex`
-   * :ref:`search`
