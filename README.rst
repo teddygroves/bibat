@@ -5,6 +5,9 @@ Bibat: Batteries-Included Bayesian Analysis Template
 .. image:: https://zenodo.org/badge/344553551.svg
    :target: https://zenodo.org/badge/latestdoi/344553551
 
+.. image:: https://readthedocs.org/projects/bibat/badge/?version=latest
+    :target: https://bibat.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
 
 Bibat is a Python package providing a flexible interactive template for Bayesian
 statistical analysis projects. 
