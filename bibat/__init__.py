@@ -1,5 +1,5 @@
 """bibat, the Batteries-included Bayesian Analysis Template."""
 
-import importlib.metadata
+from bibat import cli, wizarding
 
-__version__ = importlib.metadata.version("bibat")
+__all__ = ["cli", "wizarding"]
