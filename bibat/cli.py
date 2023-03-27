@@ -90,7 +90,10 @@ WIZARD_FIELDS = [
 def generate_project(config_file: Optional[str]):
     """Generate a Bayesian statistical analysis project.
 
-    :param config_file: Optional string specifying a relative path to a configuration file. See cookiecutter documentation for more about configuration files: https://cookiecutter.readthedocs.io/en/2.0.2/advanced/user_config.html
+    :param config_file: Optional string specifying a relative path to a
+        configuration file. See cookiecutter documentation for more about
+        configuration files:
+        https://cookiecutter.readthedocs.io/en/2.0.2/advanced/user_config.html
     """
     if config_file is not None:
         cookiecutter(THIS_DIR, no_input=True, config_file=config_file)

@@ -14,7 +14,8 @@ class WizardStr:
     :param name: name of the field
     :param prompt: string that the user will be prompted with
     :param default: default answer
-    :param default_function: function that returns a default answer, given a dictionary.
+    :param default_function: function that returns a default answer, given a
+        dictionary.
     """
 
     name: str
@@ -38,7 +39,8 @@ class WizardChoice:
     :param name: name of the field
     :param prompt: string that the user will be prompted with
     :param default: default answer
-    :param default_function: function that returns a default answer, given a dictionary.
+    :param default_function: function that returns a default answer, given a
+        dictionary.
     """
 
     name: str
@@ -72,8 +74,10 @@ def prompt_user(
 ) -> str:
     """Prompt the user for an input and parse it with click.
 
-    :param wq: A wizard question: should be one of the classes defined in the module wizarding.py.
-    :param context: an optional dictionary containing the answers to previous prompts.
+    :param wq: A wizard question: should be one of the classes defined in the
+        module wizarding.py.
+    :param context: an optional dictionary containing the answers to previous
+        prompts.
     """
     if context is not None and wq.default_function is not None:
         default = wq.default_function(context)

@@ -42,7 +42,7 @@ extensions = [
     'sphinx.ext.mathjax',
     'sphinx.ext.ifconfig',
     'sphinx.ext.viewcode',
-    'sphinx.ext.napoleon', 
+    'sphinx.ext.napoleon',
     'sphinx_click'
 ]
 
@@ -74,6 +74,8 @@ html_theme_options = {
     }
 }
 
+# Napoleon settings
+napoleon_numpy_docstring = True
 
 # html_theme_options = {
 # "logo_only": False,
