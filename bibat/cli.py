@@ -107,6 +107,3 @@ def generate_project(config_file: Optional[str]):
         THIS_DIR, no_input=True, extra_context=context, config_file=config_file
     )
 
-
-if __name__ == "__main__":
-    generate_project()

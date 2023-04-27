@@ -425,6 +425,7 @@ Now push the new tag to github:
 
 Command line interface
 ======================
+
 .. click:: bibat.cli:generate_project
    :prog: bibat
    :nested: full
