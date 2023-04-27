@@ -106,4 +106,3 @@ def generate_project(config_file: Optional[str]):
     cookiecutter(
         THIS_DIR, no_input=True, extra_context=context, config_file=config_file
     )
-
