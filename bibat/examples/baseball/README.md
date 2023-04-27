@@ -1,7 +1,7 @@
-baseball
+Baseball
 ==============================
 
-Comparison of ways of modelling at-bat success rates in baseball
+Comparison of distributions for modelling baseball hitting
 
 # How to run the analysis
 
@@ -25,11 +25,4 @@ make report
 ```
 
 
-# How to run tests
-
-Run this command from the project root:
-
-```
-python -m pytest
-```
 

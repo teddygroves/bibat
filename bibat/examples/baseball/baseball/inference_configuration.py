@@ -5,7 +5,7 @@ from typing import Callable, Dict, List, Optional
 
 import toml
 from pydantic import BaseModel, Field, root_validator, validator
-from src import stan_input_functions
+from baseball import stan_input_functions
 
 AVAILABLE_MODES = ["prior", "posterior", "kfold"]
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -78,8 +78,8 @@ class InferenceConfiguration(BaseModel):
     @validator("stan_file")
     def check_stan_file_exists(cls, v):
         """Check that the stan file exists."""
-        if not os.path.exists(os.path.join("src", "stan", v)):
-            raise ValueError(f"{v} is not a file in src/stan.")
+        if not os.path.exists(os.path.join(STAN_DIR, v)):
+            raise ValueError(f"{v} is not a file in {STAN_DIR}.")
         return v
 
     @validator("modes")

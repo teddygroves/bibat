@@ -5,7 +5,7 @@ from typing import Dict
 
 import numpy as np
 from scipy.special import expit, logit
-from src.prepared_data import PreparedData
+from baseball.data_preparation import PreparedData
 
 
 def get_stan_input_normal(ppd: PreparedData) -> Dict:

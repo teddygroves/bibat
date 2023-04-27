@@ -8,16 +8,17 @@ import cmdstanpy
 import numpy as np
 import xarray as xr
 from sklearn.model_selection import KFold
-from src.inference_configuration import (
+from baseball.data_preparation import load_prepared_data
+from baseball.inference_configuration import (
     AVAILABLE_MODES,
     InferenceConfiguration,
     load_inference_configuration,
 )
-from src.prepared_data import load_prepared_data
-from src.util import CoordDict
+from baseball.util import CoordDict
 
-RUNS_DIR = "inferences"
-STAN_DIR = os.path.join("src", "stan")
+HERE = os.path.dirname(__file__)
+RUNS_DIR = os.path.join(HERE, "..", "inferences")
+STAN_DIR = os.path.join(HERE, "stan")
 
 
 def get_sample_kwargs(raw: Dict, mode: str) -> Dict:
