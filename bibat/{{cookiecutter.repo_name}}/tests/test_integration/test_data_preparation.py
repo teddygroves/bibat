@@ -5,11 +5,11 @@ from typing import Callable
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
-from src.data_preparation_functions import (
+from {{cookiecutter.repo_name}}.data_preparation import (
     prepare_data_interaction,
     prepare_data_no_interaction,
 )
-from src.util import CoordDict
+from {{cookiecutter.repo_name}}.util import CoordDict
 
 EXAMPLE_RAW_MEASUREMENTS = pd.DataFrame(
     {

@@ -1,3 +1,35 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "{{cookiecutter.repo_name}}"
+authors = [
+    {name = "{{cookiecutter.author_name}}", email = "{{cookiecutter.author_email}}"},
+]
+version = "0.0.1"
+description = "{{cookiecutter.description}}"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "arviz",
+    "cmdstanpy",
+    "jupyter",
+    "numpy",
+    "pandas",
+    "pandera",
+    "pydantic",
+    "scipy",
+    "scikit-learn",
+    "toml",
+    {% if cookiecutter.create_tests_directory == 'y' %}"pytest",
+    "black",{% endif %}
+    {% if cookiecutter.docs_format == 'Sphinx' %}"sphinx",{% endif %}
+]
+
+[tool.setuptools]
+packages = ["{{cookiecutter.repo_name}}"]
+
 [tool.black]
 line-length = 80
 target-version = ['py38']
