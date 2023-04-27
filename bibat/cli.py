@@ -15,18 +15,6 @@ from cookiecutter.main import cookiecutter
 from bibat.wizarding import WizardChoice, WizardStr, prompt_user
 
 THIS_DIR = os.path.dirname(__file__)
-TOOLING_PACKAGES = [
-    "pandas-stubs",
-    "types-toml",
-    "flake8",
-    "flake8-bugbear",
-    "flake8-docstrings",
-    "mypy",
-    "python-lsp-server[all]",
-    "python-lsp-black",
-    "pylsp-mypy",
-    "pyls-isort",
-]
 
 WIZARD_FIELDS = [
     WizardStr("project_name", "What is your project called?", "Project Name"),
@@ -69,12 +57,6 @@ WIZARD_FIELDS = [
     WizardStr(
         "create_dotgithub_directory",
         "Would you like to create a .github directory?",
-        default="y",
-    ),
-    WizardStr(
-        "install_python_tooling",
-        "Would you like to install these handy Python tools?\n\t"
-        + "\n\t".join(TOOLING_PACKAGES),
         default="y",
     ),
 ]
