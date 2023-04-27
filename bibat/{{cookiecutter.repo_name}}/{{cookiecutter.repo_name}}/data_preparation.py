@@ -37,7 +37,7 @@ RAW_DATA_FILES = {
 
 
 def prepare_data():
-    """Main function."""
+    """Run main function."""
     print("Reading raw data...")
     raw_data = {
         k: pd.read_csv(v, index_col=None) for k, v in RAW_DATA_FILES.items()

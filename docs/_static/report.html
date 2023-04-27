@@ -3291,92 +3291,91 @@ return!"\t\n\x0B\f\r                　\u2028\u2029
 <span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    n_attempt: Series[<span class="bu">int</span>] <span class="op">=</span> pa.Field(ge <span class="op">=</span> <span class="dv">1</span>)</span>
 <span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    n_success: Series[<span class="bu">int</span>] <span class="op">=</span> pa.Field(ge <span class="op">=</span> <span class="dv">0</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>The next step is to write functions that return <code>PreparedData</code> objects. In this case I wrote a couple of data preparation functions: <code>prepare_data_2006</code> and <code>prepare_data_bdb</code>:</p>
-<div class="sourceCode" id="cb9" data-startfrom="125"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 124;"><span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data_2006(measurements_raw: pd.DataFrame) <span class="op">-&gt;</span> PreparedData:</span>
-<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Prepare the 2006 data.&quot;&quot;&quot;</span></span>
-<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a>    measurements <span class="op">=</span> measurements_raw.rename(</span>
-<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a>        columns<span class="op">=</span>{<span class="st">&quot;K&quot;</span>: <span class="st">&quot;n_attempt&quot;</span>, <span class="st">&quot;y&quot;</span>: <span class="st">&quot;n_success&quot;</span>}</span>
-<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a>    ).assign(</span>
-<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>        season<span class="op">=</span><span class="st">&quot;2006&quot;</span>,</span>
-<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a>        player_season<span class="op">=</span><span class="kw">lambda</span> df: [<span class="ss">f&quot;2006-player-</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">&quot;</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(df))],</span>
-<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> PreparedData(</span>
-<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span><span class="st">&quot;2006&quot;</span>,</span>
-<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a>        coords<span class="op">=</span>{</span>
-<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;player_season&quot;</span>: measurements[<span class="st">&quot;player_season&quot;</span>].tolist(),</span>
-<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;season&quot;</span>: measurements[<span class="st">&quot;season&quot;</span>].tolist(),</span>
-<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a>        },</span>
-<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a>        measurements<span class="op">=</span>measurements,</span>
-<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data_bdb(</span>
-<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a>    measurements_main: pd.DataFrame,</span>
-<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a>    measurements_post: pd.DataFrame,</span>
-<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a>    appearances: pd.DataFrame,</span>
-<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> PreparedData:</span>
-<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Prepare the baseballdatabank data.</span></span>
-<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a><span class="co">    There are a few substantive data choices here.</span></span>
-<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a><span class="co">    First, the function excludes players who have a &#39;1&#39; in their position as</span></span>
-<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a><span class="co">    these are likely pitchers, as well as players with fewer than 20 at bats.</span></span>
-<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a><span class="co">    Second, the function defines a successes and attempts according to the</span></span>
-<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a><span class="co">    &#39;on-base percentage&#39; metric, so a success is a time when a player got a hit,</span></span>
-<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a><span class="co">    a base on ball/walk or a hit-by-pitch and an attempt is an at-bat or a</span></span>
-<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a><span class="co">    base-on-ball/walk or a hit-by-pitch or a sacrifice fly. This could have</span></span>
-<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a><span class="co">    alternatively been calculated as just hits divided by at-bats, but my</span></span>
-<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a><span class="co">    understanding is that this method underrates players who are good at getting</span></span>
-<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a><span class="co">    walks.</span></span>
-<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
-<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a>    pitchers <span class="op">=</span> appearances.loc[</span>
-<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> df: df[<span class="st">&quot;G_p&quot;</span>] <span class="op">==</span> df[<span class="st">&quot;G_all&quot;</span>], <span class="st">&quot;playerID&quot;</span></span>
-<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>    ].unique()</span>
-<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> filter_batters(df: pd.DataFrame):</span>
-<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (</span>
-<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a>            (df[<span class="st">&quot;AB&quot;</span>] <span class="op">&gt;=</span> <span class="dv">20</span>)</span>
-<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;</span> (df[<span class="st">&quot;season&quot;</span>].ge(<span class="dv">2017</span>))</span>
-<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;</span> (<span class="op">~</span>df[<span class="st">&quot;player&quot;</span>].isin(pitchers))</span>
-<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a>    measurements_main, measurements_post <span class="op">=</span> (</span>
-<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a>        m.rename(columns<span class="op">=</span>{<span class="st">&quot;yearID&quot;</span>: <span class="st">&quot;season&quot;</span>, <span class="st">&quot;playerID&quot;</span>: <span class="st">&quot;player&quot;</span>})</span>
-<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a>        .assign(</span>
-<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a>            player_season<span class="op">=</span><span class="kw">lambda</span> df: df[<span class="st">&quot;player&quot;</span>].<span class="bu">str</span>.cat(</span>
-<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a>                df[<span class="st">&quot;season&quot;</span>].astype(<span class="bu">str</span>)</span>
-<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a>            ),</span>
-<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a>            n_attempt<span class="op">=</span><span class="kw">lambda</span> df: df[[<span class="st">&quot;AB&quot;</span>, <span class="st">&quot;BB&quot;</span>, <span class="st">&quot;HBP&quot;</span>, <span class="st">&quot;SF&quot;</span>]]</span>
-<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a>            .fillna(<span class="dv">0</span>)</span>
-<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
-<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a>            .astype(<span class="bu">int</span>),</span>
-<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a>            n_success<span class="op">=</span><span class="kw">lambda</span> df: (</span>
-<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a>                df[[<span class="st">&quot;H&quot;</span>, <span class="st">&quot;BB&quot;</span>, <span class="st">&quot;HBP&quot;</span>]].fillna(<span class="dv">0</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).astype(<span class="bu">int</span>)</span>
-<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a>            ),</span>
-<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a>        )</span>
-<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a>        .loc[</span>
-<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a>            filter_batters,</span>
-<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a>            [<span class="st">&quot;player_season&quot;</span>, <span class="st">&quot;season&quot;</span>, <span class="st">&quot;n_attempt&quot;</span>, <span class="st">&quot;n_success&quot;</span>],</span>
-<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>        ]</span>
-<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>        .copy()</span>
-<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> m <span class="kw">in</span> [measurements_main, measurements_post]</span>
-<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-196"><a href="#cb9-196" aria-hidden="true" tabindex="-1"></a>    measurements <span class="op">=</span> (</span>
-<span id="cb9-197"><a href="#cb9-197" aria-hidden="true" tabindex="-1"></a>        pd.concat([measurements_main, measurements_post])</span>
-<span id="cb9-198"><a href="#cb9-198" aria-hidden="true" tabindex="-1"></a>        .groupby([<span class="st">&quot;player_season&quot;</span>, <span class="st">&quot;season&quot;</span>])</span>
-<span id="cb9-199"><a href="#cb9-199" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">sum</span>()</span>
-<span id="cb9-200"><a href="#cb9-200" aria-hidden="true" tabindex="-1"></a>        .reset_index()</span>
-<span id="cb9-201"><a href="#cb9-201" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-202"><a href="#cb9-202" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> PreparedData(</span>
-<span id="cb9-203"><a href="#cb9-203" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span><span class="st">&quot;bdb&quot;</span>,</span>
-<span id="cb9-204"><a href="#cb9-204" aria-hidden="true" tabindex="-1"></a>        coords<span class="op">=</span>{</span>
-<span id="cb9-205"><a href="#cb9-205" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;player_season&quot;</span>: measurements[<span class="st">&quot;player_season&quot;</span>].tolist(),</span>
-<span id="cb9-206"><a href="#cb9-206" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;season&quot;</span>: measurements[<span class="st">&quot;season&quot;</span>].tolist(),</span>
-<span id="cb9-207"><a href="#cb9-207" aria-hidden="true" tabindex="-1"></a>        },</span>
-<span id="cb9-208"><a href="#cb9-208" aria-hidden="true" tabindex="-1"></a>        measurements<span class="op">=</span>measurements,</span>
-<span id="cb9-209"><a href="#cb9-209" aria-hidden="true" tabindex="-1"></a>    )</span>
-<span id="cb9-210"><a href="#cb9-210" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb9" data-startfrom="111"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 110;"><span id="cb9-111"><a href="#cb9-111" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data_2006(measurements_raw: pd.DataFrame) <span class="op">-&gt;</span> PreparedData:</span>
+<span id="cb9-112"><a href="#cb9-112" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Prepare the 2006 data.&quot;&quot;&quot;</span></span>
+<span id="cb9-113"><a href="#cb9-113" aria-hidden="true" tabindex="-1"></a>    measurements <span class="op">=</span> measurements_raw.rename(</span>
+<span id="cb9-114"><a href="#cb9-114" aria-hidden="true" tabindex="-1"></a>        columns<span class="op">=</span>{<span class="st">&quot;K&quot;</span>: <span class="st">&quot;n_attempt&quot;</span>, <span class="st">&quot;y&quot;</span>: <span class="st">&quot;n_success&quot;</span>}</span>
+<span id="cb9-115"><a href="#cb9-115" aria-hidden="true" tabindex="-1"></a>    ).assign(</span>
+<span id="cb9-116"><a href="#cb9-116" aria-hidden="true" tabindex="-1"></a>        season<span class="op">=</span><span class="st">&quot;2006&quot;</span>,</span>
+<span id="cb9-117"><a href="#cb9-117" aria-hidden="true" tabindex="-1"></a>        player_season<span class="op">=</span><span class="kw">lambda</span> df: [<span class="ss">f&quot;2006-player-</span><span class="sc">{</span>i<span class="op">+</span><span class="dv">1</span><span class="sc">}</span><span class="ss">&quot;</span> <span class="cf">for</span> i <span class="kw">in</span> <span class="bu">range</span>(<span class="bu">len</span>(df))],</span>
+<span id="cb9-118"><a href="#cb9-118" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-119"><a href="#cb9-119" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> PreparedData(</span>
+<span id="cb9-120"><a href="#cb9-120" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span><span class="st">&quot;2006&quot;</span>,</span>
+<span id="cb9-121"><a href="#cb9-121" aria-hidden="true" tabindex="-1"></a>        coords<span class="op">=</span>{</span>
+<span id="cb9-122"><a href="#cb9-122" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;player_season&quot;</span>: measurements[<span class="st">&quot;player_season&quot;</span>].tolist(),</span>
+<span id="cb9-123"><a href="#cb9-123" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;season&quot;</span>: measurements[<span class="st">&quot;season&quot;</span>].tolist(),</span>
+<span id="cb9-124"><a href="#cb9-124" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb9-125"><a href="#cb9-125" aria-hidden="true" tabindex="-1"></a>        measurements<span class="op">=</span>measurements,</span>
+<span id="cb9-126"><a href="#cb9-126" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-127"><a href="#cb9-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-128"><a href="#cb9-128" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-129"><a href="#cb9-129" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data_bdb(</span>
+<span id="cb9-130"><a href="#cb9-130" aria-hidden="true" tabindex="-1"></a>    measurements_main: pd.DataFrame,</span>
+<span id="cb9-131"><a href="#cb9-131" aria-hidden="true" tabindex="-1"></a>    measurements_post: pd.DataFrame,</span>
+<span id="cb9-132"><a href="#cb9-132" aria-hidden="true" tabindex="-1"></a>    appearances: pd.DataFrame,</span>
+<span id="cb9-133"><a href="#cb9-133" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> PreparedData:</span>
+<span id="cb9-134"><a href="#cb9-134" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Prepare the baseballdatabank data.</span></span>
+<span id="cb9-135"><a href="#cb9-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-136"><a href="#cb9-136" aria-hidden="true" tabindex="-1"></a><span class="co">    There are a few substantive data choices here.</span></span>
+<span id="cb9-137"><a href="#cb9-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-138"><a href="#cb9-138" aria-hidden="true" tabindex="-1"></a><span class="co">    First, the function excludes players who have a &#39;1&#39; in their position as</span></span>
+<span id="cb9-139"><a href="#cb9-139" aria-hidden="true" tabindex="-1"></a><span class="co">    these are likely pitchers, as well as players with fewer than 20 at bats.</span></span>
+<span id="cb9-140"><a href="#cb9-140" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-141"><a href="#cb9-141" aria-hidden="true" tabindex="-1"></a><span class="co">    Second, the function defines a successes and attempts according to the</span></span>
+<span id="cb9-142"><a href="#cb9-142" aria-hidden="true" tabindex="-1"></a><span class="co">    &#39;on-base percentage&#39; metric, so a success is a time when a player got a hit,</span></span>
+<span id="cb9-143"><a href="#cb9-143" aria-hidden="true" tabindex="-1"></a><span class="co">    a base on ball/walk or a hit-by-pitch and an attempt is an at-bat or a</span></span>
+<span id="cb9-144"><a href="#cb9-144" aria-hidden="true" tabindex="-1"></a><span class="co">    base-on-ball/walk or a hit-by-pitch or a sacrifice fly. This could have</span></span>
+<span id="cb9-145"><a href="#cb9-145" aria-hidden="true" tabindex="-1"></a><span class="co">    alternatively been calculated as just hits divided by at-bats, but my</span></span>
+<span id="cb9-146"><a href="#cb9-146" aria-hidden="true" tabindex="-1"></a><span class="co">    understanding is that this method underrates players who are good at getting</span></span>
+<span id="cb9-147"><a href="#cb9-147" aria-hidden="true" tabindex="-1"></a><span class="co">    walks.</span></span>
+<span id="cb9-148"><a href="#cb9-148" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-149"><a href="#cb9-149" aria-hidden="true" tabindex="-1"></a><span class="co">    &quot;&quot;&quot;</span></span>
+<span id="cb9-150"><a href="#cb9-150" aria-hidden="true" tabindex="-1"></a>    pitchers <span class="op">=</span> appearances.loc[</span>
+<span id="cb9-151"><a href="#cb9-151" aria-hidden="true" tabindex="-1"></a>        <span class="kw">lambda</span> df: df[<span class="st">&quot;G_p&quot;</span>] <span class="op">==</span> df[<span class="st">&quot;G_all&quot;</span>], <span class="st">&quot;playerID&quot;</span></span>
+<span id="cb9-152"><a href="#cb9-152" aria-hidden="true" tabindex="-1"></a>    ].unique()</span>
+<span id="cb9-153"><a href="#cb9-153" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-154"><a href="#cb9-154" aria-hidden="true" tabindex="-1"></a>    <span class="kw">def</span> filter_batters(df: pd.DataFrame):</span>
+<span id="cb9-155"><a href="#cb9-155" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> (</span>
+<span id="cb9-156"><a href="#cb9-156" aria-hidden="true" tabindex="-1"></a>            (df[<span class="st">&quot;AB&quot;</span>] <span class="op">&gt;=</span> <span class="dv">20</span>)</span>
+<span id="cb9-157"><a href="#cb9-157" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;</span> (df[<span class="st">&quot;season&quot;</span>].ge(<span class="dv">2017</span>))</span>
+<span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a>            <span class="op">&amp;</span> (<span class="op">~</span>df[<span class="st">&quot;player&quot;</span>].isin(pitchers))</span>
+<span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb9-160"><a href="#cb9-160" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-161"><a href="#cb9-161" aria-hidden="true" tabindex="-1"></a>    measurements_main, measurements_post <span class="op">=</span> (</span>
+<span id="cb9-162"><a href="#cb9-162" aria-hidden="true" tabindex="-1"></a>        m.rename(columns<span class="op">=</span>{<span class="st">&quot;yearID&quot;</span>: <span class="st">&quot;season&quot;</span>, <span class="st">&quot;playerID&quot;</span>: <span class="st">&quot;player&quot;</span>})</span>
+<span id="cb9-163"><a href="#cb9-163" aria-hidden="true" tabindex="-1"></a>        .assign(</span>
+<span id="cb9-164"><a href="#cb9-164" aria-hidden="true" tabindex="-1"></a>            player_season<span class="op">=</span><span class="kw">lambda</span> df: df[<span class="st">&quot;player&quot;</span>].<span class="bu">str</span>.cat(</span>
+<span id="cb9-165"><a href="#cb9-165" aria-hidden="true" tabindex="-1"></a>                df[<span class="st">&quot;season&quot;</span>].astype(<span class="bu">str</span>)</span>
+<span id="cb9-166"><a href="#cb9-166" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb9-167"><a href="#cb9-167" aria-hidden="true" tabindex="-1"></a>            n_attempt<span class="op">=</span><span class="kw">lambda</span> df: df[[<span class="st">&quot;AB&quot;</span>, <span class="st">&quot;BB&quot;</span>, <span class="st">&quot;HBP&quot;</span>, <span class="st">&quot;SF&quot;</span>]]</span>
+<span id="cb9-168"><a href="#cb9-168" aria-hidden="true" tabindex="-1"></a>            .fillna(<span class="dv">0</span>)</span>
+<span id="cb9-169"><a href="#cb9-169" aria-hidden="true" tabindex="-1"></a>            .<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>)</span>
+<span id="cb9-170"><a href="#cb9-170" aria-hidden="true" tabindex="-1"></a>            .astype(<span class="bu">int</span>),</span>
+<span id="cb9-171"><a href="#cb9-171" aria-hidden="true" tabindex="-1"></a>            n_success<span class="op">=</span><span class="kw">lambda</span> df: (</span>
+<span id="cb9-172"><a href="#cb9-172" aria-hidden="true" tabindex="-1"></a>                df[[<span class="st">&quot;H&quot;</span>, <span class="st">&quot;BB&quot;</span>, <span class="st">&quot;HBP&quot;</span>]].fillna(<span class="dv">0</span>).<span class="bu">sum</span>(axis<span class="op">=</span><span class="dv">1</span>).astype(<span class="bu">int</span>)</span>
+<span id="cb9-173"><a href="#cb9-173" aria-hidden="true" tabindex="-1"></a>            ),</span>
+<span id="cb9-174"><a href="#cb9-174" aria-hidden="true" tabindex="-1"></a>        )</span>
+<span id="cb9-175"><a href="#cb9-175" aria-hidden="true" tabindex="-1"></a>        .loc[</span>
+<span id="cb9-176"><a href="#cb9-176" aria-hidden="true" tabindex="-1"></a>            filter_batters,</span>
+<span id="cb9-177"><a href="#cb9-177" aria-hidden="true" tabindex="-1"></a>            [<span class="st">&quot;player_season&quot;</span>, <span class="st">&quot;season&quot;</span>, <span class="st">&quot;n_attempt&quot;</span>, <span class="st">&quot;n_success&quot;</span>],</span>
+<span id="cb9-178"><a href="#cb9-178" aria-hidden="true" tabindex="-1"></a>        ]</span>
+<span id="cb9-179"><a href="#cb9-179" aria-hidden="true" tabindex="-1"></a>        .copy()</span>
+<span id="cb9-180"><a href="#cb9-180" aria-hidden="true" tabindex="-1"></a>        <span class="cf">for</span> m <span class="kw">in</span> [measurements_main, measurements_post]</span>
+<span id="cb9-181"><a href="#cb9-181" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-182"><a href="#cb9-182" aria-hidden="true" tabindex="-1"></a>    measurements <span class="op">=</span> (</span>
+<span id="cb9-183"><a href="#cb9-183" aria-hidden="true" tabindex="-1"></a>        pd.concat([measurements_main, measurements_post])</span>
+<span id="cb9-184"><a href="#cb9-184" aria-hidden="true" tabindex="-1"></a>        .groupby([<span class="st">&quot;player_season&quot;</span>, <span class="st">&quot;season&quot;</span>])</span>
+<span id="cb9-185"><a href="#cb9-185" aria-hidden="true" tabindex="-1"></a>        .<span class="bu">sum</span>()</span>
+<span id="cb9-186"><a href="#cb9-186" aria-hidden="true" tabindex="-1"></a>        .reset_index()</span>
+<span id="cb9-187"><a href="#cb9-187" aria-hidden="true" tabindex="-1"></a>    )</span>
+<span id="cb9-188"><a href="#cb9-188" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> PreparedData(</span>
+<span id="cb9-189"><a href="#cb9-189" aria-hidden="true" tabindex="-1"></a>        name<span class="op">=</span><span class="st">&quot;bdb&quot;</span>,</span>
+<span id="cb9-190"><a href="#cb9-190" aria-hidden="true" tabindex="-1"></a>        coords<span class="op">=</span>{</span>
+<span id="cb9-191"><a href="#cb9-191" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;player_season&quot;</span>: measurements[<span class="st">&quot;player_season&quot;</span>].tolist(),</span>
+<span id="cb9-192"><a href="#cb9-192" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;season&quot;</span>: measurements[<span class="st">&quot;season&quot;</span>].tolist(),</span>
+<span id="cb9-193"><a href="#cb9-193" aria-hidden="true" tabindex="-1"></a>        },</span>
+<span id="cb9-194"><a href="#cb9-194" aria-hidden="true" tabindex="-1"></a>        measurements<span class="op">=</span>measurements,</span>
+<span id="cb9-195"><a href="#cb9-195" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <div class="page-columns page-full"><p>To check that all this worked, I ran the data preparation script manually:<a href="#fn2" class="footnote-ref" id="fnref2" role="doc-noteref"><sup>2</sup></a></p><div class="no-row-height column-margin column-container"><li id="fn2"><p><sup>2</sup> I could also have just run <code>make analysis</code> again</p></li></div></div>
 <div class="sourceCode" id="cb10"><pre class="sourceCode zsh code-with-copy"><code class="sourceCode zsh"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="op">&gt;</span> source <span class="ex">.venv/bin/activate</span></span>
 <span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">(</span><span class="ex">baseball</span><span class="kw">)</span> <span class="op">&gt;</span> python <span class="ex">baseball/prepare_data.py</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>

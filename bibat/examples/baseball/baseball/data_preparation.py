@@ -1,4 +1,4 @@
-"""Provides functions prepare_data_x.
+"""Provide functions prepare_data_x.
 
 These functions should take in a dataframe of measurements and return a
 PreparedData object.
@@ -7,10 +7,9 @@ PreparedData object.
 import json
 import os
 
-import numpy as np
 import pandas as pd
 import pandera as pa
-from baseball.util import CoordDict, make_columns_lower_case
+from baseball.util import CoordDict
 from pandera.typing import DataFrame, Series
 from pydantic.dataclasses import dataclass
 
@@ -42,7 +41,7 @@ RAW_DATA_FILES = {
 
 
 def prepare_data():
-    """Main function."""
+    """Run main function."""
     print("Reading raw data...")
     raw_data = {
         k: [pd.read_csv(file, index_col=None) for file in v]
@@ -107,21 +106,6 @@ def write_prepared_data(prepped: PreparedData, directory):
         json.dump(prepped.coords, f)
     with open(os.path.join(directory, NAME_FILE), "w") as f:
         f.write(prepped.name)
-
-
-def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
-    """Prepare data with an interaction column."""
-    measurements = process_measurements(measurements_raw)
-    return PreparedData(
-        name="interaction",
-        coords=CoordDict(
-            {
-                "covariate": ["x1", "x2", "x1:x2"],
-                "observation": measurements.index.tolist(),
-            }
-        ),
-        measurements=measurements,
-    )
 
 
 def prepare_data_2006(measurements_raw: pd.DataFrame) -> PreparedData:

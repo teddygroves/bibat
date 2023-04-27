@@ -210,7 +210,7 @@ The next step is to write functions that return `PreparedData` objects. In this
 case I wrote a couple of data preparation functions: `prepare_data_2006` and
 `prepare_data_bdb`:
 
-```{.python include="../baseball/data_preparation.py" start-line=125}
+```{.python include="../baseball/data_preparation.py" start-line=111}
 ```
 
 To check that all this worked, I ran the data preparation script manually:^[I
