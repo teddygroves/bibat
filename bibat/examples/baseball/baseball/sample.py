@@ -7,7 +7,6 @@ import arviz as az
 import cmdstanpy
 import numpy as np
 import xarray as xr
-from sklearn.model_selection import KFold
 from baseball.data_preparation import load_prepared_data
 from baseball.inference_configuration import (
     AVAILABLE_MODES,
@@ -15,6 +14,7 @@ from baseball.inference_configuration import (
     load_inference_configuration,
 )
 from baseball.util import CoordDict
+from sklearn.model_selection import KFold
 
 HERE = os.path.dirname(__file__)
 RUNS_DIR = os.path.join(HERE, "..", "inferences")

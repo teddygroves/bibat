@@ -4,8 +4,8 @@
 from typing import Dict
 
 import numpy as np
-from scipy.special import expit, logit
 from baseball.data_preparation import PreparedData
+from scipy.special import expit, logit
 
 
 def get_stan_input_normal(ppd: PreparedData) -> Dict:

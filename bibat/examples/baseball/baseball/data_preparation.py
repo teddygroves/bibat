@@ -10,9 +10,9 @@ import os
 import numpy as np
 import pandas as pd
 import pandera as pa
+from baseball.util import CoordDict, make_columns_lower_case
 from pandera.typing import DataFrame, Series
 from pydantic.dataclasses import dataclass
-from baseball.util import CoordDict, make_columns_lower_case
 
 NAME_FILE = "name.txt"
 COORDS_FILE = "coords.json"
@@ -45,11 +45,12 @@ def prepare_data():
     """Main function."""
     print("Reading raw data...")
     raw_data = {
-        k: [pd.read_csv(file, index_col=None) for file in v] 
+        k: [pd.read_csv(file, index_col=None) for file in v]
         for k, v in RAW_DATA_FILES.items()
     }
     data_preparation_functions_to_run = {
-        "2006": prepare_data_2006, "bdb": prepare_data_bdb
+        "2006": prepare_data_2006,
+        "bdb": prepare_data_bdb,
     }
     print("Preparing data...")
     for name, dpf in data_preparation_functions_to_run.items():
@@ -106,6 +107,7 @@ def write_prepared_data(prepped: PreparedData, directory):
         json.dump(prepped.coords, f)
     with open(os.path.join(directory, NAME_FILE), "w") as f:
         f.write(prepped.name)
+
 
 def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     """Prepare data with an interaction column."""
@@ -207,4 +209,3 @@ def prepare_data_bdb(
         },
         measurements=measurements,
     )
-
