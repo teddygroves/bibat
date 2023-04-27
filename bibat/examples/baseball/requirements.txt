@@ -10,7 +10,6 @@ pydantic
 scipy
 scikit-learn
 toml
-pytest
-black
-pyreadr
+
+
 

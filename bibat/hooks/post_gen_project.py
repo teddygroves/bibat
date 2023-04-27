@@ -24,10 +24,10 @@ REMOVE_PATHS = [
     '{% if cookiecutter.create_tests_directory != "y" %}tests{% endif %}',
     '{% if cookiecutter.create_dotgithub_directory != "y" %}.github{% endif %}',
 ]
-if "{{ cookiecutter.docs_format }}" not in ["Sphinx", "No docs"]:
+if "{{cookiecutter.docs_format}}" not in ["Sphinx", "No docs"]:
     REMOVE_PATHS += SPHINX_ONLY_PATHS
 
-if "{{ cookiecutter.docs_format }}" not in ["Quarto", "No docs"]:
+if "{{cookiecutter.docs_format}}" not in ["Quarto", "No docs"]:
     REMOVE_PATHS += QUARTO_ONLY_PATHS
 
 for path in REMOVE_PATHS:

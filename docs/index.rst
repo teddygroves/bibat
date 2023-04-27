@@ -57,7 +57,7 @@ Intended workflow
 bibat assumes that a statistical analysis consists of the following components:
 
 - **Raw data**
-- **Data preparation functions** each of which take in raw data and produce prepared data
+- **Data preparation** in which raw data is transformed to produce prepared data
   that fit a common structure.
 - **Statistical models**
 - **Inferences**, i.e. combinations of a prepared dataset, a statistical model,
@@ -73,9 +73,9 @@ specific than normal meaning in this context. This choice was made to avoid
 creating new jargon, and in order to match the arviz concept of `InferenceData
 <https://arviz-devs.github.io/arviz/api/inference_data.html>`_.
   
-To perform a statistical analysis means running a set of data preparation
-functions, then carrying out a set of inferences, doing some investigations and
-providing some documentation. bibat provides functionality for conveniently
+To perform a statistical analysis means running some data preparation
+operations, then carrying out a set of inferences, doing some investigations
+and providing some documentation. bibat provides functionality for conveniently
 doing these things, as well as explicit and convenient representations of all
 the components and even a ready-made working example project.
 
@@ -83,32 +83,39 @@ bibat's strategy for representing the components of a statistical analysis is as
 follows:
 
 - Raw data are files that live in the directory :code:`data/raw`.
-- A common structure for prepared data is specified by a Python class
-  :code:`PreparedData` in the directory :code:`src/prepared_data.py`, which can
-  be saved to files in the directory :code:`prepared_data` and later recovered
-  from those files.
-- Data preparation functions are python functions in the file
-  :code:`src/data_preparation.py`, each of which returns a `PreparedData`.
-- Statistical models are Stan programs in the directory :code:`src/stan`
+
+- Source code lives in a folder with the same name as the analysis, for example
+  `my_analysis`. 
+
+- Logic for data preparation, including a common structure given by a class
+  PreparedData and functions producing data in this format, lives in the file
+  `my_analysis/data_preparation.py`.
+
+- Statistical models are represented by Stan programs in the directory
+  :code:`my_analysis/stan/`
+
 - Inferences are subdirectories of the directory :code:`inferences`. Each such
   subdirectory contains a file called :code:`config.toml` that chooses a
   prepared dataset, statistical model and some fitting modes, as well as sampler
   configuraiton. When the analysis is run the folder is populated with an
   :code:`InferenceData` object saved in the file :code:`idata.json`, containing
   samples and debug information.
+
 - Investigations are performed literately using the notebook file
-  :code:`investigate.ipynb`, which saves plots to the directory :code:`plots`.
+  :code:`my_analysis/investigate.ipynb`, which saves plots to the directory
+  :code:`plots`.
+
 - Documentation lives in the directory :code:`docs`, and can be written using a
   range of standard formats including `quarto <https://quarto.org/>`_ and
   `Sphinx <https://www.sphinx-doc.org/en/master/>`_.
 
 The analysis is performed by setting up a suitable programming environment and
-then running the Python scripts :code:`prepare_data.py` and :code:`sample.py`,
-which live in the project root, executing the notebook file
-:code:`execute.ipynb` and building the documentation. These tasks are automated
-using the makefile :code:`Makefile`, so that the entire analysis can be
-performed using the command :code:`make analysis` while avoiding unnecessarily
-re-running any tasks.
+then running the Python scripts :code:`my_analysis/prepare_data.py` and
+:code:`my_analysis/sample.py`, which live in the project root, executing the
+notebook file :code:`my_analysis/investigate.ipynb` and building the
+documentation. These tasks are automated using the makefile :code:`Makefile`,
+so that the entire analysis can be performed using the command :code:`make
+analysis` while avoiding unnecessarily re-running any tasks.
 
 After running the analysis, the next step is to make some changes and run a new
 analysis. This can be done by editing any of the files representing the
@@ -135,8 +142,9 @@ legs should be integers greater than zero.
 
 To achieve this with the help of `pandera
 <https://pandera.readthedocs.io/en/stable/index.html>`_, we can add a new
-dataframe schema :code:`GroupsDF` to the file :code:`src/prepared_data.py`,
-following the example of the already existing schema :code:`MeasurementsDF`:
+dataframe schema :code:`GroupsDF` to the file
+:code:`my_analysis/data_preparation.py`, following the example of the already
+existing schema :code:`MeasurementsDF`:
 
 .. code-block:: python
 
@@ -145,19 +153,18 @@ following the example of the already existing schema :code:`MeasurementsDF`:
         colour: pa.typing.Series[str]
         number_of_legs: pa.typing.Series[int] = pa.Field(ge=0)
 
-Next the :code:`PreparedData` definition and :code:`load_prepared_data` function
-need to be updated to expect dataframes that follow this schema, and the data
-preparation functions in :code:`src/data_preparation.py` need to be updated so
-that they produce them.
+Next the :code:`PreparedData` definition and :code:`load_prepared_data`
+function need to be updated to expect dataframes that follow this schema, and
+the data preparation functions in :code:`my_analysis/data_preparation.py` need
+to be updated so that they produce them.
 
-Removing a data preparation function
-------------------------------------
+Removing a data preparation operation
+-------------------------------------
 
-To remove a data preparation function, simply delete it from
-:code:`src/data_preparation.py`, remove any already prepared data manually or
-with the command :code:`make clean-prepared-data` and remember not to import it
-in :code:`prepare_data.py` or refer to the prepared data in any inference
-configuration files.
+To remove a data preparation operation, simply make sure it is not run by the
+function `prepare_data` in the file :code:`my_analysis/data_preparation.py`, then
+remove any already prepared data manually or with the command :code:`make
+clean-prepared-data`.
 
 Adding a new data preparation function
 --------------------------------------
@@ -166,7 +173,8 @@ Perhaps you would like to add a new data preparation function that ignores
 measurements with odd-numbered index values, but is otherwise the same as the
 function :code:`prepare_data_no_interaction`.
 
-First add a new function to the file :code:`src/data_preparation.py` like so:
+First add a new function to the file :code:`my_analysis/data_preparation.py`
+like so:
 
 .. code:: python
 
@@ -189,17 +197,32 @@ First add a new function to the file :code:`src/data_preparation.py` like so:
          measurements=measurements,
      )
 
-Next import the new function in the file :code:`prepare_data.py`:
+Next update the new function `prepare_data` so that it calls the new function:
 
 .. code:: python
 
-    DATA_PREPARATION_FUNCTIONS_TO_RUN = [
-        data_preparation_functions.prepare_data_fake_interaction,
-        data_preparation_functions.prepare_data_interaction,
-        data_preparation_functions.prepare_data_no_interaction,
-        data_preparation_functions.prepare_data_no_interaction_even_only,
+  def prepare_data():
+      """Main function."""
+      print("Reading raw data...")
+      raw_data = {
+          k: pd.read_csv(v, index_col=None) for k, v in RAW_DATA_FILES.items()
+      }
+      data_preparation_functions_to_run = [
+          prepare_data_interaction,
+          prepare_data_no_interaction,
+          prepare_data_fake_interaction
+          prepare_data_no_interaction_even_only,
+      ]
+      print("Preparing data...")
+      for dpf in data_preparation_functions_to_run:
+          print(f"Running data preparation function {dpf.__name__}...")
+          prepared_data = dpf(raw_data["raw_measurements"])
+          output_dir = os.path.join(PREPARED_DIR, prepared_data.name)
+          print(f"\twriting files to {output_dir}")
+          if not os.path.exists(PREPARED_DIR):
+              os.mkdir(PREPARED_DIR)
+          write_prepared_data(prepared_data, output_dir)
     ]
-
 
 Finally, create one or more new inferences and configure them to use the new
 prepared data, for example by creating a folder
@@ -237,10 +260,11 @@ Adding a new statistical model
 ------------------------------
 
 To add a new statistical model, first write a new Stan program in the folder
-:code:`src/stan`, then check whether the model is compatible with any of the
-functions in the folder :code:`src/stan_input_functions.py`; if not, write a new
-function. Finally, create a new inference folder and configure it to use the new
-model and a suitable stan input function, for example like this:
+:code:`my_analysis/stan`, then check whether the model is compatible with any
+of the functions in the folder :code:`my_analysis/stan_input_functions.py`; if
+not, write a new function. Finally, create a new inference folder and configure
+it to use the new model and a suitable stan input function, for example like
+this:
 
 .. code:: toml
 

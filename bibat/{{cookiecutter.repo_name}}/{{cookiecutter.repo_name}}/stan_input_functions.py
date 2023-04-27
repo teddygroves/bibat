@@ -4,7 +4,7 @@
 from typing import Dict, List
 
 import pandas as pd
-from src.prepared_data import PreparedData
+from {{cookiecutter.repo_name}}.data_preparation import PreparedData
 
 
 def get_stan_input(measurements: pd.DataFrame, x_cols: List[str]) -> Dict:
