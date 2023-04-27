@@ -27,7 +27,5 @@ python:
       path: .
       extra_requirements:
         - development
-    - method: pip
-      path: bibat   
     - requirements: docs/requirements.txt
    system_packages: true
