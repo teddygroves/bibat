@@ -26,7 +26,9 @@ WIZARD_FIELDS = [
         .replace(" ", "_"),
     ),
     WizardStr("author_name", "What is your name?", default="Author name"),
-    WizardStr("author_email", "What is your email?", default="author@email.com"),
+    WizardStr(
+        "author_email", "What is your email?", default="author@email.com"
+    ),
     WizardStr(
         "coc_contact",
         "Who should be the code of conduct contact?",

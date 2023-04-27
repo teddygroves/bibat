@@ -10,10 +10,9 @@ import os
 import numpy as np
 import pandas as pd
 import pandera as pa
-from pandera.typing import Series, DataFrame
+from pandera.typing import DataFrame, Series
 from pydantic.dataclasses import dataclass
 from {{cookiecutter.repo_name}}.util import CoordDict, make_columns_lower_case
-
 
 NAME_FILE = "name.txt"
 COORDS_FILE = "coords.json"

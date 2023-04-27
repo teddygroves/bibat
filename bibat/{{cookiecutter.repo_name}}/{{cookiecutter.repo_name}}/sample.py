@@ -8,12 +8,12 @@ import cmdstanpy
 import numpy as np
 import xarray as xr
 from sklearn.model_selection import KFold
+from {{cookiecutter.repo_name}}.data_preparation import load_prepared_data
 from {{cookiecutter.repo_name}}.inference_configuration import (
     AVAILABLE_MODES,
     InferenceConfiguration,
     load_inference_configuration,
 )
-from {{cookiecutter.repo_name}}.data_preparation import load_prepared_data
 from {{cookiecutter.repo_name}}.util import CoordDict
 
 HERE = os.path.dirname(__file__)

@@ -3,7 +3,9 @@
 import os
 
 import pytest
-from {{cookiecutter.repo_name}}.inference_configuration import InferenceConfiguration
+from {{cookiecutter.repo_name}}.inference_configuration import (
+    InferenceConfiguration,
+)
 
 SAMPLE_KWARGS = {
     "iter_warmup": 50,
