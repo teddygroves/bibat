@@ -1,7 +1,6 @@
 
 Checklist:
 
-- [ ] `requirements.txt` up to date
 - [ ] No pytest errors
 - [ ] `make analysis` works
 - [ ] `README.md` up to date
