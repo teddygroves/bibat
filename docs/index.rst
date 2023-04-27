@@ -403,9 +403,9 @@ Contributing
 
 All contributions are very welcome!
 
-Make sure to read the [code of
-conduct](https://github.com/teddygroves/bibat/CODE_OF_CONDUCT.md) and follow
-its recommendations. 
+Make sure to read the `code of conduct
+<https://github.com/teddygroves/bibat/CODE_OF_CONDUCT.md>`_ and follow its
+recommendations. 
 
 If you have a specific suggestion for how bibat could be improved, or if you
 find a bug then please file an issue or submit a pull request.
