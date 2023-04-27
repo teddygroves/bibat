@@ -8,6 +8,26 @@ Bibat: Batteries-Included Bayesian Analysis Template
 .. image:: https://readthedocs.org/projects/bibat/badge/?version=latest
     :target: https://bibat.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
+    
+.. image:: https://github.com/teddygroves/bibat/actions/workflows/run_tox.yml/badge.svg
+    :target: https://github.com/teddygroves/bibat/actions/workflows/run_tox.yml
+    :alt: Test
+    
+.. image:: https://github.com/teddygroves/bibat/actions/workflows/test_end_to_end.yml/badge.svg
+    :target: https://github.com/teddygroves/bibat/actions/workflows/test_end_to_end.yml
+    :alt: Test
+    
+.. image:: https://www.repostatus.org/badges/latest/active.svg
+   :alt: Project Status: Active – The project has reached a stable, usable state and is being actively developed.
+   :target: https://www.repostatus.org/#active
+ 
+.. image:: https://img.shields.io/badge/python->=3.9-blue.svg
+   :alt: Supported Python versions: 3.9 and newer
+   :target: https://www.python.org/
+   
+.. image:: https://badge.fury.io/py/bibat.svg
+    :target: https://badge.fury.io/py/bibat
+
 
 Bibat is a Python package providing a flexible interactive template for Bayesian
 statistical analysis projects. 
@@ -61,3 +81,18 @@ To install the latest version from github:
 .. code:: sh
 
     $ pip install git+https://github.com/teddygroves/bibat.git@main
+    
+Citation information
+====================
+
+If you would like to cite bibat using bibtex please use the following format:
+
+.. code:: sh
+
+  @software{bibat,
+    doi = {10.5281/zenodo.7775328},
+    url = {https://github.com/teddygroves/bibat},
+    year = {2023},
+    author = {Teddy Groves},
+    title = {Bibat: batteries-included Bayesian analysis template},
+  }
