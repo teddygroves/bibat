@@ -17,7 +17,6 @@ warn-pedantic = true
 save_warmup = false
 iter_warmup = 2000
 iter_sampling = 2000
-show_console = true
 
 [sample_kwargs.kfold]
 chains = 1
