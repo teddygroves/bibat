@@ -81,3 +81,18 @@ To install the latest version from github:
 .. code:: sh
 
     $ pip install git+https://github.com/teddygroves/bibat.git@main
+    
+Citation information
+====================
+
+If you would like to cite bibat using bibtex please use the following format:
+
+.. code:: sh
+
+  @software{bibat,
+    doi = {10.5281/zenodo.7775328},
+    url = {https://github.com/teddygroves/bibat},
+    year = {2023},
+    author = {Teddy Groves},
+    title = {Bibat: batteries-included Bayesian analysis template},
+  }
