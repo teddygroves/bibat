@@ -10,9 +10,9 @@ will install a fresh virtual environment if one doesn't exist already, activate
 it and install python dependencies and cmdstan, then run the analysis with the
 following commands:
 
-- `python {{cookicutter.repo_name}}/prepare_data.py`
-- `python {{cookicutter.repo_name}}/sample.py`
-- `jupyter execute {{cookicutter.repo_name}}/investigate.ipynb`
+- `python {{cookiecutter.repo_name}}/prepare_data.py`
+- `python {{cookiecutter.repo_name}}/sample.py`
+- `jupyter execute {{cookiecutter.repo_name}}/investigate.ipynb`
 
 {% if cookiecutter.docs_format == "Quarto" %}# How to create a pdf report
 
