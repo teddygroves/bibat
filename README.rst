@@ -105,7 +105,7 @@ bibat like this:
 
     $ bibat --config_file=my_json_file.json
 
-See `here
+See `bibat's cookiecutter schema
 <https://github.com/teddygroves/bibat/blob/main/bibat/cookiecutter.json>`_ for
 the information you need to create a suitable json file.
 
