@@ -56,32 +56,60 @@ In particular, you may find it useful to have a look at `this vignette
 demonstrates, step by step, how to use bibat to implement a complex statistical
 analysis.
 
-Quick Start
-===========
+Installation
+============
 
-You can try out bibat like this (make sure you are in a Python environment where
-you would like to install bibat and `its dependencies
-<https://github.com/teddygroves/bibat/blob/main/setup.cfg#L28>`_):
+You can install bibat like this (make sure you are in a Python environment where
+you would like to install bibat):
 
 .. code:: sh
 
     $ pip install bibat
+
+To install the latest version of bibat from github:
+
+.. code:: sh
+
+    $ pip install git+https://github.com/teddygroves/bibat.git@main
+    
+
+To install bibat with development dependencies:
+
+.. code:: sh
+
+    $ pip install bibat'[development]'
+
+Usage
+=====
+
+Bibat is intended to be used from the command line like this:
+
+.. code:: sh
+
     $ bibat
 
-After following the wizard's instructions, you should now have a new directory
-implementing a simple statistical analysis. To try it out, run the following
+Running this command will trigger a command line wizard. After following the
+wizard's instructions, a new directory will be created that implements a simple
+statistical analysis. To try out the example analysis, run the following
 command from the root of the new directory:
 
 .. code:: sh
 
     $ make analysis
 
-To install the latest version from github:
+If you already know how you are going to answer the wizard's questions, you can
+put your answers in a json file with relative path `my_json_file.json` and run
+bibat like this:
 
 .. code:: sh
 
-    $ pip install git+https://github.com/teddygroves/bibat.git@main
-    
+    $ bibat --config_file=my_json_file.json
+
+See `here
+<https://github.com/teddygroves/bibat/blob/main/bibat/cookiecutter.json>`_ for
+the information you need to create a suitable json file.
+
+
 Citation information
 ====================
 

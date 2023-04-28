@@ -8,9 +8,9 @@ uses `cookiecutter <https://cookiecutter.readthedocs.io/en/latest/>`_, `Stan
 `arviz <https://arviz-devs.github.io/arviz/>`_. It takes a 'batteries-included'
 approach, creating a whole working project rather than a skeleton.
 
-The :ref:`getting started` section explains how to install bibat and use
-it to easily create a folder containing a complete example Bayesian statistical
-analysis project.
+The :ref:`installation` and :ref:`usage` sections explain how to install bibat
+and use it to easily create a folder containing a complete example Bayesian
+statistical analysis project.
 
 The next thing you will probably want to do is edit the example analysis so that
 it does something different. To find out how to do that, get acquainted with
@@ -27,27 +27,57 @@ If you would like to contribute to bibat in any way (please do this!), the
 If you are looking for reference information about bibat's :ref:`cli` or
 :ref:`api`, check those out!
 
-.. _getting started:
+.. _installation:
 
-Getting started
-===============
+Installation
+============
 
+You can install bibat like this (make sure you are in a Python environment where
+you would like to install bibat):
+
+.. code:: sh
+
+    $ pip install bibat
+
+To install the latest version of bibat from github:
+
+.. code:: sh
+
+    $ pip install git+https://github.com/teddygroves/bibat.git@main
+    
+
+.. _usage:
+
+Usage
+=====
+
+Bibat is intended to be used from the command line like this:
+
+.. code:: shell
+
+    $ bibat
+
+Running this command will trigger a command line wizard. After following the
+wizard's instructions, a new directory will be created that implements a simple
+statistical analysis. To try out the example analysis, run the following
+command from the root of the new directory:
+
+.. code:: shell
+
+    $ make analysis
+
+If you already know how you are going to answer the wizard's questions, you can
+put your answers in a json file with relative path `my_json_file.json` and run
+bibat like this:
+
+.. code:: shell
+
+    $ bibat --config_file=my_json_file.json
+
+See `here
+<https://github.com/teddygroves/bibat/blob/main/bibat/cookiecutter.json>`_ for
+the information you need to create a suitable json file.
 You can use bibat to start your statistical analysis project like this:
-
-.. code:: shell
-
-   pip install bibat
-   bibat
-
-After asking you some questions through a wizard, bibat will create a directory
-containing a complete Bayesian statistical analysis project, whose results you
-can reproduce like this:
-
-.. code:: shell
-
-   cd my_cool_project
-   make analysis
-
 
 .. _intended workflow:
 
@@ -416,6 +446,12 @@ them in the `discussions page
 
 If you'd like to contribute code changes, just follow the normal github
 workflow.
+
+You can install bibat with development dependencies like this:
+
+.. code:: sh
+
+    $ pip install bibat'[development]'
 
 To test changes to the template locally, I recommend avoiding having to complete
 the wizard every time by making a `yaml <https://yaml.org/>`_ config file like

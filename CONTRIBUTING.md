@@ -16,6 +16,12 @@ them in the [discussions page](https://github.com/teddygroves/bibat/discussions)
 If you'd like to contribute code changes, just follow the normal github
 workflow.
 
+You can install bibat with development dependencies like this:
+
+.. code:: sh
+
+    $ pip install bibat'[development]'
+
 To test changes to the template locally, I recommend avoiding having to complete
 the wizard every time by making a [yaml](https://yaml.org/) config file like
 this (copied from the file `tests/data/example_config.yml`):
