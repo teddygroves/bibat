@@ -33,6 +33,7 @@ dependencies = [
 development = [
     "black",
     "isort",
+    "pre-commit",
     "pytest",
     "tox",
     "sphinx",
