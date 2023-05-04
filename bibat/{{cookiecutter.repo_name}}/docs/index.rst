@@ -10,11 +10,6 @@ Welcome to {{ cookiecutter.project_name }}'s documentation!
    :maxdepth: 2
    :caption: Contents:
 
-  how_to_build
-  how_to_do_some_things_with_rst
-  reference
-
-
 Write your documentation here in `reStructuredText <https://www.sphinx-doc.org/en/master/usage/restructuredtext/index.html>`_.
 
 .. _how_to_build:

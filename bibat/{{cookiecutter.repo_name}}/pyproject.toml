@@ -22,9 +22,9 @@ dependencies = [
     "scipy",
     "scikit-learn",
     "toml",
-    {% if cookiecutter.create_tests_directory == 'y' %}"pytest",
-    "black",{% endif %}
-    {% if cookiecutter.docs_format == 'Sphinx' %}"sphinx",{% endif %}
+    {-% if cookiecutter.create_tests_directory == 'y' 0%}    "pytest",
+    "black",{-% endif -%}
+    {-% if cookiecutter.docs_format == 'Sphinx' -%}"sphinx",{-% endif -%}
 ]
 
 [tool.setuptools]
