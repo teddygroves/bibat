@@ -1,3 +1,7 @@
+.tox",
+__pycache__",
+.ipynb_checkpoints/",
+.*.egg-info"
 # _extensions
 *_extensions*
 
@@ -60,7 +64,7 @@ pip-delete-this-directory.txt
 
 # Unit test / coverage reports
 htmlcov/
-.tox/
+.tox
 .coverage
 .coverage.*
 .cache

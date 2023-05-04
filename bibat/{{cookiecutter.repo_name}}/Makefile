@@ -5,7 +5,7 @@ ACTIVATE_VENV = .venv/bin/activate
 REQUIREMENTS_FILE = requirements.txt
 SRC = {{cookiecutter.repo_name}}
 {% if cookiecutter.docs_format != 'No docs' %}DOCS_DIR = docs{% endif %}
-{% if cookiecutter.docs_format == 'SPHINX' %}DOCS_BUILDDIR = docs/build{% endif %}
+{% if cookiecutter.docs_format == 'Sphinx' %}DOCS_BUILDDIR = docs/build{% endif %}
 {% if cookiecutter.docs_format == 'Quarto' %}REPORT_STEM = docs/report{% endif %}
 
 ifeq ($(OS),Windows_NT)
@@ -20,7 +20,7 @@ $(ACTIVATE_VENV):
 
 {% if cookiecutter.docs_format != 'No docs' %}docs: $(ENV_MARKER)
 	. $(ACTIVATE_VENV) && (\{% endif %}
-		{% if cookiecutter.docs_format == 'Sphinx' %}sphinx-build "$(DOCS_SOURCE)" "$(DOCS_BUILDDIR)" -b html; \
+		{% if cookiecutter.docs_format == 'Sphinx' %}sphinx-build "$(DOCS_DIR)" "$(DOCS_BUILDDIR)" -b html; \
     {%- elif cookiecutter.docs_format == 'Quarto' -%}quarto render $(REPORT_STEM).qmd; \
 		{%- endif %}
 {% if cookiecutter.docs_format != 'No docs' %}	){% endif %}
