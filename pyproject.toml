@@ -55,6 +55,7 @@ bibat = "bibat.cli:generate_project"
 [tool.black]
 line-length = 80
 target-version = ['py311']
+include = '\.pyi?$'
 extend-exclude = '''
 /(
    \.eggs         # exclude a few common directories in the
