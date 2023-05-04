@@ -6,8 +6,9 @@ Working with bibat
 
 This page explains how to create custom statistical analyses using bibat,
 including the :ref:`intended workflow <intended_workflow>`, instructions for
-:ref:`editing the example analysis <editing_the_example_analysis>` and links to
-some :ref:`vignettes`.
+:ref:`editing the example analysis <editing_the_example_analysis>`,
+:ref:`documenting your analysis <documenting_your_analysis>` and links to some
+:ref:`vignettes`.
 
 .. _intended_workflow:
 
@@ -66,8 +67,8 @@ follows:
   :code:`plots`.
 
 - Documentation lives in the directory :code:`docs`, and can be written using a
-  range of standard formats including `quarto <https://quarto.org/>`_ and
-  `Sphinx <https://www.sphinx-doc.org/en/master/>`_.
+  range of standard formats: see the section on
+  :ref:`documenting your analysis <documenting_your_analysis>` for details.
 
 The analysis is performed by setting up a suitable programming environment and
 then running the Python scripts :code:`my_analysis/prepare_data.py` and
@@ -252,6 +253,45 @@ this:
     chains = 1
     iter_warmup = 1000
     iter_sampling = 1000
+
+.. _documenting_your_analysis:
+
+Documenting your analysis
+=========================
+
+Bibat makes it easy to document your analysis using the popular tools `Quarto
+<https://quarto.org/>`_ and `Sphinx
+<https://www.sphinx-doc.org/en/master/index.html>`_.
+
+If you choose one of these options when completing bibat's cli wizard, the
+folder :literal:`docs` will be populated with documentation source files, which
+you can convert to a prettier format by running the command :literal:`make
+docs` from the project root.
+
+Sphinx is an excellent choice for documenting projects that involve Python code
+that you would like to share with others, as it supports automatic
+documentation via directives like `automodule
+<https://www.sphinx-doc.org/en/master/usage/extensions/autodoc.html#directive-automodule>`_.
+
+Quarto is specialised for producing nicely-formatted documents in a range of
+formats, starting from a source document written in `pandoc markdown
+<https://pandoc.org/MANUAL.html#pandocs-markdown>`_. One relevant usecase is
+when you want to write a paper based on your analysis and update any figures
+automatically. Note that, unlike, bibat does not attempt to install or set up
+quarto: see `quarto's 'getting started' page
+<https://quarto.org/docs/get-started/>`_ for official installation
+instructions.
+
+To get an idea for how to get started with writing documentation using Quarto
+and Sphinx, the official documentation for both tools are very good. The
+`Quarto guide is here <https://quarto.org/docs/guide/>`_ and resources for
+learning Sphinx and its primary document format reStructuredText are linked
+from the `Sphinx homepage <https://www.sphinx-doc.org/en/master/>`_. For a more
+focused intoduction, try looking at the example source documents that bibat
+provides. The example `quarto report is here
+<https://github.com/teddygroves/bibat/blob/main/bibat/%7B%7Bcookiecutter.repo_name%7D%7D/docs/report.qmd>`_
+and the `Sphinx index document can be found here
+<https://github.com/teddygroves/bibat/blob/main/bibat/%7B%7Bcookiecutter.repo_name%7D%7D/docs/index.rst>`_.
 
 .. _vignettes:
 
