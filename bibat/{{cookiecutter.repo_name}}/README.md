@@ -18,10 +18,19 @@ following commands:
 
 First make sure you have installed [quarto](https://https://quarto.org/).
 
-Now run this command from the `docs` directory:
+Now run this command from the project root:
 
 ```
-make report
+make docs
+```
+{% endif %}
+
+{% if cookiecutter.docs_format == "Sphinx" %}# How to build Sphinx documentation
+
+Run this command from the project root:
+
+```
+make docs
 ```
 {% endif %}
 
