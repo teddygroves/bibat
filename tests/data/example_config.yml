@@ -6,7 +6,7 @@ default_context:
   coc_contact: author@email.com
   description: A short description of the project
   open_source_license: MIT
-  docs_format: Markdown
+  docs_format: Quarto
   create_tests_directory: y
   create_dotgithub_directory: y
   install_python_tooling: y

@@ -79,12 +79,12 @@ def prompt_user(
     :param context: an optional dictionary containing the answers to previous
         prompts.
     """
+    if not (isinstance(wq, WizardStr) or isinstance(wq, WizardChoice)):
+        raise ValueError(f"input {wq} is not a WizardStr or a WizardChoice")
     if context is not None and wq.default_function is not None:
         default = wq.default_function(context)
     elif isinstance(wq.default, str):
         default = wq.default
-    else:
-        raise ValueError(f"wf.default has unexpected type {type(wq.default)}")
     if isinstance(wq, WizardStr):
         return click.prompt(wq.prompt, default=default, type=str)
     elif isinstance(wq, WizardChoice):
@@ -94,5 +94,3 @@ def prompt_user(
             type=click.Choice(wq.options),
             show_choices=True,
         )
-    else:
-        raise ValueError(f"input {wq} is not a WizardStr or a WizardChoice")
