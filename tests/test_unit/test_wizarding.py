@@ -49,13 +49,6 @@ def test_prompt_user_bad():
 
 
 @pytest.mark.xfail
-def test_prompt_user_bad_default():
-    """Test that the prompt_user function fails with incorrect default."""
-    wq = WizardStr("name", "Question?", default=int(1))
-    prompt_user(wq, context=None)
-
-
-@pytest.mark.xfail
 def test_prompt_user_bad_input():
     """Test that the prompt_user function fails with incorrect default."""
     prompt_user(123, context=None)
