@@ -5,7 +5,7 @@ All contributions are very welcome!
 
 Make sure to read the [code of
 conduct](https://github.com/teddygroves/bibat/CODE_OF_CONDUCT.md) and follow
-its recommendations. 
+its recommendations.
 
 If you have a specific suggestion for how bibat could be improved, or if you
 find a bug then please file an issue or submit a pull request.
@@ -35,7 +35,7 @@ default_context:
   coc_contact: author@email.com
   description: A short description of the project
   open_source_license: MIT
-  docs_format: Markdown
+  docs_format: Quarto
   create_tests_directory: y
   create_dotgithub_directory: y
   install_python_tooling: y

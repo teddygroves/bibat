@@ -18,7 +18,7 @@ def test_wizard_choice_good():
 
 
 @pytest.mark.xfail
-def test_wizard_choic_bad():
+def test_wizard_choice_bad():
     """Test that the WizardChoice class fails as expected."""
     WizardChoice("name", "What's your name?", ["Sasha", "Alex"], "Lex")
 
@@ -46,3 +46,16 @@ def test_prompt_user_bad():
         return prompt_user(c)
 
     runner.invoke(prompt_c, input="Alex")
+
+
+@pytest.mark.xfail
+def test_prompt_user_bad_default():
+    """Test that the prompt_user function fails with incorrect default."""
+    wq = WizardStr("name", "Question?", default=int(1))
+    prompt_user(wq, context=None)
+
+
+@pytest.mark.xfail
+def test_prompt_user_bad_input():
+    """Test that the prompt_user function fails with incorrect default."""
+    prompt_user(123, context=None)
