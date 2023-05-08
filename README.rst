@@ -143,6 +143,8 @@ by running :code:`pip install bibat'[development]'`:
 - pre-commit
 - pytest
 - tox
+- codecov
+- pytest-cov
 - sphinx
 - sphinx-click
 - pydata_sphinx_theme
