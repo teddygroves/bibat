@@ -7,7 +7,7 @@ name = "bibat"
 authors = [
     {name = "Teddy Groves", email = "tedgro@dtu.dk"},
 ]
-version = "0.1.4"
+version = "0.1.5"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Science/Research",
@@ -75,7 +75,6 @@ extend-exclude = '''
 '''
 
 [tool.isort]
-auto_identify_namespace_packages = true
 known_first_party = ["bibat", "baseball"]
 multi_line_output = 3
 include_trailing_comma = true
