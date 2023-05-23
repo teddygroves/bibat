@@ -89,7 +89,7 @@ Choose an open source license from these options: (MIT, BSD-3-Clause, No license
 How would you like to document your project? (Quarto, Sphinx, No docs) [Quarto]:
 Would you like to create a tests directory? [y]: n
 Would you like to create a .github directory? [y]: n
-> 
+>
 ```
 
 After I answered the wizard's questions bibat creted a new folder called
@@ -186,7 +186,7 @@ Finally I removed the example analysis's raw data:
 The first step in preparing data is to decide what prepared data looks like for
 the purposes of our analysis. Bibat provides dataclasses called `PreparedData`
 and `MeasurementsDF` to help get started with this, which I found in the file
-`baseball/prepared_data.py`.
+`baseball/data_preparation.py`.
 
 As it happens, prepared data looks very similar in this analysis and the
 example. All I had to do was change the `MeasurementsDF` definition a
@@ -210,8 +210,18 @@ The next step is to write functions that return `PreparedData` objects. In this
 case I wrote a couple of data preparation functions: `prepare_data_2006` and
 `prepare_data_bdb`:
 
-```{.python include="../baseball/data_preparation.py" start-line=111}
+```{.python include="../baseball/data_preparation.py" start-line=101}
 ```
+
+I had to update the `prepare_data` function to take into account the
+two raw data sources:
+
+```{.python include="../baseball/data_preparation.py" start-line=33 end-line=52}
+```
+
+To finish off I deleted the unused global variables `MEASUREMENTS_FILE`,
+`NEW_COLNAMES`, `DROPNA_COLS` and `DIMS`, then checked if the function
+`load_prepared_data` needed any changes: I was pretty sure it didn't.
 
 To check that all this worked, I ran the data preparation script manually:^[I
 could also have just run `make analysis` again]
@@ -219,7 +229,7 @@ could also have just run `make analysis` again]
 ```{.zsh}
 > source .venv/bin/activate
 (baseball) > python baseball/prepare_data.py
-``` 
+```
 
 Now the folder `data/prepared/bdb` contained a file
 `data/prepared/bdb/measurements.csv` that looked like this:
@@ -277,7 +287,7 @@ study](https://mc-stan.org/users/documentation/case-studies/gpareto_functions.ht
 
 ```{.stan}
 real gpareto_lpdf(vector y, real ymin, real k, real sigma) {
-  // generalised Pareto log pdf 
+  // generalised Pareto log pdf
   int N = rows(y);
   real inv_k = inv(k);
   if (k<0 && max(y-ymin)/sigma > -inv_k)
@@ -311,7 +321,8 @@ can write as many Stan input functions as you like and choose which one to run
 for any given inference.
 
 I started by defining some Stan input functions that pass arbitary prepared
-data on to each of the models:
+data on to each of the models:^[Note that this code uses the scipy function
+`logit`, which it imported like this: `from scipy.special import logit`]
 
 ```{.python include="../baseball/stan_input_functions.py" start-line=11 end-line=34}
 ```
@@ -360,13 +371,14 @@ Here is the file `inferences/normal2006/config.toml`:
 ```
 
 Note that:
-* The Stan file, prepared data folder and stan input function are referred to by
+
+- The Stan file, prepared data folder and stan input function are referred to by
   strings. The analysis should raise an error if you enter a non-existing value.
-* Both inferences are set to run in "prior" and "posterior" modes - the other
+- Both inferences are set to run in "prior" and "posterior" modes - the other
   pre-defined mode is "kfold", but you can also write your own!
-* You can enter arbitrary arguments to cmdstanpy's `CmdStanModel.sample` method
+- You can enter arbitrary arguments to cmdstanpy's `CmdStanModel.sample` method
   in the `[sample_kwargs]` table.
-* You can enter mode-specific overrides in `[sample_kwargs.<MODE>]`. This can be
+- You can enter mode-specific overrides in `[sample_kwargs.<MODE>]`. This can be
   handy if you want to run more or fewer iterations for a certain mode.
 
 Now when I ran `make analysis` again, I saw messages indicating that Stan had
@@ -385,10 +397,24 @@ inferences
 # Investigating the inferences
 
 Now that the inferences are ready it's time to check them out. Bibat provides a
-jupyter notebook at `baseball/investigate.ipynb` for exactly this purpose.
+Jupyter notebook at `baseball/investigate.ipynb` for exactly this purpose. The
+notebook's main job is to create plots and save them in the `plots` directory
+when it is executed with the command `jupyter execute investigate.ipynb`, which
+is the final step in the chain of commands that is triggered by `make
+analysis`.
 
-A lot of code from the example analysis's notebook was reusable, so I largely
-followed its structure, with a few tweaks.
+A notebook is arguably a nicer home for code that creates plots than a plain
+python script because it allows for literate documentation and an iterative
+workflow. A notebook makes it easy to, for example, add some code to change the
+scale of a plot, execute the code and see the new results, then update the
+relevant documentation all in the same place.
+
+The code from the example analysis's notebook for loading `InferenceData` was
+reusable with a few tweaks to avoid missing file errors, so I kept it. On the
+other hand, I wanted to make some different plots from the ones in the example
+analysis, including some that required loading prepared data. To check out
+everything I did, see
+[here](https://github.com/teddygroves/bibat/blob/main/bibat/examples/baseball/baseball/investigate.ipynb).
 
 # Choosing priors using push-forward calibration
 
@@ -427,4 +453,10 @@ dramatically different certainty levels about the abilities of players with few
 at-bats. This pattern was true both for the small 2006 dataset and the much
 larger baseballdatabank dataset.
 
+# Documenting the analysis
 
+The final step was to document my analysis. To do this I edited the file
+`docs/report.qmd`, then ran `quarto render docs/report.qmd`, which produced the
+very html document that you are probably reading now! You can find the complete
+`report.qmd` file
+[here](https://github.com/teddygroves/bibat/blob/main/bibat/examples/baseball/docs/report.qmd).
