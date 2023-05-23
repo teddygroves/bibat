@@ -75,6 +75,8 @@ extend-exclude = '''
 '''
 
 [tool.isort]
+auto_identify_namespace_packages = true
+known_first_party = ["bibat", "baseball"]
 multi_line_output = 3
 include_trailing_comma = true
 force_grid_wrap = 0

@@ -16,6 +16,7 @@ from baseball.util import CoordDict
 
 NAME_FILE = "name.txt"
 COORDS_FILE = "coords.json"
+MEASUREMENTS_FILE = "measurements.csv"
 N_CV_FOLDS = 10
 HERE = os.path.dirname(__file__)
 DATA_DIR = os.path.join(HERE, "..", "data")
