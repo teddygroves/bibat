@@ -216,7 +216,7 @@ case I wrote a couple of data preparation functions: `prepare_data_2006` and
 I had to update the `prepare_data` function to take into account the
 two raw data sources:
 
-```{.python include="../baseball/data_preparation.py" start-line=35 end-line=53}
+```{.python include="../baseball/data_preparation.py" start-line=35 end-line=54}
 ```
 
 To finish off I deleted the unused global variables `NEW_COLNAMES`,
