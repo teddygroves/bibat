@@ -4,8 +4,9 @@ import os
 from typing import Callable, Dict, List, Optional
 
 import toml
-from baseball import stan_input_functions
 from pydantic import BaseModel, Field, root_validator, validator
+
+from baseball import stan_input_functions
 
 AVAILABLE_MODES = ["prior", "posterior", "kfold"]
 HERE = os.path.dirname(os.path.abspath(__file__))

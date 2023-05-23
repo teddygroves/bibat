@@ -35,7 +35,7 @@ $(ENV_MARKER): $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
 
 analysis: $(ENV_MARKER)
 	. $(ACTIVATE_VENV) && (\
-	  {% if cookiecutter.create_tests_directory %}python -m pytest || exit 1; \{% endif %}
+	  {% if cookiecutter.create_tests_directory == 'y' %}python -m pytest || exit 1; \{% endif %}
 	  python $(SRC)/prepare_data.py || exit 1; \
 	  python $(SRC)/sample.py || exit 1; \
 	  jupyter execute $(SRC)/investigate.ipynb || exit 1; \
