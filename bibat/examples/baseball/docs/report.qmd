@@ -47,7 +47,7 @@ I thought I'd test this out with some sports data, and luckily there is a really
 nice baseball example on [the Stan case studies
 website](https://mc-stan.org/users/documentation/case-studies/pool-binary-trials.html),
 complete with [data from the 2006 Major league
-season])https://github.com/stan-dev/example-models/blob/master/knitr/pool-binary-trials/baseball-hits-2006.csv).
+season](https://github.com/stan-dev/example-models/blob/master/knitr/pool-binary-trials/baseball-hits-2006.csv).
 After I posted some early results [on the Stan discourse
 forum](https://discourse.mc-stan.org/t/baseball-analysis-using-latent-generalised-pareto-distribution/29222),
 other users suggested that it might be interesting to model similar data from
@@ -210,18 +210,18 @@ The next step is to write functions that return `PreparedData` objects. In this
 case I wrote a couple of data preparation functions: `prepare_data_2006` and
 `prepare_data_bdb`:
 
-```{.python include="../baseball/data_preparation.py" start-line=101}
+```{.python include="../baseball/data_preparation.py" start-line=103}
 ```
 
 I had to update the `prepare_data` function to take into account the
 two raw data sources:
 
-```{.python include="../baseball/data_preparation.py" start-line=33 end-line=52}
+```{.python include="../baseball/data_preparation.py" start-line=35 end-line=53}
 ```
 
-To finish off I deleted the unused global variables `MEASUREMENTS_FILE`,
-`NEW_COLNAMES`, `DROPNA_COLS` and `DIMS`, then checked if the function
-`load_prepared_data` needed any changes: I was pretty sure it didn't.
+To finish off I deleted the unused global variables `NEW_COLNAMES`,
+`DROPNA_COLS` and `DIMS`, then checked if the function `load_prepared_data`
+needed any changes: I was pretty sure it didn't.
 
 To check that all this worked, I ran the data preparation script manually:^[I
 could also have just run `make analysis` again]
