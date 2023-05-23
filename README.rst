@@ -182,13 +182,13 @@ Target project dependencies: Cmdstan
 ------------------------------------
 
 Bibat will attempt to install `cmdstan
-<https://mc-stan.org/docs/cmdstan-guide/index.html>`_, the command line
+<https://mc-stan.org/docs/cmdstan-guide/index.html>`__, the command line
 interface to Stan, when you run the commands :code:`make env` or :code:`make
 analysis` from the root of the target project.
 
 If bibat fails to install cmdstan, please raise an issue! The relevant
 parts of the `cmdstan
-<https://mc-stan.org/docs/cmdstan-guide/cmdstan-installation.html>`_ and
+<https://mc-stan.org/docs/cmdstan-guide/cmdstan-installation.html>`__ and
 `cmdstanpy
 <https://cmdstanpy.readthedocs.io/en/v1.1.0/installation.html#cmdstan-installation>`_
 documentation might also be useful.
