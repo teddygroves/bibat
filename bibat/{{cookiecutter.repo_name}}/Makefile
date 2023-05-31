@@ -25,6 +25,8 @@ $(ACTIVATE_VENV):
 		{%- endif %}
 {% if cookiecutter.docs_format != 'No docs' %}	){% endif %}
 
+env: $(ENV_MARKER)
+
 $(ENV_MARKER): $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
 	. $(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
