@@ -1,6 +1,7 @@
 """A general definition of a fitting mode, plus some mode instances."""
 
 import textwrap
+from enum import Enum
 from typing import Callable, Dict, Union
 
 import numpy as np
@@ -9,6 +10,11 @@ from cmdstanpy import CmdStanMCMC, CmdStanModel
 from pydantic import BaseModel
 from sklearn.model_selection import KFold
 
+
+class IdataTarget(str, Enum):
+    prior = "prior"
+    posterior = "posterior"
+    log_likelihood = "log_likelihood"
 
 class FittingMode(BaseModel):
     """A way of fitting a statistical model.
@@ -24,9 +30,9 @@ class FittingMode(BaseModel):
       modes = ['prior', 'posterior', 'kfold']
       ...
 
-    The idata_target can be any name you want; however if it is 'prior' or
-    'posterior' it must be compatible with how this package's 'sample' module
-    creates groups with these names.
+    The idata_target must be one out of 'prior', 'posterior' and
+    'log_likelihood', and specifies which out of these InferenceData groups the
+    output will be written to.
 
     Each fitting mode's fit function must match the signature specified in the
     FittingMode class. This can also be changed, but must agree with the
@@ -35,7 +41,7 @@ class FittingMode(BaseModel):
 
     """
     name: str
-    idata_target: str
+    idata_target: IdataTarget
     fit: Callable[[CmdStanModel, Dict, Dict[str, str]], Union[CmdStanMCMC, xr.Dataset]]
 
 
@@ -127,4 +133,4 @@ prior_mode = FittingMode(name="prior", idata_target="prior", fit=fit_prior)
 posterior_mode = FittingMode(
     name="posterior", idata_target="posterior", fit=fit_posterior
 )
-kfold_mode = FittingMode(name="kfold", idata_target="llik_kfold", fit=fit_kfold)
+kfold_mode = FittingMode(name="kfold", idata_target="log_likelihood", fit=fit_kfold)

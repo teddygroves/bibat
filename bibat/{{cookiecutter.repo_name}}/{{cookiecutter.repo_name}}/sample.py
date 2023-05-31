@@ -39,19 +39,24 @@ def main():
             "coords": prepared_data.coords,
             "dims": ic.dims,
         }
-        extra_groups = {}
+        llik_outputs = {}
         for mode in ic.fitting_modes:
             fit_kwargs = ic.sample_kwargs
             if ic.mode_options is not None and mode.name in ic.mode_options.keys():
                 fit_kwargs |= ic.mode_options[mode.name]
             output = mode.fit(model, stan_input_base, fit_kwargs)
-            if mode.name in ["prior", "posterior"]:
+            if mode.idata_target in ["prior", "posterior"]:
                 idata_kwargs[mode.idata_target] = output
-                idata_kwargs[f"{mode.name}_predictive"] = "yrep"
+                idata_kwargs[f"{mode.idata_target.value}_predictive"] = "yrep"
+            elif mode.idata_target == "log_likelihood":
+                llik_outputs[f"llik_{mode.name}"] = output
             else:
-                extra_groups[mode.idata_target] = output
+                raise ValueError(
+                    f"idata_target {mode.idata_target} is not yet supported"
+                )
         idata = az.from_cmdstanpy(**idata_kwargs)
-        idata.add_groups(extra_groups)
+        for varname, output in llik_outputs.items():
+            idata.log_likelihood[varname] = output
         idata_file = os.path.join(run_dir, "idata.json")
         print(f"Saving idata to {idata_file}")
         idata.to_json(idata_file)
