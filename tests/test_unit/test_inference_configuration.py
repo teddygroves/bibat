@@ -1,9 +1,11 @@
-"""Unit tests for the ModelConfiguration class."""
+"""Unit tests for the InferenceConfiguration class."""
 
 import os
 
 import pytest
-from asdf.inference_configuration import InferenceConfiguration
+from {{cookiecutter.repo_name}}.inference_configuration import (
+    InferenceConfiguration,
+)
 
 SAMPLE_KWARGS = {
     "iter_warmup": 50,
