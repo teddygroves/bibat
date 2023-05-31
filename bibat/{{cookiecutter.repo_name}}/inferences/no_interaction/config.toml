@@ -3,7 +3,6 @@ stan_file = "multilevel-linear-regression.stan"
 prepared_data_dir = "no_interaction"
 stan_input_function = "get_stan_input_no_interaction"
 modes = ["prior", "posterior", "kfold"]
-kfold_folds = 5
 
 [dims]
 b = ["covariate"]
@@ -18,7 +17,8 @@ save_warmup = false
 iter_warmup = 2000
 iter_sampling = 2000
 
-[sample_kwargs.kfold]
+[mode_options.kfold]
+n_folds = 5
 chains = 1
 iter_warmup = 1000
 iter_sampling = 1000
