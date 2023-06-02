@@ -15,24 +15,28 @@ including the :ref:`intended workflow <intended_workflow>`, instructions for
 Intended workflow
 =================
 
-bibat assumes that a statistical analysis consists of the following components:
+Bibat assumes that a statistical analysis consists of the following components:
 
 - **Raw data**
 - **Data preparation** in which raw data is transformed to produce prepared data
   that fit a common structure.
 - **Statistical models**
 - **Inferences**, i.e. combinations of a prepared dataset, a statistical model,
-  a choice of which modes to fit the model in (for example
-  prior mode, posterior mode and exact k-fold cross-validation mode) and how
-  exactly to do so, and the results of doing this fitting.
+  a choice of which modes to fit the model in and how exactly to do so, and the
+  results of doing this fitting.
 - **Investigations** that do things with inferences and prepared data, such as
   making plots.
 - **Documentation**
 
-These terms are all pretty standard, except "Inference", which has a more
-specific than normal meaning in this context. This choice was made to avoid
-creating new jargon, and in order to match the arviz concept of `InferenceData
-<https://arviz-devs.github.io/arviz/api/inference_data.html>`_.
+The terms "Inference" and "mode" in this list have specific meanings.
+"Inference" roughly matches the concept `InferenceData
+<https://arviz-devs.github.io/arviz/api/inference_data.html>`_ from the library
+arviz.
+
+A "mode" means a way of fitting a statistical model to some data. Maud provides
+modes called "prior", "posterior" and "kfold", which respectively trigger
+priors-only inference, posterior inference and exact cross-validation. It is
+possible to add more modes!
 
 To perform a statistical analysis means running some data preparation
 operations, then carrying out a set of inferences, doing some investigations
@@ -277,8 +281,8 @@ Quarto is specialised for producing nicely-formatted documents in a range of
 formats, starting from a source document written in `pandoc markdown
 <https://pandoc.org/MANUAL.html#pandocs-markdown>`_. One relevant usecase is
 when you want to write a paper based on your analysis and update any figures
-automatically. Note that, unlike, bibat does not attempt to install or set up
-quarto: see `quarto's 'getting started' page
+automatically. Note that, unlike sphinx, bibat is not set up to install or
+configure quarto automatically. See `quarto's 'getting started' page
 <https://quarto.org/docs/get-started/>`_ for official installation
 instructions.
 
@@ -301,7 +305,7 @@ Vignettes
 `This vignette <_static/report.html>`_ provides a step by step description of
 how to create a complex analysis of baseball data starting with bibat's example
 project. You can see the complete analysis `here
-<https://github.com/teddygroves/bibat/bibat/examples/baseball>`_. This is
+<https://github.com/teddygroves/bibat/tree/main/bibat/examples/baseball>`_. This is
 probably the most useful example project as it is kept up to date as bibat is
 developed.
 
@@ -316,4 +320,4 @@ For even more inspiration, check out these projects that used bibat:
   analysis of biochemical thermodynamics data.
 
 If you used bibat to start your analysis, feel free to `add it to this list
-<https://github.com/teddygroves/bibat/docs/index.rst>`_!
+<https://github.com/teddygroves/bibat/blob/main/docs/index.rst>`_!

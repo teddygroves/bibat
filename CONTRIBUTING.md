@@ -4,7 +4,7 @@ Contributing
 All contributions are very welcome!
 
 Make sure to read the [code of
-conduct](https://github.com/teddygroves/bibat/CODE_OF_CONDUCT.md) and follow
+conduct](https://github.com/teddygroves/bibat/blob/main/CODE_OF_CONDUCT.md) and follow
 its recommendations.
 
 If you have a specific suggestion for how bibat could be improved, or if you
