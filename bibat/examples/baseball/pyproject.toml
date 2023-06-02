@@ -21,10 +21,7 @@ dependencies = [
     "pydantic",
     "scipy",
     "scikit-learn",
-    "toml",
-    
-    
-]
+    "toml",]
 
 [tool.setuptools]
 packages = ["baseball"]

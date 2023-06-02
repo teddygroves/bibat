@@ -10,19 +10,16 @@ will install a fresh virtual environment if one doesn't exist already, activate
 it and install python dependencies and cmdstan, then run the analysis with the
 following commands:
 
-- `python prepare_data.py`
-- `python sample.py`
-- `jupyter execute investigate.ipynb`
+- `python baseball/prepare_data.py`
+- `python baseball/sample.py`
+- `jupyter execute baseball/investigate.ipynb`
 
 # How to create a pdf report
 
 First make sure you have installed [quarto](https://https://quarto.org/).
 
-Now run this command from the `docs` directory:
+Now run this command from the project root:
 
 ```
-make report
+make docs
 ```
-
-
-

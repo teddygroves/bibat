@@ -16,7 +16,7 @@ Alternatively, if you have any more general thoughts or questions, please post
 them in the `discussions page
 <https://github.com/teddygroves/bibat/discussions>`_.
 
-If you'd like to contribute code changes, just follow the normal github
+If you'd like to contribute code changes, just follow the normal GitHub
 workflow.
 
 You can install bibat with development dependencies like this:
@@ -50,7 +50,7 @@ local :code:`master` branch, for example like this:
 
           git tag v0.2.1
 
-Now push the new tag to github:
+Now push the new tag to GitHub:
 
 .. code:: bash
 

@@ -1,4 +1,4 @@
-"""Definition of the ModelConfiguration class."""
+"""Definition of the InferenceConfiguration class."""
 
 import os
 from typing import Callable, Dict, List, Optional
@@ -6,9 +6,8 @@ from typing import Callable, Dict, List, Optional
 import toml
 from pydantic import BaseModel, Field, root_validator, validator
 
-from baseball import stan_input_functions
+from baseball import fitting_mode, stan_input_functions
 
-AVAILABLE_MODES = ["prior", "posterior", "kfold"]
 HERE = os.path.dirname(os.path.abspath(__file__))
 STAN_DIR = os.path.join(HERE, "stan")
 DEFAULT_DIMS = {"llik": ["observation"], "yrep": ["observation"]}
@@ -54,10 +53,12 @@ class InferenceConfiguration(BaseModel):
     name: str
     stan_file: str
     prepared_data_dir: str
-    modes: List[str]
     stan_input_function: Callable
+    fitting_mode_names: List[str] = Field(alias="modes")
+    fitting_modes: List[fitting_mode.FittingMode]
     sample_kwargs: dict = Field(default_factory=lambda: DEFAULT_SAMPLE_KWARGS)
     dims: Dict[str, List[str]] = Field(default_factory=lambda: DEFAULT_DIMS)
+    mode_options: Optional[Dict[str, dict]] = None
     kfold_folds: Optional[int] = None
     cpp_options: Optional[dict] = None
     stanc_options: Optional[dict] = None
@@ -67,13 +68,31 @@ class InferenceConfiguration(BaseModel):
         data["stan_input_function"] = getattr(
             stan_input_functions, data["stan_input_function"]
         )
+        data["fitting_modes"] = [
+            getattr(fitting_mode, mode + "_mode") for mode in data["modes"]
+        ]
         super().__init__(**data)
 
     @root_validator
     def check_folds(cls, values):
         """Check that there is a number of folds if required."""
-        if "kfold" in values["modes"] and values["kfold_folds"] is None:
-            raise ValueError("Set kfold_folds in order to run in kfold mode.")
+        if any(m == "kfold" for m in values["fitting_mode_names"]):
+            if "mode_options" not in values.keys():
+                raise ValueError(
+                    "Mode 'kfold' requires a mode_options.kfold table."
+                )
+            mode_options = values["mode_options"]
+            if "kfold" not in mode_options.keys():
+                raise ValueError(
+                    "Mode 'kfold' requires a mode_options.kfold table."
+                )
+            elif "n_folds" not in mode_options["kfold"].keys():
+                raise ValueError("Set 'n_folds' field in kfold mode options.")
+            else:
+                assert int(mode_options["kfold"]["n_folds"]), (
+                    f"Could not coerce n_folds choice "
+                    f"{mode_options['kfold']['n_folds']} to int."
+                )
         return values
 
     @validator("stan_file")
@@ -83,13 +102,16 @@ class InferenceConfiguration(BaseModel):
             raise ValueError(f"{v} is not a file in {STAN_DIR}.")
         return v
 
-    @validator("modes")
+    @validator("fitting_modes")
     def check_modes(cls, v):
         """Check that the provided modes exist."""
         for mode in v:
-            if mode not in AVAILABLE_MODES:
+            try:
+                getattr(fitting_mode, mode.name + "_mode")
+            except ValueError:
                 raise ValueError(
-                    f"{mode} not in available modes: {AVAILABLE_MODES}."
+                    f"{mode.name} not in available modes: "
+                    "check the file 'fitting_mode.py'."
                 )
         return v
 

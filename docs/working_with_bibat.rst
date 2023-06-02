@@ -22,57 +22,56 @@ Bibat assumes that a statistical analysis consists of the following components:
   that fit a common structure.
 - **Statistical models**
 - **Inferences**, i.e. combinations of a prepared dataset, a statistical model,
-  a choice of which modes to fit the model in and how exactly to do so, and the
-  results of doing this fitting.
+  a choice of how to run the model, and the results of doing so.
 - **Investigations** that do things with inferences and prepared data, such as
   making plots.
 - **Documentation**
 
-The terms "Inference" and "mode" in this list have specific meanings.
-"Inference" roughly matches the concept `InferenceData
-<https://arviz-devs.github.io/arviz/api/inference_data.html>`_ from the library
-arviz.
-
-A "mode" means a way of fitting a statistical model to some data. Maud provides
-modes called "prior", "posterior" and "kfold", which respectively trigger
-priors-only inference, posterior inference and exact cross-validation. It is
-possible to add more modes!
-
 To perform a statistical analysis means running some data preparation
-operations, then carrying out a set of inferences, doing some investigations
-and providing some documentation. bibat provides functionality for conveniently
-doing these things, as well as explicit and convenient representations of all
-the components and even a ready-made working example project.
+operations, performing some inferences, doing some investigations and providing
+some documentation. Bibat provides functionality for conveniently doing these
+things, as well as explicit and convenient representations of all the
+components and even a ready-made working example project.
 
-bibat's strategy for representing the components of a statistical analysis is as
+Bibat's strategy for representing the components of a statistical analysis is as
 follows:
 
 - Raw data are files that live in the directory :code:`data/raw`.
 
 - Source code lives in a folder with the same name as the analysis, for example
-  `my_analysis`.
+  :code:`my_analysis`.
 
 - Logic for data preparation, including a common structure given by a class
   PreparedData and functions producing data in this format, lives in the file
-  `my_analysis/data_preparation.py`.
+  :code:`my_analysis/data_preparation.py`.
 
 - Statistical models are represented by Stan programs in the directory
   :code:`my_analysis/stan/`
 
-- Inferences are subdirectories of the directory :code:`inferences`. Each such
-  subdirectory contains a file called :code:`config.toml` that chooses a
-  prepared dataset, statistical model and some fitting modes, as well as sampler
-  configuraiton. When the analysis is run the folder is populated with an
-  :code:`InferenceData` object saved in the file :code:`idata.json`, containing
-  samples and debug information.
+- Ways of running statistical models are represented by Python variables that
+  live in the file :code:`my_analysis/fitting_mode.py`. Each fitting mode is an
+  instance of the class :code:`FittingMode` and comes with a Python function
+  that spells out what it means to fit a model in that mode. You can define new
+  fitting modes as required for your analysis by creating new instances here,
+  or change the general definition by editing the :code:`FittingMode` class.
+
+- Inferences are subdirectories of the directory :code:`inferences`. Each
+  inference subdirectory contains a file called :code:`config.toml` that
+  chooses a prepared dataset, statistical model and fitting modes, as well as
+  sampler configuration. The chosen fitting modes must correspond with the
+  names of modes defined in :code:`my_analysis/fitting_mode.py`. When the
+  analysis is run the folder is populated with an :code:`InferenceData` object
+  saved in a file called :code:`idata.json`. This file contains everything
+  needed to analyse the results of the inference, including samples, debug
+  information and sometimes predictions.
 
 - Investigations are performed literately using the notebook file
   :code:`my_analysis/investigate.ipynb`, which saves plots to the directory
   :code:`plots`.
 
-- Documentation lives in the directory :code:`docs`, and can be written using a
-  range of standard formats: see the section on
-  :ref:`documenting your analysis <documenting_your_analysis>` for details.
+- Documentation lives in the directory :code:`docs`, and can be written using
+  either sphinx or quarto: see the section on :ref:`documenting your analysis
+  <documenting_your_analysis>` for details.
 
 The analysis is performed by setting up a suitable programming environment and
 then running the Python scripts :code:`my_analysis/prepare_data.py` and
@@ -228,7 +227,7 @@ To add a new statistical model, first write a new Stan program in the folder
 :code:`my_analysis/stan`, then check whether the model is compatible with any
 of the functions in the folder :code:`my_analysis/stan_input_functions.py`; if
 not, write a new function. Finally, create a new inference folder and configure
-it to use the new model and a suitable stan input function, for example like
+it to use the new model and a suitable Stan input function, for example like
 this:
 
 .. code:: toml
@@ -267,10 +266,10 @@ Bibat makes it easy to document your analysis using the popular tools `Quarto
 <https://quarto.org/>`_ and `Sphinx
 <https://www.sphinx-doc.org/en/master/index.html>`_.
 
-If you choose one of these options when completing bibat's cli wizard, the
+If you choose one of these options when completing bibat's CLI wizard, the
 folder :literal:`docs` will be populated with documentation source files, which
-you can convert to a prettier format by running the command :literal:`make
-docs` from the project root.
+you can convert into formatted documentation files by running the command
+:literal:`make docs` from the project root.
 
 Sphinx is an excellent choice for documenting projects that involve Python code
 that you would like to share with others, as it supports automatic
@@ -279,7 +278,7 @@ documentation via directives like `automodule
 
 Quarto is specialised for producing nicely-formatted documents in a range of
 formats, starting from a source document written in `pandoc markdown
-<https://pandoc.org/MANUAL.html#pandocs-markdown>`_. One relevant usecase is
+<https://pandoc.org/MANUAL.html#pandocs-markdown>`_. One relevant use case is
 when you want to write a paper based on your analysis and update any figures
 automatically. Note that, unlike sphinx, bibat is not set up to install or
 configure quarto automatically. See `quarto's 'getting started' page
@@ -291,7 +290,7 @@ and Sphinx, the official documentation for both tools are very good. The
 `Quarto guide is here <https://quarto.org/docs/guide/>`_ and resources for
 learning Sphinx and its primary document format reStructuredText are linked
 from the `Sphinx homepage <https://www.sphinx-doc.org/en/master/>`_. For a more
-focused intoduction, try looking at the example source documents that bibat
+focused introduction, try looking at the example source documents that bibat
 provides. The example `quarto report is here
 <https://github.com/teddygroves/bibat/blob/main/bibat/%7B%7Bcookiecutter.repo_name%7D%7D/docs/report.qmd>`_
 and the `Sphinx index document can be found here

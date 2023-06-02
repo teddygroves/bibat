@@ -1,4 +1,4 @@
-"""Unit tests for the ModelConfiguration class."""
+"""Unit tests for the InferenceConfiguration class."""
 
 import os
 
@@ -27,7 +27,7 @@ def test_model_configuration_good_modes():
         prepared_data_dir=os.path.join("hi", "hello", "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
-        kfold_folds=10,
+        mode_options={"kfold": {"n_folds": 10}},
         modes=MODES_GOOD,
         cpp_options=None,
         stanc_options=None,
@@ -44,7 +44,7 @@ def test_model_configuration_bad_modes():
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_BAD,
-        kfold_options=10,
+        mode_options={"kfold": {"n_folds": 10}},
         cpp_options=None,
         stanc_options=None,
     )
@@ -59,7 +59,7 @@ def test_model_configuration_no_k():
         prepared_data_dir=os.path.join("hi", "hello", "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
-        kfold_options=None,  # this is the bad field!
+        mode_options={"kfold": None},  # This is the bad mode!
         modes=MODES_GOOD,  # it would be ok if 'kfold' weren't in here.
         cpp_options=None,
         stanc_options=None,
@@ -76,7 +76,7 @@ def test_model_configuration_no_stan_file():
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_GOOD,
-        kfold_options=10,
+        mode_options={"kfold": {"n_folds": 10}},
         cpp_options=None,
         stanc_options=None,
     )
@@ -92,7 +92,7 @@ def test_model_configuration_no_stan_input_function():
         stan_input_function="XXXXXXXXXXXXXXXXXX",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_GOOD,
-        kfold_options=10,
+        mode_options={"kfold": {"n_folds": 10}},
         cpp_options=None,
         stanc_options=None,
     )
