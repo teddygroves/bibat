@@ -2,7 +2,6 @@
 
 ENV_MARKER = .venv/.bibat.marker
 ACTIVATE_VENV = .venv/bin/activate
-REQUIREMENTS_FILE = requirements.txt
 SRC = {{cookiecutter.repo_name}}
 {% if cookiecutter.docs_format != 'No docs' %}DOCS_DIR = docs{% endif %}
 {% if cookiecutter.docs_format == 'Sphinx' %}DOCS_BUILDDIR = docs/build{% endif %}
@@ -25,7 +24,7 @@ $(ACTIVATE_VENV):
 		{%- endif %}
 {% if cookiecutter.docs_format != 'No docs' %}	){% endif %}
 
-$(ENV_MARKER): $(ACTIVATE_VENV) $(REQUIREMENTS_FILE) $(CMDSTAN)
+$(ENV_MARKER): $(ACTIVATE_VENV) $(CMDSTAN)
 	. $(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
 		python -m pip install -e .; \
