@@ -12,6 +12,8 @@ from sklearn.model_selection import KFold
 
 
 class IdataTarget(str, Enum):
+    """An enum for choosing the group that a fitting mode writes to."""
+
     prior = "prior"
     posterior = "posterior"
     log_likelihood = "log_likelihood"
