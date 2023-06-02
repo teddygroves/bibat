@@ -1,6 +1,6 @@
 ---
 title: "Modelling at-bats in baseball using the generalised Pareto distribution"
-subtitle: "A report created using bibat version 0.1.3"
+subtitle: "A report created using bibat version 0.1.6"
 author: "Teddy Groves"
 bibliography: bibliography.bib
 reference-location: margin
@@ -22,7 +22,7 @@ in fact this worked pretty well! You would see the kind of players at the top
 and bottom of the ability scale that you would expect.
 
 Still, there were a few problems. In particular the data were typically
-unbalanced because better players tended to fproduce more data than worse
+unbalanced because better players tended to produce more data than worse
 players. The result of this was that my models would often inappropriately think
 the bad players were like the good players: they would not only tend to be too
 certain about the abilities of low-data players, but also be biased, thinking
@@ -101,9 +101,23 @@ baseball
 ├── LICENSE
 ├── Makefile
 ├── README.md
+├── bibat_version.txt
+├── data
+│   └── raw
+│       ├── raw_measurements.csv
+│       └── readme.md
+├── docs
+│   ├── bibliography.bib
+│   ├── img
+│   │   ├── example.png
+│   │   └── readme.md
+│   ├── report.html
+│   ├── report.pdf
+│   └── report.qmd
 ├── baseball
 │   ├── __init__.py
 │   ├── data_preparation.py
+│   ├── fitting_mode.py
 │   ├── inference_configuration.py
 │   ├── investigate.ipynb
 │   ├── notebooks
@@ -116,17 +130,6 @@ baseball
 │   │   └── readme.md
 │   ├── stan_input_functions.py
 │   └── util.py
-├── bibat_version.txt
-├── data
-│   └── raw
-│       ├── raw_measurements.csv
-│       └── readme.md
-├── docs
-│   ├── bibliography.bib
-│   ├── img
-│   │   ├── example.png
-│   │   └── readme.md
-│   └── report.qmd
 ├── inferences
 │   ├── fake_interaction
 │   │   └── config.toml
@@ -137,11 +140,10 @@ baseball
 ├── plots
 │   ├── posterior_ll_comparison.png
 │   └── posterior_predictive_comparison.png
-├── pyproject.toml
-└── requirements.txt
+└── pyproject.toml
 ```
 
-This folder implements bibat's example analysis - a comparison of linear
+This folder implements bibat's example analysis – a comparison of linear
 regression with two different design matrices. To check that everything was
 working correctly I ran the analysis like this:
 
@@ -175,7 +177,7 @@ Fetching bdb-apps data from https://raw.githubusercontent.com/chadwickbureau/bas
 Writing bdb-apps data to data/raw/bdb-apps.csv
 ```
 
-Finally I removed the example analysis's raw data:
+Finally, I removed the example analysis's raw data:
 
 ```zsh
 (baseball) > rm data/raw/raw_measurements.csv
@@ -224,7 +226,8 @@ To finish off I deleted the unused global variables `NEW_COLNAMES`,
 needed any changes: I was pretty sure it didn't.
 
 To check that all this worked, I ran the data preparation script manually:^[I
-could also have just run `make analysis` again]
+could also have just run `make analysis` again. This would have caused an error
+on the step after prepare_data.py, which is fine!]
 
 ```{.zsh}
 > source .venv/bin/activate
@@ -248,11 +251,11 @@ Now the folder `data/prepared/bdb` contained a file
 # Specifying statistical models
 
 I wanted to test two statistical models: one with the modelling the distribution
-of per-player logit-scale at-bat success rates as a normal distbution with
+of per-player logit-scale at-bat success rates as a normal distribution with
 unknown mean and standard deviation, and another where the same logit-scale
-rates have a generalised pareto distribution.
+rates have a generalised Pareto distribution.
 
-So, genve a table of $N$ player profiles, with each player has $y$ successes out
+So, given a table of $N$ player profiles, with each player has $y$ successes out
 of $K$ at-bats and an unknown latent success rate $\alpha$, I wanted to use this
 measurement model:
 
@@ -260,7 +263,7 @@ $$
 y \sim \text{binomial logit}(K, \alpha)
 $$
 
-In the generalised pareto model I would give the $\alpha$s this prior model,
+In the generalised Pareto model I would give the $\alpha$s this prior model,
 with the hyperparameter $\text{min }\alpha$ assumed to be known exactly and $k$
 and $\sigma$ given prior distributions that put the $\alpha$s in the generally
 plausible range of between roughly 0.1 and 0.4.
@@ -320,25 +323,25 @@ each of which takes in a `PreparedData` and returns a Python dictionary. You
 can write as many Stan input functions as you like and choose which one to run
 for any given inference.
 
-I started by defining some Stan input functions that pass arbitary prepared
+I started by defining some Stan input functions that pass arbitrary prepared
 data on to each of the models:^[Note that this code uses the scipy function
 `logit`, which it imported like this: `from scipy.special import logit`]
 
 ```{.python include="../baseball/stan_input_functions.py" start-line=11 end-line=34}
 ```
 
-But why stop there? It can also be useful to generate Stan input data from a
-model with a model, by running it in simulation model with hardcoded parameter
-values. Here are some functions that do this for both of our models:
+But why stop there? It can also be useful to generate Stan input data with a
+model, by running it in simulation mode with hardcoded parameter values. Here
+are some functions that do this for both of our models:
 
 ```{.python include="../baseball/stan_input_functions.py" start-line=36}
 ```
 
 # Specifying inferences
 
-Now all the building blocks for making statistical inferences - raw data, data
+Now all the building blocks for making statistical inferences – raw data, data
 preparation rules, statistical models and recipes for turning prepared data
-into model inputs - were in place. The last step before actually running Stan
+into model inputs – were in place. The last step before actually running Stan
 was to write down how put the blocks together. Bibat has another concept for
 this, called 'inferences'.
 
@@ -372,17 +375,19 @@ Here is the file `inferences/normal2006/config.toml`:
 
 Note that:
 
-- The Stan file, prepared data folder and stan input function are referred to by
+- The Stan file, prepared data folder and Stan input function are referred to by
   strings. The analysis should raise an error if you enter a non-existing value.
-- Both inferences are set to run in "prior" and "posterior" modes - the other
+- Both inferences are set to run in "prior" and "posterior" modes – the other
   pre-defined mode is "kfold", but you can also write your own!
 - You can enter arbitrary arguments to cmdstanpy's `CmdStanModel.sample` method
   in the `[sample_kwargs]` table.
-- You can enter mode-specific overrides in `[sample_kwargs.<MODE>]`. This can be
+- You can enter mode-specific overrides in `[mode_options.<MODE>]`. This can be
   handy if you want to run more or fewer iterations for a certain mode.
 
-Now when I ran `make analysis` again, I saw messages indicating that Stan had
-run, and found that the `inferences` subfolders had been populated:
+With all these changes made I ran `make analysis` again. There were no errors
+until after sampling, which was expected as I hadn't yet customised the
+investigation code, and I saw messages indicating that Stan had run. I also
+found that the `inferences` subfolders had been populated:
 
 ```zsh
 inferences
@@ -457,6 +462,6 @@ larger baseballdatabank dataset.
 
 The final step was to document my analysis. To do this I edited the file
 `docs/report.qmd`, then ran `quarto render docs/report.qmd`, which produced the
-very html document that you are probably reading now! You can find the complete
+very HTML document that you are probably reading now! You can find the complete
 `report.qmd` file
 [here](https://github.com/teddygroves/bibat/blob/main/bibat/examples/baseball/docs/report.qmd).

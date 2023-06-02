@@ -15,7 +15,7 @@ save_warmup = false
 iter_warmup = 2000
 iter_sampling = 2000
 
-[sample_kwargs.prior]
+[mode_options.prior]
 chains = 2
 iter_warmup = 2000
 iter_sampling = 1000
