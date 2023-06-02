@@ -20,15 +20,16 @@ analysis into the analysis you actually want to do. For this there is the
 If you would like to contribute to bibat in any way (please do!), the
 :ref:`contributing` page has some useful information.
 
-If you are looking for reference information about bibat's :ref:`cli` or
-:ref:`api`, check out the :ref:`reference` page!
+For reference information about bibat, check out the :ref:`cli` and :ref:`api`
+pages.
 
 .. toctree::
    :maxdepth: 2
 
    working_with_bibat
    contributing
-   reference
+   cli
+   api
 
 .. _getting_started:
 
@@ -45,7 +46,7 @@ you would like to install bibat):
 
     $ pip install bibat
 
-To install the latest version of bibat from github:
+To install the latest version of bibat from GitHub:
 
 .. code:: sh
 
