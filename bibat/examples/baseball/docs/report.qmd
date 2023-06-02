@@ -461,7 +461,7 @@ larger baseballdatabank dataset.
 # Documenting the analysis
 
 The final step was to document my analysis. To do this I edited the file
-`docs/report.qmd`, then ran `quarto render docs/report.qmd`, which produced the
+`docs/report.qmd`, then ran `make docs`, which produced the
 very HTML document that you are probably reading now! You can find the complete
 `report.qmd` file
 [here](https://github.com/teddygroves/bibat/blob/main/bibat/examples/baseball/docs/report.qmd).
