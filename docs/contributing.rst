@@ -35,8 +35,8 @@ You can see what these dependencies are by checking the
 :code:`[project.optional-dependencies]` table in bibat's `pyproject.toml file
 <https://github.com/teddygroves/bibat/blob/main/pyproject.toml>`_. Some
 important ones are `black <https://github.com/psf/black>`_,
-`isort<https://pycqa.github.io/isort/>`_,
-`pre-commit<https://pre-commit.com/>`_ and `tox<https://tox.wiki/en/latest/>`_.
+`isort <https://pycqa.github.io/isort/>`_,
+`pre-commit <https://pre-commit.com/>`_ and `tox <https://tox.wiki/en/latest/>`_.
 
 Another thing you will want to do while developing bibat locally is use it to
 create projects. For this I recommend avoiding having to complete
@@ -57,12 +57,12 @@ completing the wizard like this:
 Cmdstan
 -------
 
-Bibat depends on `cmdstan <https://github.com/stan-dev/cmdstan>`_, which can be
+Bibat depends on `cmdstan <https://github.com/stan-dev/cmdstan>`__, which can be
 tricky to install. If you run the commands :code:`make env` or :code:`make
 analysis` from a bibat project, it will attempt to install cmdstan
 automatically. If this doesn't work, please check the `cmdstan
-<https://mc-stan.org/users/interfaces/cmdstan>`_ and `cmdstanpy
-<https://cmdstanpy.readthedocs.io/en/v1.1.0/installation.html#cmdstan-installation>`_
+<https://mc-stan.org/users/interfaces/cmdstan>`__ and `cmdstanpy
+<https://cmdstanpy.readthedocs.io/en/v1.1.0/installation.html#cmdstan-installation>`__
 documentation.
 
 Releasing new versions of bibat
