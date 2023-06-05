@@ -1,0 +1,30 @@
+# This workflow tests whether the documentation builds correctly and runs a
+# lighthouse audit.
+
+name: Docs check
+
+on: push
+
+jobs:
+  docs:
+
+    runs-on: ubuntu-latest
+
+    steps:
+
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.11.3
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.11.3
+    - name: install bibat with development packages
+      run: pip install -e .\[development\]
+    - name: build docs with sphinx
+      run: sphinx-build docs ./docs/_build/html/
+    - name: Audit with Lighthouse
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        configPath: ".github/workflows/lighthouserc.json"
+        temporaryPublicStorage: true
+        uploadArtifacts: true
+        runs: 3 # Multiple runs to reduce variance

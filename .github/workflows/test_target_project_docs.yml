@@ -1,6 +1,6 @@
 # This workflow tests whether projects with sphinx documentation work correctly.
 
-name: Sphinx Check
+name: Test target project docs
 
 on: push
 
