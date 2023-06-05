@@ -28,6 +28,11 @@ release = "0.1.5"
 
 root_doc = "index"
 
+# Accessibility recommendation from
+# https://pydata-sphinx-theme.readthedocs.io/en/latest/user_guide/accessibility.html#what-you-can-do
+
+language = "en"
+
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
