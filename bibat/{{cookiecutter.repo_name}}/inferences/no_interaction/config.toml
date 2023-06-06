@@ -14,11 +14,11 @@ warn-pedantic = true
 
 [sample_kwargs]
 save_warmup = false
-iter_warmup = 2000
-iter_sampling = 2000
+iter_warmup = {{ cookiecutter.n_iter_default | int }}
+iter_sampling = {{ cookiecutter.n_iter_default | int }}
 
 [mode_options.kfold]
 n_folds = 5
 chains = 1
-iter_warmup = 1000
-iter_sampling = 1000
+iter_warmup = {{ cookiecutter.n_iter_default | int // 2 }}
+iter_sampling = {{ cookiecutter.n_iter_default | int // 2 }}

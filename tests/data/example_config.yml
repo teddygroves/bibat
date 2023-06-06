@@ -11,3 +11,4 @@ default_context:
   create_dotgithub_directory: y
   install_python_tooling: y
   bibat_version: unknown version
+  n_iter_default: 20

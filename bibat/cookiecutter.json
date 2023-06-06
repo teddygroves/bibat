@@ -9,5 +9,6 @@
     "docs_format": ["Quarto", "Sphinx", "No docs"],
     "create_tests_directory": "y",
     "create_dotgithub_directory": "y",
-    "bibat_version": "unknown version"
+    "bibat_version": "unknown version",
+    "n_iter_default": "1000"
 }
