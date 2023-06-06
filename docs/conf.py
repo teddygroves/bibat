@@ -75,6 +75,11 @@ html_static_path = ["_static"]
 html_theme_options = {
     "light_logo": "bibat-light.svg",
     "dark_logo": "bibat-dark.svg",
+    "dark_css_variables": {
+        "color-brand-content": "#FFA500",
+        "color-brand-primary": "#FFA500",
+        "color-foreground-border": "#FFA500",
+    },
 }
 
 # Napoleon settings

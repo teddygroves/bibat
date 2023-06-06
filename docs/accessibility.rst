@@ -1,8 +1,8 @@
 .. _accessibility:
 
-=======================
-Accessibility statement
-=======================
+=============
+Accessibility
+=============
 
 The bibat developers want as many people as possible to be able to use this
 website. For example, that means you should be able to:
@@ -15,8 +15,7 @@ website. For example, that means you should be able to:
 
 - navigate most of the website using speech recognition software
 
-- listen to most of the website using a screen reader (including the most
-  recent versions of JAWS, NVDA and VoiceOver)
+- listen to most of the website using a screen reader
 
 - We’ve also made the website text as simple as possible to understand.
 
