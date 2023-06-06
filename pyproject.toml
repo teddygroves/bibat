@@ -40,7 +40,7 @@ development = [
     "tox",
     "sphinx",
     "sphinx-click",
-    "pydata_sphinx_theme",
+    "furo",
 ]
 [project.urls]
 homepage = "https://github.com/teddygroves/bibat"
