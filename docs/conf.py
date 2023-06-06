@@ -82,19 +82,9 @@ html_theme_options = {
     },
 }
 
+# pygments config
+pygments_style = "default"
+pygments_dark_style = "github-dark"
+
 # Napoleon settings
 napoleon_numpy_docstring = True
-
-# html_theme_options = {
-# "logo_only": False,
-# "display_version": True,
-# "prev_next_buttons_location": "bottom",
-# "style_external_links": False,
-# "vcs_pageview_mode": "",
-# # Toc options
-# "collapse_navigation": True,
-# "sticky_navigation": True,
-# "navigation_depth": 4,
-# "includehidden": True,
-# "titles_only": False,
-# }
