@@ -19,12 +19,12 @@ sys.path.insert(0, os.path.abspath(".."))
 
 # -- Project information -----------------------------------------------------
 
-pproject = "bibat"
+project = "bibat"
 copyright = "2022, Teddy Groves"
 author = "Teddy Groves"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.5"
+release = "0.1.6"
 
 root_doc = "index"
 
@@ -32,6 +32,7 @@ root_doc = "index"
 # https://pydata-sphinx-theme.readthedocs.io/en/latest/user_guide/accessibility.html#what-you-can-do
 
 language = "en"
+
 
 # -- General configuration ---------------------------------------------------
 
@@ -65,18 +66,15 @@ exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]
 # The theme to use for HTML and HTML Help pages.  See the documentation for
 # a list of builtin themes.
 #
-html_theme = "pydata_sphinx_theme"
+html_theme = "furo"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ["_static"]
 html_theme_options = {
-    "logo": {
-        "text": "bibat: Batteries-Included Bayesian Analysis Template",
-        "image_light": "bibat-light.svg",
-        "image_dark": "bibat-dark.svg",
-    }
+    "light_logo": "bibat-light.svg",
+    "dark_logo": "bibat-dark.svg",
 }
 
 # Napoleon settings
