@@ -24,7 +24,8 @@ How accessible this website is
 
 We know some parts of this website are not fully accessible:
 
--
+- Some images in `this vignette <_static/report.html>`__ have no text
+  descriptions.
 
 Feedback and contact information
 --------------------------------
