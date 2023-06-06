@@ -1,5 +1,5 @@
 ===================================
- Welcome to bibat's documentation!
+Welcome to bibat's documentation!
 ===================================
 
 Bibat is an interactive template for Bayesian statistical analysis projects that
@@ -27,9 +27,10 @@ pages.
    :maxdepth: 2
 
    working_with_bibat
-   contributing
    cli
    api
+   contributing
+   accessibility
 
 .. _getting_started:
 
