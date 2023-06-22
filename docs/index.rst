@@ -24,7 +24,7 @@ If you would like to contribute to bibat in any way, the :ref:`contributing`
 page has some useful information.
 
 Finally, see the :ref:`accessibility` page to find out how we have tried to
-make this website as useable as possible for everyone, and for how to
+make this website as useable as possible for everyone.
 
 .. toctree::
    :maxdepth: 2
