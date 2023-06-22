@@ -69,7 +69,7 @@ Releasing new versions of bibat
 -------------------------------
 
 To release a new version of bibat, edit the field :code:`version` in the file
-:code:`setup.cfg`, e.g. to :code:`0.2.1` then make a pull request with this
+:code:`pyproject.toml`, e.g. to :code:`0.2.1` then make a pull request with this
 change.
 
 Once the changes are merged into the :code:`origin/master` branch, add a tag
