@@ -199,7 +199,7 @@ Target project dependencies: Quarto
 Bibat supports automatic generation of documentation using either Sphinx or
 `Quarto <https://quarto.org/>`_. Whereas bibat will install Sphinx
 automatically, Quarto must be installed manually: see the `quarto
-documnentation <https://quarto.org/docs/get-started/>`_ for instructions.
+documentation <https://quarto.org/docs/get-started/>`_ for instructions.
 
 Citation information
 ====================
