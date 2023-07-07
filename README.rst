@@ -31,6 +31,10 @@ Bibat: Batteries-Included Bayesian Analysis Template
 .. image:: https://codecov.io/github/teddygroves/bibat/branch/main/graph/badge.svg?token=ck0IKyzP7J
     :target: https://codecov.io/github/teddygroves/bibat
 
+.. image:: https://tinyurl.com/y22nb8up
+   :alt: pyOpenSci
+   :target: https://github.com/pyOpenSci/software-review/issues/83
+
 Bibat is a Python package providing a flexible interactive template for Bayesian
 statistical analysis projects.
 
