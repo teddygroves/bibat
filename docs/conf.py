@@ -24,7 +24,7 @@ copyright = "2022, Teddy Groves"
 author = "Teddy Groves"
 
 # The full version, including alpha/beta/rc tags
-release = "0.1.8"
+release = "0.1.9"
 
 root_doc = "index"
 

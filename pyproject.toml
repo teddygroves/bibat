@@ -7,7 +7,7 @@ name = "bibat"
 authors = [
     {name = "Teddy Groves", email = "tedgro@dtu.dk"},
 ]
-version = "0.1.8"
+version = "0.1.9"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Science/Research",
