@@ -1,6 +1,5 @@
 """Functions for generating input to Stan from prepared data."""
 
-
 from typing import Dict
 
 import numpy as np
