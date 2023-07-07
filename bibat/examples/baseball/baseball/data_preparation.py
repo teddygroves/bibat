@@ -1,4 +1,4 @@
-"""Provide functions prepare_data_x.
+"""Provides functions prepare_data_x.
 
 These functions should take in a dataframe of measurements and return a
 PreparedData object.
@@ -7,17 +7,19 @@ PreparedData object.
 import json
 import os
 
+import numpy as np
 import pandas as pd
 import pandera as pa
 from pandera.typing import DataFrame, Series
-from pydantic.dataclasses import dataclass
+from pydantic import BaseModel
 
-from baseball.util import CoordDict
+from baseball import util
 
 NAME_FILE = "name.txt"
 COORDS_FILE = "coords.json"
 MEASUREMENTS_FILE = "measurements.csv"
 N_CV_FOLDS = 10
+
 HERE = os.path.dirname(__file__)
 DATA_DIR = os.path.join(HERE, "..", "data")
 RAW_DIR = os.path.join(DATA_DIR, "raw")
@@ -66,38 +68,12 @@ class MeasurementsDF(pa.SchemaModel):
     n_success: Series[int] = pa.Field(ge=0)
 
 
-@dataclass
-class PreparedData:
+class PreparedData(BaseModel, arbitrary_types_allowed=True):
     """What prepared data looks like in this analysis."""
 
     name: str
-    coords: CoordDict
+    coords: util.CoordDict
     measurements: DataFrame[MeasurementsDF]
-
-
-def load_prepared_data(directory: str) -> PreparedData:
-    """Load prepared data from files in directory."""
-    with open(os.path.join(directory, COORDS_FILE), "r") as f:
-        coords = json.load(f)
-    with open(os.path.join(directory, NAME_FILE), "r") as f:
-        name = f.read()
-    measurements = pd.read_csv(os.path.join(directory, MEASUREMENTS_FILE))
-    return PreparedData(
-        name=name,
-        coords=coords,
-        measurements=measurements,
-    )
-
-
-def write_prepared_data(prepped: PreparedData, directory):
-    """Write prepared data files to a directory."""
-    if not os.path.exists(directory):
-        os.mkdir(directory)
-        prepped.measurements.to_csv(os.path.join(directory, MEASUREMENTS_FILE))
-    with open(os.path.join(directory, COORDS_FILE), "w") as f:
-        json.dump(prepped.coords, f)
-    with open(os.path.join(directory, NAME_FILE), "w") as f:
-        f.write(prepped.name)
 
 
 def prepare_data_2006(measurements_raw: pd.DataFrame) -> PreparedData:
@@ -112,9 +88,9 @@ def prepare_data_2006(measurements_raw: pd.DataFrame) -> PreparedData:
         name="2006",
         coords={
             "player_season": measurements["player_season"].tolist(),
-            "season": measurements["season"].tolist(),
+            "season": measurements["season"].astype(str).tolist(),
         },
-        measurements=measurements,
+        measurements=DataFrame[MeasurementsDF](measurements),
     )
 
 
@@ -181,7 +157,32 @@ def prepare_data_bdb(
         name="bdb",
         coords={
             "player_season": measurements["player_season"].tolist(),
-            "season": measurements["season"].tolist(),
+            "season": measurements["season"].astype(str).tolist(),
         },
-        measurements=measurements,
+        measurements=DataFrame[MeasurementsDF](measurements),
     )
+
+
+def load_prepared_data(directory: str) -> PreparedData:
+    """Load prepared data from files in directory."""
+    with open(os.path.join(directory, COORDS_FILE), "r") as f:
+        coords = json.load(f)
+    with open(os.path.join(directory, NAME_FILE), "r") as f:
+        name = f.read()
+    measurements = pd.read_csv(os.path.join(directory, MEASUREMENTS_FILE))
+    return PreparedData(
+        name=name,
+        coords=coords,
+        measurements=DataFrame[MeasurementsDF](measurements),
+    )
+
+
+def write_prepared_data(prepped: PreparedData, directory):
+    """Write prepared data files to a directory."""
+    if not os.path.exists(directory):
+        os.mkdir(directory)
+        prepped.measurements.to_csv(os.path.join(directory, MEASUREMENTS_FILE))
+    with open(os.path.join(directory, COORDS_FILE), "w") as f:
+        json.dump(prepped.coords, f)
+    with open(os.path.join(directory, NAME_FILE), "w") as f:
+        f.write(prepped.name)
