@@ -7,7 +7,6 @@ PreparedData object.
 import json
 import os
 
-import numpy as np
 import pandas as pd
 import pandera as pa
 from pandera.typing import DataFrame, Series
