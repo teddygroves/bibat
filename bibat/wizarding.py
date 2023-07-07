@@ -3,7 +3,7 @@
 from typing import Callable, Dict, List, Optional, Union
 
 import click
-from pydantic import root_validator
+from pydantic import model_validator
 from pydantic.dataclasses import dataclass
 
 
@@ -23,13 +23,13 @@ class WizardStr:
     default: Optional[str] = None
     default_function: Optional[Callable] = None
 
-    @root_validator
-    def default_or_default_function_exists(cls, values):
+    @model_validator(mode="after")
+    def default_or_default_function_exists(cls, m: "WizardStr"):
         """Either the default or the default function must not be None."""
-        assert (values["default"] is not None) or (
-            values["default_function"] is not None
+        assert (m.default is not None) or (
+            m.default_function is not None
         ), "Either the default or the default function must not be None."
-        return values
+        return m
 
 
 @dataclass
@@ -49,24 +49,21 @@ class WizardChoice:
     default: Optional[str] = None
     default_function: Optional[Callable] = None
 
-    @root_validator
-    def default_is_an_option(cls, values):
+    @model_validator(mode="after")
+    def default_is_an_option(cls, m: "WizardChoice"):
         """Check that the default is one of the options."""
-        if isinstance(values["default"], str):
-            msg = (
-                f"default {values['default']} "
-                f"not in options {values['options']}"
-            )
-            assert values["default"] in values["options"], msg
-            return values
+        if isinstance(m.default, str):
+            msg = f"default {m.default} not in options {m.options}"
+            assert m.default in m.options, msg
+            return m
 
-    @root_validator
-    def default_or_default_function_exists(cls, values):
+    @model_validator(mode="after")
+    def default_or_default_function_exists(cls, m: "WizardChoice"):
         """Either the default or the default function must not be None."""
-        assert (values["default"] is not None) or (
-            values["default_function"] is not None
+        assert (m.default is not None) or (
+            m.default_function is not None
         ), "Either the default or the default function must not be None."
-        return values
+        return m
 
 
 def prompt_user(
