@@ -11,8 +11,8 @@ import numpy as np
 import pandas as pd
 import pandera as pa
 from pandera.typing import DataFrame, Series
-from pydantic.dataclasses import dataclass
-from {{cookiecutter.repo_name}}.util import CoordDict, make_columns_lower_case
+from pydantic import BaseModel
+from {{cookiecutter.repo_name}} import util
 
 NAME_FILE = "name.txt"
 COORDS_FILE = "coords.json"
@@ -70,12 +70,11 @@ class MeasurementsDF(pa.SchemaModel):
     y: Series[float]
 
 
-@dataclass
-class PreparedData:
+class PreparedData(BaseModel, arbitrary_types_allowed=True):
     """What prepared data looks like in this analysis."""
 
     name: str
-    coords: CoordDict
+    coords: util.CoordDict
     measurements: DataFrame[MeasurementsDF]
 
 
@@ -89,7 +88,7 @@ def load_prepared_data(directory: str) -> PreparedData:
     return PreparedData(
         name=name,
         coords=coords,
-        measurements=measurements,
+        measurements=DataFrame[MeasurementsDF](measurements),
     )
 
 
@@ -108,13 +107,13 @@ def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     measurements = process_measurements(measurements_raw)
     return PreparedData(
         name="interaction",
-        coords=CoordDict(
+        coords=util.CoordDict(
             {
                 "covariate": ["x1", "x2", "x1:x2"],
-                "observation": measurements.index.tolist(),
+                "observation": measurements.index.map(str).tolist(),
             }
         ),
-        measurements=measurements,
+        measurements=DataFrame[MeasurementsDF](measurements),
     )
 
 
@@ -123,13 +122,13 @@ def prepare_data_no_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     measurements = process_measurements(measurements_raw)
     return PreparedData(
         name="no_interaction",
-        coords=CoordDict(
+        coords=util.CoordDict(
             {
                 "covariate": ["x1", "x2"],
-                "observation": measurements.index.tolist(),
+                "observation": measurements.index.map(str).tolist(),
             }
         ),
-        measurements=measurements,
+        measurements=DataFrame[MeasurementsDF](measurements),
     )
 
 
@@ -146,13 +145,13 @@ def prepare_data_fake_interaction(
     )  # type: ignore
     return PreparedData(
         name="fake_interaction",
-        coords=CoordDict(
+        coords=util.CoordDict(
             {
                 "covariate": x_cols,
-                "observation": measurements.index.tolist(),
+                "observation": measurements.index.map(str).tolist(),
             }
         ),
-        measurements=measurements,
+        measurements=DataFrame[MeasurementsDF](measurements),
     )
 
 
@@ -168,7 +167,7 @@ def process_measurements(measurements: pd.DataFrame) -> pd.DataFrame:
     """
     out = (
         measurements.rename(columns=NEW_COLNAMES)
-        .pipe(make_columns_lower_case)
+        .pipe(util.make_columns_lower_case)
         .dropna(subset=DROPNA_COLS, axis=0)
     ).copy()
     for col in ["x1", "x2", "y"]:

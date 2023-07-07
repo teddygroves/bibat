@@ -4,7 +4,7 @@ import os
 from typing import Callable, Dict, List, Optional
 
 import toml
-from pydantic import BaseModel, Field, root_validator, validator
+from pydantic import BaseModel, Field, field_validator, model_validator
 from {{cookiecutter.repo_name}} import fitting_mode, stan_input_functions
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -72,32 +72,31 @@ class InferenceConfiguration(BaseModel):
         ]
         super().__init__(**data)
 
-    @root_validator
-    def check_folds(cls, values):
+    @model_validator(mode="after")
+    def check_folds(cls, m: "InferenceConfiguration"):
         """Check that there is a number of folds if required."""
-        if any(m == "kfold" for m in values["fitting_mode_names"]):
-            if "mode_options" not in values.keys():
+        if any(m == "kfold" for m in m.fitting_mode_names):
+            if m.mode_options is None:
                 raise ValueError("Mode 'kfold' requires a mode_options.kfold table.")
-            mode_options = values["mode_options"]
-            if "kfold" not in mode_options.keys():
+            if "kfold" not in m.mode_options.keys():
                 raise ValueError("Mode 'kfold' requires a mode_options.kfold table.")
-            elif "n_folds" not in mode_options["kfold"].keys():
+            elif "n_folds" not in m.mode_options["kfold"].keys():
                 raise ValueError("Set 'n_folds' field in kfold mode options.")
             else:
-                assert int(mode_options["kfold"]["n_folds"]), (
+                assert int(m.mode_options["kfold"]["n_folds"]), (
                     f"Could not coerce n_folds choice "
-                    f"{mode_options['kfold']['n_folds']} to int."
+                    f"{m.mode_options['kfold']['n_folds']} to int."
                 )
-        return values
+        return m
 
-    @validator("stan_file")
+    @field_validator("stan_file")
     def check_stan_file_exists(cls, v):
         """Check that the stan file exists."""
         if not os.path.exists(os.path.join(STAN_DIR, v)):
             raise ValueError(f"{v} is not a file in {STAN_DIR}.")
         return v
 
-    @validator("fitting_modes")
+    @field_validator("fitting_modes")
     def check_modes(cls, v):
         """Check that the provided modes exist."""
         for mode in v:

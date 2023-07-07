@@ -212,13 +212,19 @@ The next step is to write functions that return `PreparedData` objects. In this
 case I wrote a couple of data preparation functions: `prepare_data_2006` and
 `prepare_data_bdb`:
 
-```{.python include="../baseball/data_preparation.py" start-line=103}
+```{.python include="../baseball/data_preparation.py" start-line=78 end-line=162}
 ```
 
-I had to update the `prepare_data` function to take into account the
-two raw data sources:
+To take into account the inconsistency between the two raw data sources, I
+first had to change the variable `RAW_DATA_FILES`:
 
-```{.python include="../baseball/data_preparation.py" start-line=35 end-line=54}
+```{.python include="../baseball/data_preparation.py" start-line=26 end-line=33}
+```
+
+Next I changed the `prepare_data` function to handle the two different data
+sources.
+
+```{.python include="../baseball/data_preparation.py" start-line=36 end-line=56}
 ```
 
 To finish off I deleted the unused global variables `NEW_COLNAMES`,

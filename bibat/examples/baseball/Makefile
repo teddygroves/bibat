@@ -15,6 +15,8 @@ else
 	INSTALL_CMDSTAN_FLAGS =
 endif
 
+env: $(ENV_MARKER)
+
 $(ACTIVATE_VENV):
 	python -m venv .venv --prompt=baseball
 
