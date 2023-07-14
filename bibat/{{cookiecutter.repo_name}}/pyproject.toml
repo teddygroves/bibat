@@ -19,6 +19,7 @@ dependencies = [
     "pandas",
     "pandera@git+https://github.com/unionai-oss/pandera.git@pydantic-v2",
     "pydantic >= 2.0.0",
+    "pyspark",
     "scipy",
     "scikit-learn",
     "toml",
