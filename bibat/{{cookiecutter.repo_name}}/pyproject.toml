@@ -12,12 +12,12 @@ description = "{{cookiecutter.description}}"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = [
-    "arviz",
+    "arviz@git+https://github.com/arviz-devs/arviz.git@main",
     "cmdstanpy",
     "jupyter",
     "numpy",
     "pandas",
-    "pandera@git+https://github.com/unionai-oss/pandera.git@pydantic-v2",
+    "pandera >= 0.18.0",
     "pydantic >= 2.0.0",
     "pyspark",
     "scipy",
