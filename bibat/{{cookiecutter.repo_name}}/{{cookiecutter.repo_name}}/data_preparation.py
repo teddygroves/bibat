@@ -13,7 +13,6 @@ from typing import Any
 import numpy as np
 import pandas as pd
 import pandera as pa
-from pandas._libs.lib import item_from_zerodim
 from pandera.typing import DataFrame, Series
 from pandera.typing.common import DataFrameBase
 from pydantic import BaseModel, field_serializer, field_validator
