@@ -9,8 +9,8 @@ b = ["covariate"]
 y = ["observation"]
 x = ["observation", "covariate"]
 
-[stanc_options]
-warn-pedantic = true
+# [stanc_options]
+# warn-pedantic = true
 
 [sample_kwargs]
 save_warmup = false
