@@ -9,10 +9,10 @@ SRC = {{cookiecutter.repo_name}}
 QUARTO_EXTENSIONS_FOLDER = $(DOCS_DIR)/_extensions{% endif %}
 
 ifeq ($(OS),Windows_NT)
-	INSTALL_CMDSTAN_FLAGS = --compiler
+	INSTALL_CMDSTAN_FLAGS = --compiler --version git:develop --cores 2
 	ACTIVATE_VENV = .venv/Scripts/activate
 else
-	INSTALL_CMDSTAN_FLAGS =
+	INSTALL_CMDSTAN_FLAGS = --cores 2
 endif
 
 env: $(ENV_MARKER)
@@ -36,7 +36,7 @@ $(ENV_MARKER): $(ACTIVATE_VENV) $(CMDSTAN)
 	. $(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
 		python -m pip install -e .; \
-	  install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
+	  python -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
 		touch $@ ; \
 	)
 
