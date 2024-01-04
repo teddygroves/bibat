@@ -9,7 +9,7 @@ SRC = {{cookiecutter.repo_name}}
 QUARTO_EXTENSIONS_FOLDER = $(DOCS_DIR)/_extensions{% endif %}
 
 ifeq ($(OS),Windows_NT)
-	INSTALL_CMDSTAN_FLAGS = --compiler --version git:develop --cores 2
+	INSTALL_CMDSTAN_FLAGS =  --version git:develop --cores 2
 	ACTIVATE_VENV = .venv/Scripts/activate
 else
 	INSTALL_CMDSTAN_FLAGS = --cores 2
