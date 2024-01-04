@@ -23,15 +23,15 @@ def main():
     for run_dir in sorted(run_dirs):
         ic = load_inference_configuration(os.path.join(run_dir, "config.toml"))
         stan_file = os.path.join(STAN_DIR, ic.stan_file)
-        prepared_data_dir = os.path.join(
-            "data", "prepared", ic.prepared_data_dir
+        prepared_data_file = os.path.join(
+            "data", "prepared", ic.prepared_data_dir + ".json"
         )
         model = cmdstanpy.CmdStanModel(
             stan_file=stan_file,
             cpp_options=ic.cpp_options,
             stanc_options=ic.stanc_options,
         )
-        prepared_data = load_prepared_data(prepared_data_dir)
+        prepared_data = load_prepared_data(prepared_data_file)
         stan_input_base = ic.stan_input_function(prepared_data)
         idata_kwargs = {
             "observed_data": stan_input_base,
