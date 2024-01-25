@@ -216,7 +216,7 @@ The next step is to write functions that return `PreparedData` objects. In this
 case I wrote a couple of data preparation functions: `prepare_data_2006` and
 `prepare_data_bdb`:
 
-```{.python include="../baseball/data_preparation.py" start-line=74 end-line=159}
+```{.python include="../baseball/data_preparation.py" start-line=75 end-line=159}
 ```
 
 To take into account the inconsistency between the two raw data sources, I
@@ -228,7 +228,7 @@ first had to change the variable `RAW_DATA_FILES`:
 Next I changed the `prepare_data` function to handle the two different data
 sources.
 
-```{.python include="../baseball/data_preparation.py" start-line=25 end-line=32}
+```{.python include="../baseball/data_preparation.py" start-line=162 end-line=182}
 ```
 
 To finish off I deleted the unused global variables `NEW_COLNAMES`,
@@ -337,14 +337,14 @@ I started by defining some Stan input functions that pass arbitrary prepared
 data on to each of the models:^[Note that this code uses the scipy function
 `logit`, which it imported like this: `from scipy.special import logit`]
 
-```{.python include="../baseball/stan_input_functions.py" start-line=11 end-line=34}
+```{.python include="../baseball/stan_input_functions.py" start-line=22 end-line=46}
 ```
 
 But why stop there? It can also be useful to generate Stan input data with a
 model, by running it in simulation mode with hardcoded parameter values. Here
 are some functions that do this for both of our models:
 ^[These functions require some more imports: `numpy` and `scipy.special.expit`]
-```{.python include="../baseball/stan_input_functions.py" start-line=36}
+```{.python include="../baseball/stan_input_functions.py" start-line=49}
 ```
 
 # Specifying inferences
