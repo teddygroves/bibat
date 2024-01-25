@@ -17,11 +17,21 @@ dependencies = [
     "jupyter",
     "numpy",
     "pandas",
-    "pandera",
-    "pydantic",
+    "pandera >= 0.18.0",
+    "pydantic >= 2.0.0",
+    "pyspark",
     "scipy",
     "scikit-learn",
-    "toml",]
+    "stanio",
+    "toml",
+    "zarr",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+]
 
 [tool.setuptools]
 packages = ["baseball"]

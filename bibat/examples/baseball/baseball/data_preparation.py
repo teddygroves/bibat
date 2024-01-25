@@ -1,28 +1,28 @@
-"""Provides functions prepare_data_x.
+"""Provides function `prepare_data` and runs it.
 
-These functions should take in a dataframe of measurements and return a
-PreparedData object.
+This function should run some other functions with names `prepare_data_x`, which
+each take in a dataframe of measurements and return a PreparedData object.
 
 """
 import json
 import os
+from io import StringIO
+from pathlib import Path
+from typing import Any
 
+import numpy as np
 import pandas as pd
 import pandera as pa
 from pandera.typing import DataFrame, Series
-from pydantic import BaseModel
+from pandera.typing.common import DataFrameBase
+from pydantic import BaseModel, field_serializer, field_validator
+from pydantic_core.core_schema import field_after_validator_function
 
 from baseball import util
 
-NAME_FILE = "name.txt"
-COORDS_FILE = "coords.json"
-MEASUREMENTS_FILE = "measurements.csv"
-N_CV_FOLDS = 10
-
-HERE = os.path.dirname(__file__)
-DATA_DIR = os.path.join(HERE, "..", "data")
-RAW_DIR = os.path.join(DATA_DIR, "raw")
-PREPARED_DIR = os.path.join(DATA_DIR, "prepared")
+HERE = Path(__file__).parent
+RAW_DIR = HERE / ".." / "data" / "raw"
+PREPARED_DIR = HERE / ".." / "data" / "prepared"
 RAW_DATA_FILES = {
     "2006": [os.path.join(RAW_DIR, "2006.csv")],
     "bdb": [
@@ -31,28 +31,6 @@ RAW_DATA_FILES = {
         os.path.join(RAW_DIR, "bdb-apps.csv"),
     ],
 }
-
-
-def prepare_data():
-    """Run main function."""
-    print("Reading raw data...")
-    raw_data = {
-        k: [pd.read_csv(file, index_col=None) for file in v]
-        for k, v in RAW_DATA_FILES.items()
-    }
-    data_preparation_functions_to_run = {
-        "2006": prepare_data_2006,
-        "bdb": prepare_data_bdb,
-    }
-    print("Preparing data...")
-    for name, dpf in data_preparation_functions_to_run.items():
-        print(f"Running data preparation function {dpf.__name__}...")
-        prepared_data = dpf(*raw_data[name])
-        output_dir = os.path.join(PREPARED_DIR, prepared_data.name)
-        print(f"\twriting files to {output_dir}")
-        if not os.path.exists(PREPARED_DIR):
-            os.mkdir(PREPARED_DIR)
-        write_prepared_data(prepared_data, output_dir)
 
 
 class MeasurementsDF(pa.SchemaModel):
@@ -72,7 +50,26 @@ class PreparedData(BaseModel, arbitrary_types_allowed=True):
 
     name: str
     coords: util.CoordDict
-    measurements: DataFrame[MeasurementsDF]
+    measurements: Any
+
+    @field_validator("measurements")
+    def validate_measurements(cls, v: Any) -> DataFrameBase[MeasurementsDF]:
+        if isinstance(v, str):
+            v = pd.read_json(StringIO(v))
+        return MeasurementsDF.validate(v)
+
+    @field_serializer("measurements")
+    def serialize_measurements(
+        self, measurements: DataFrame[MeasurementsDF], _info
+    ):
+        return measurements.to_json()
+
+
+def load_prepared_data(path_to_data: str) -> PreparedData:
+    """Load a dataset."""
+    with open(path_to_data) as f:
+        raw = json.load(f)
+    return PreparedData(**raw)
 
 
 def prepare_data_2006(measurements_raw: pd.DataFrame) -> PreparedData:
@@ -162,26 +159,28 @@ def prepare_data_bdb(
     )
 
 
-def load_prepared_data(directory: str) -> PreparedData:
-    """Load prepared data from files in directory."""
-    with open(os.path.join(directory, COORDS_FILE), "r") as f:
-        coords = json.load(f)
-    with open(os.path.join(directory, NAME_FILE), "r") as f:
-        name = f.read()
-    measurements = pd.read_csv(os.path.join(directory, MEASUREMENTS_FILE))
-    return PreparedData(
-        name=name,
-        coords=coords,
-        measurements=DataFrame[MeasurementsDF](measurements),
-    )
+def prepare_data():
+    """Run main function."""
+    print("Reading raw data...")
+    raw_data = {
+        k: [pd.read_csv(file, index_col=None) for file in v]
+        for k, v in RAW_DATA_FILES.items()
+    }
+    data_preparation_functions_to_run = {
+        "2006": prepare_data_2006,
+        "bdb": prepare_data_bdb,
+    }
+    print("Preparing data...")
+    for name, dpf in data_preparation_functions_to_run.items():
+        print(f"Running data preparation function {dpf.__name__}...")
+        prepared_data = dpf(*raw_data[name])
+        output_file = os.path.join(PREPARED_DIR, prepared_data.name + ".json")
+        print(f"\twriting files to {output_file}")
+        if not os.path.exists(PREPARED_DIR):
+            os.mkdir(PREPARED_DIR)
+        with open(output_file, "w") as f:
+            f.write(prepared_data.model_dump_json())
 
 
-def write_prepared_data(prepped: PreparedData, directory):
-    """Write prepared data files to a directory."""
-    if not os.path.exists(directory):
-        os.mkdir(directory)
-        prepped.measurements.to_csv(os.path.join(directory, MEASUREMENTS_FILE))
-    with open(os.path.join(directory, COORDS_FILE), "w") as f:
-        json.dump(prepped.coords, f)
-    with open(os.path.join(directory, NAME_FILE), "w") as f:
-        f.write(prepped.name)
+if __name__ == "__main__":
+    prepare_data()
