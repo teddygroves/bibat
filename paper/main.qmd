@@ -157,14 +157,13 @@ cross-validation or need to compare MCMC sampling with an optimisation-based
 alternative.
 
 Bibat accommodates this ubiquitous scenario by introducing an abstraction called
-"fitting mode" and a corresponding Pydantic base class `FittingMode`, along with
-and several subclasses for commonly used cases.
-
-This abstraction allows bibat projects to handle fitting a model and dataset in
-different ways appropriately and flexibly. For example, the provided prior
-sampling fitting mode creates a Stan input dictionary with the `likelihood`
-data variable set to `0`, performs MCMC sampling and writes data to the
-`InferenceData` group `prior`.
+"fitting mode". This abstraction allows bibat projects to handle fitting a
+model and dataset in different ways appropriately and flexibly. For example, the
+provided prior sampling fitting mode creates a Stan input dictionary with the
+`likelihood` data variable set to `0`, performs MCMC sampling and writes data
+to the `InferenceData` group `prior`. Bibat provides fitting modes corresponding
+for prior sampling, posterior sampling and kfold posterior sampling. Users can
+easily add additional fitting modes by copying these examples.
 
 ## Configure fitting concisely.
 
@@ -196,9 +195,11 @@ specificities of Bayesian workflow.
 There is some software that addresses the general task of facilitating Bayesian
 workflow, but differently from bibat. For example, bambi [@capretto2020]
 and brms [@burknerBrmsPackageBayesian2017] aim to make implementing Bayesian
-workflows easier by trivialising the task of specifying a Bayesian generalised
-linear model and fitting it to a single tabular dataset. This approach does not
-address several difficulties that bibat does address,
+workflows easier by providing ergonomic ways to specify and fit Bayesian
+generalised models to tabular datasets. Bibat is complementary with these
+packages, as it targets use cases that they do not support, such as analyses
+where complex datasets or models might be required.
 
+#
 
 # References
