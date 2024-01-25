@@ -18,6 +18,7 @@ class IdataTarget(str, Enum):
     posterior = "posterior"
     log_likelihood = "log_likelihood"
 
+
 class FittingMode(BaseModel):
     """A way of fitting a statistical model.
 
@@ -42,9 +43,12 @@ class FittingMode(BaseModel):
 
 
     """
+
     name: str
     idata_target: IdataTarget
-    fit: Callable[[CmdStanModel, Dict, Dict[str, str]], Union[CmdStanMCMC, xr.Dataset]]
+    fit: Callable[
+        [CmdStanModel, Dict, Dict[str, str]], Union[CmdStanMCMC, xr.DataArray]
+    ]
 
 
 def fit_prior(model: CmdStanModel, input_dict: dict, kwargs) -> CmdStanMCMC:
@@ -81,7 +85,7 @@ def fit_posterior(model: CmdStanModel, input_dict: dict, kwargs) -> CmdStanMCMC:
     return model.sample(input_dict_final, **kwargs)
 
 
-def fit_kfold(model: CmdStanModel, input_dict :dict, kwargs) -> xr.DataArray:
+def fit_kfold(model: CmdStanModel, input_dict: dict, kwargs) -> xr.DataArray:
     """Do k-fold cross validation, given a CmdStanModel, some data and config.
 
     :param model: a CmdStanModel. It must have a data variables called
@@ -131,8 +135,13 @@ def fit_kfold(model: CmdStanModel, input_dict :dict, kwargs) -> xr.DataArray:
         lliks_by_fold.append(llik_fold["llik"])
     return xr.concat(lliks_by_fold, dim="llik_dim_0").sortby("llik_dim_0")
 
-prior_mode = FittingMode(name="prior", idata_target="prior", fit=fit_prior)
-posterior_mode = FittingMode(
-    name="posterior", idata_target="posterior", fit=fit_posterior
+
+prior_mode = FittingMode(
+    name="prior", idata_target=IdataTarget.prior, fit=fit_prior
 )
-kfold_mode = FittingMode(name="kfold", idata_target="log_likelihood", fit=fit_kfold)
+posterior_mode = FittingMode(
+    name="posterior", idata_target=IdataTarget.posterior, fit=fit_posterior
+)
+kfold_mode = FittingMode(
+    name="kfold", idata_target=IdataTarget.log_likelihood, fit=fit_kfold
+)
