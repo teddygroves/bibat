@@ -104,12 +104,14 @@ These packages will be installed when you run :code:`make env` or `make
 analysis` and are as follows:
 
 - arviz
+- black
 - cmdstanpy
 - jupyter
 - numpy
 - pandas
 - pandera
 - pydantic
+- pytest
 - scipy
 - scikit-learn
 - toml
@@ -117,8 +119,6 @@ analysis` and are as follows:
 In addition, the following Python packages may be installed, depending on how
 the user answers bibat's wizard:
 
-- pytest
-- black
 - sphinx
 
 Target project dependencies: Cmdstan
