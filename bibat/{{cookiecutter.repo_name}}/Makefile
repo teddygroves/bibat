@@ -1,4 +1,4 @@
-.PHONY: clean-inferences clean-plots clean-stan clean-all analysis env {% if cookiecutter.docs_format != 'No docs' %}docs clean-docs{% endif %}
+.PHONY: clean-inferences clean-plots clean-stan clean-all analysis env test {% if cookiecutter.docs_format != 'No docs' %}docs clean-docs{% endif %}
 
 ENV_MARKER = .venv/.bibat.marker
 ACTIVATE_VENV = .venv/bin/activate
@@ -35,14 +35,19 @@ $(QUARTO_EXTENSIONS_FOLDER):
 $(ENV_MARKER): $(ACTIVATE_VENV) $(CMDSTAN)
 	. $(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
-		python -m pip install -e .; \
+	  python -m pip install -e .; \
 	  python -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
 		touch $@ ; \
 	)
 
+test: $(ENV_MARKER)
+	. $(ACTIVATE_VENV) && ( \
+	  python -m pip install -e .'[dev]'; \
+	  python -m pytest || exit 1; \
+	)
+
 analysis: $(ENV_MARKER)
-	. $(ACTIVATE_VENV) && (\{%- if cookiecutter.create_tests_directory == 'y' %}
-	  python -m pytest || exit 1; \{%- endif %}
+	. $(ACTIVATE_VENV) && ( \
 	  python $(SRC)/data_preparation.py || exit 1; \
 	  python $(SRC)/sample.py || exit 1; \
 	  jupyter execute $(SRC)/investigate.ipynb || exit 1; \

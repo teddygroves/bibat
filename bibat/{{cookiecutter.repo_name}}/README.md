@@ -34,11 +34,10 @@ make docs
 ```
 {% endif %}
 
-{% if cookiecutter.create_tests_directory == "y" %}# How to run tests
+# How to run tests
 
 Run this command from the project root:
 
 ```
 python -m pytest
 ```
-{% endif %}

@@ -24,9 +24,15 @@ dependencies = [
     "scikit-learn",
     "stanio",
     "toml",
-    {%- if cookiecutter.create_tests_directory == 'y' %}    "pytest",
-    "black",{%- endif -%}
-    {%- if cookiecutter.docs_format == 'Sphinx' -%}"sphinx",{%- endif -%}
+    {%- if cookiecutter.docs_format == 'Sphinx' %}
+    "sphinx",
+    {%- endif -%}
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
 ]
 
 [tool.setuptools]
