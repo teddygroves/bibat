@@ -3485,14 +3485,14 @@ window.Quarto = {
 <span id="cb9-158"><a href="#cb9-158" aria-hidden="true" tabindex="-1"></a>        measurements<span class="op">=</span>DataFrame[MeasurementsDF](measurements),</span>
 <span id="cb9-159"><a href="#cb9-159" aria-hidden="true" tabindex="-1"></a>    )</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>To take into account the inconsistency between the two raw data sources, I first had to change the variable <code>RAW_DATA_FILES</code>:</p>
-<div class="sourceCode" id="cb10" data-startfrom="26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 25;"><span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>RAW_DATA_FILES <span class="op">=</span> {</span>
-<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;2006&quot;</span>: [os.path.join(RAW_DIR, <span class="st">&quot;2006.csv&quot;</span>)],</span>
-<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="st">&quot;bdb&quot;</span>: [</span>
-<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        os.path.join(RAW_DIR, <span class="st">&quot;bdb-main.csv&quot;</span>),</span>
-<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>        os.path.join(RAW_DIR, <span class="st">&quot;bdb-post.csv&quot;</span>),</span>
-<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>        os.path.join(RAW_DIR, <span class="st">&quot;bdb-apps.csv&quot;</span>),</span>
-<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>    ],</span>
-<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb10" data-startfrom="26"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 25;"><span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;bdb&quot;</span>: [</span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>        os.path.join(RAW_DIR, <span class="st">&quot;bdb-main.csv&quot;</span>),</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>        os.path.join(RAW_DIR, <span class="st">&quot;bdb-post.csv&quot;</span>),</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        os.path.join(RAW_DIR, <span class="st">&quot;bdb-apps.csv&quot;</span>),</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>    ],</span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Next I changed the <code>prepare_data</code> function to handle the two different data sources.</p>
 <div class="sourceCode" id="cb11" data-startfrom="162"><pre class="sourceCode python code-with-copy"><code class="sourceCode python" style="counter-reset: source-line 161;"><span id="cb11-162"><a href="#cb11-162" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> prepare_data():</span>
 <span id="cb11-163"><a href="#cb11-163" aria-hidden="true" tabindex="-1"></a>    <span class="co">&quot;&quot;&quot;Run main function.&quot;&quot;&quot;</span></span>
