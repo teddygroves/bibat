@@ -1,13 +1,25 @@
 """Functions for generating input to Stan from prepared data."""
 
-from typing import Dict
+
+from typing import Any, Callable, Dict
 
 import numpy as np
 from scipy.special import expit, logit
+from stanio.json import process_dictionary
 
 from baseball.data_preparation import PreparedData
 
 
+def returns_stan_input(func: Callable[[Any], Dict]) -> Callable[[Any], Dict]:
+    """Decorate a function so it returns a json-serialisable dictionary."""
+
+    def wrapper(*args, **kwargs):
+        return process_dictionary(func(*args, **kwargs))
+
+    return wrapper
+
+
+@returns_stan_input
 def get_stan_input_normal(ppd: PreparedData) -> Dict:
     """General function for creating a Stan input."""
     return {
@@ -20,6 +32,7 @@ def get_stan_input_normal(ppd: PreparedData) -> Dict:
     }
 
 
+@returns_stan_input
 def get_stan_input_gpareto(ppd: PreparedData) -> Dict:
     """General function for creating a Stan input."""
     return {
@@ -33,6 +46,7 @@ def get_stan_input_gpareto(ppd: PreparedData) -> Dict:
     }
 
 
+@returns_stan_input
 def get_stan_input_normal_fake(ppd: PreparedData) -> Dict:
     """Generate fake Stan input consistent with the normal model."""
     N = len(ppd.measurements)
@@ -54,6 +68,7 @@ def get_stan_input_normal_fake(ppd: PreparedData) -> Dict:
     return {"N": N, "K": K, "y": y} | true_param_values
 
 
+@returns_stan_input
 def get_stan_input_gpareto_fake(ppd: PreparedData) -> Dict:
     """Generate fake Stan input consistent with the gpareto model."""
     N = len(ppd.measurements)

@@ -7,7 +7,6 @@ default_context:
   description: A short description of the project
   open_source_license: MIT
   docs_format: Quarto
-  create_tests_directory: y
   create_dotgithub_directory: y
   install_python_tooling: y
   bibat_version: unknown version

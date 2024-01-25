@@ -7,11 +7,11 @@ import pandas as pd
 URLS = {
     "2006": "https://raw.githubusercontent.com/stan-dev/"
     "example-models/master/knitr/pool-binary-trials/baseball-hits-2006.csv",
-    "bdb-main": "https://raw.githubusercontent.com/chadwickbureau/"
+    "bdb-main": "https://raw.githubusercontent.com/cbwinslow/"
     "baseballdatabank/master/core/Batting.csv",
-    "bdb-post": "https://raw.githubusercontent.com/chadwickbureau/"
+    "bdb-post": "https://raw.githubusercontent.com/cbwinslow/"
     "baseballdatabank/master/core/BattingPost.csv",
-    "bdb-apps": "https://raw.githubusercontent.com/chadwickbureau/"
+    "bdb-apps": "https://raw.githubusercontent.com/cbwinslow/"
     "baseballdatabank/master/core/Appearances.csv",
 }
 OUT_FILES = {

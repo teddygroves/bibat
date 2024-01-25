@@ -87,7 +87,6 @@ Who should be the code of conduct contact? [author@email.com]:
 Please briefly describe your project [A short description of the project.]: Comparison of distributions for modelling baseball hitting
 Choose an open source license from these options: (MIT, BSD-3-Clause, No license file) [MIT]:
 How would you like to document your project? (Quarto, Sphinx, No docs) [Quarto]:
-Would you like to create a tests directory? [y]: n
 Would you like to create a .github directory? [y]: n
 >
 ```
@@ -121,7 +120,6 @@ baseball
 │   ├── inference_configuration.py
 │   ├── investigate.ipynb
 │   ├── notebooks
-│   ├── prepare_data.py
 │   ├── readme.md
 │   ├── sample.py
 │   ├── stan
@@ -140,7 +138,13 @@ baseball
 ├── plots
 │   ├── posterior_ll_comparison.png
 │   └── posterior_predictive_comparison.png
-└── pyproject.toml
+├── pyproject.toml
+└── tests
+    ├── test_integration
+    │   └── test_data_preparation.py
+    └── test_unit
+        ├── test_inference_configuration.py
+        └── test_util.py
 ```
 
 This folder implements bibat's example analysis – a comparison of linear
@@ -169,11 +173,11 @@ To get the files I ran the script:
 (baseball) > python baseball/fetch_data.py
 Fetching 2006 data from https://raw.githubusercontent.com/stan-dev/example-models/master/knitr/pool-binary-trials/baseball-hits-2006.csv
 Writing 2006 data to data/raw/2006.csv
-Fetching bdb-main data from https://raw.githubusercontent.com/chadwickbureau/baseballdatabank/master/core/Batting.csv
+Fetching bdb-main data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/Batting.csv
 Writing bdb-main data to data/raw/bdb-main.csv
-Fetching bdb-post data from https://raw.githubusercontent.com/chadwickbureau/baseballdatabank/master/core/BattingPost.csv
+Fetching bdb-post data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/BattingPost.csv
 Writing bdb-post data to data/raw/bdb-post.csv
-Fetching bdb-apps data from https://raw.githubusercontent.com/chadwickbureau/baseballdatabank/master/core/Appearances.csv
+Fetching bdb-apps data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/Appearances.csv
 Writing bdb-apps data to data/raw/bdb-apps.csv
 ```
 
@@ -212,7 +216,7 @@ The next step is to write functions that return `PreparedData` objects. In this
 case I wrote a couple of data preparation functions: `prepare_data_2006` and
 `prepare_data_bdb`:
 
-```{.python include="../baseball/data_preparation.py" start-line=78 end-line=162}
+```{.python include="../baseball/data_preparation.py" start-line=75 end-line=159}
 ```
 
 To take into account the inconsistency between the two raw data sources, I
@@ -224,7 +228,7 @@ first had to change the variable `RAW_DATA_FILES`:
 Next I changed the `prepare_data` function to handle the two different data
 sources.
 
-```{.python include="../baseball/data_preparation.py" start-line=36 end-line=56}
+```{.python include="../baseball/data_preparation.py" start-line=162 end-line=182}
 ```
 
 To finish off I deleted the unused global variables `NEW_COLNAMES`,
@@ -237,7 +241,7 @@ on the step after prepare_data.py, which is fine!]
 
 ```{.zsh}
 > source .venv/bin/activate
-(baseball) > python baseball/prepare_data.py
+(baseball) > python baseball/data_preparation.py
 ```
 
 Now the folder `data/prepared/bdb` contained a file
@@ -333,14 +337,14 @@ I started by defining some Stan input functions that pass arbitrary prepared
 data on to each of the models:^[Note that this code uses the scipy function
 `logit`, which it imported like this: `from scipy.special import logit`]
 
-```{.python include="../baseball/stan_input_functions.py" start-line=11 end-line=34}
+```{.python include="../baseball/stan_input_functions.py" start-line=22 end-line=46}
 ```
 
 But why stop there? It can also be useful to generate Stan input data with a
 model, by running it in simulation mode with hardcoded parameter values. Here
 are some functions that do this for both of our models:
-
-```{.python include="../baseball/stan_input_functions.py" start-line=36}
+^[These functions require some more imports: `numpy` and `scipy.special.expit`]
+```{.python include="../baseball/stan_input_functions.py" start-line=49}
 ```
 
 # Specifying inferences

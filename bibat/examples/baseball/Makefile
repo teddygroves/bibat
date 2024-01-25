@@ -1,4 +1,4 @@
-.PHONY: clean-inferences clean-plots clean-stan clean-all analysis env docs clean-docs
+.PHONY: clean-inferences clean-plots clean-stan clean-all analysis env test docs clean-docs
 
 ENV_MARKER = .venv/.bibat.marker
 ACTIVATE_VENV = .venv/bin/activate
@@ -9,10 +9,10 @@ REPORT_STEM = docs/report
 QUARTO_EXTENSIONS_FOLDER = $(DOCS_DIR)/_extensions
 
 ifeq ($(OS),Windows_NT)
-	INSTALL_CMDSTAN_FLAGS = --compiler
+	INSTALL_CMDSTAN_FLAGS =  --version git:develop --cores 2
 	ACTIVATE_VENV = .venv/Scripts/activate
 else
-	INSTALL_CMDSTAN_FLAGS =
+	INSTALL_CMDSTAN_FLAGS = --cores 2
 endif
 
 env: $(ENV_MARKER)
@@ -31,14 +31,20 @@ docs: $(ENV_MARKER) $(QUARTO_EXTENSIONS_FOLDER)
 $(ENV_MARKER): $(ACTIVATE_VENV) $(CMDSTAN)
 	. $(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
-		python -m pip install -e .; \
-	  install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
+	  python -m pip install -e .; \
+	  python -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
 		touch $@ ; \
 	)
 
+test: $(ENV_MARKER)
+	. $(ACTIVATE_VENV) && ( \
+	  python -m pip install -e .'[dev]'; \
+	  python -m pytest || exit 1; \
+	)
+
 analysis: $(ENV_MARKER)
-	. $(ACTIVATE_VENV) && (\
-	  python $(SRC)/prepare_data.py || exit 1; \
+	. $(ACTIVATE_VENV) && ( \
+	  python $(SRC)/data_preparation.py || exit 1; \
 	  python $(SRC)/sample.py || exit 1; \
 	  jupyter execute $(SRC)/investigate.ipynb || exit 1; \
 	)

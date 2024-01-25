@@ -57,9 +57,9 @@ def main():
         idata = az.from_cmdstanpy(**idata_kwargs)
         for varname, output in llik_outputs.items():
             idata.log_likelihood[varname] = output
-        idata_file = os.path.join(run_dir, "idata.json")
-        print(f"Saving idata to {idata_file}")
-        idata.to_json(idata_file)
+        idata_dir = os.path.join(run_dir, "idata")
+        print(f"Saving idata to {idata_dir}")
+        idata.to_zarr(idata_dir)
 
 
 if __name__ == "__main__":

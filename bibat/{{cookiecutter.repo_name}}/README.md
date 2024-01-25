@@ -7,7 +7,7 @@
 
 To run the analysis, run the command `make analysis` from the project root. This
 will install a fresh virtual environment if one doesn't exist already, activate
-it and install python dependencies and cmdstan, then run the analysis with the
+it, install python dependencies and cmdstan and then run the analysis with the
 following commands:
 
 - `python {{cookiecutter.repo_name}}/prepare_data.py`
@@ -21,7 +21,7 @@ First make sure you have installed [quarto](https://https://quarto.org/).
 Now run this command from the project root:
 
 ```
-make docs
+$ make docs
 ```
 {% endif %}
 
@@ -30,15 +30,22 @@ make docs
 Run this command from the project root:
 
 ```
-make docs
+$ make docs
 ```
 {% endif %}
 
-{% if cookiecutter.create_tests_directory == "y" %}# How to run tests
+# How to run tests
 
-Run this command from the project root:
+From the project root, either run
 
 ```
-python -m pytest
+$ make test
 ```
-{% endif %}
+
+or
+
+```
+$ source .venv/bin/activate
+$ pip install -e .'[dev]'
+$ python -m pytest
+```
