@@ -1,7 +1,7 @@
 """Functions for generating input to Stan from prepared data."""
 
 
-from typing import Dict, List
+from typing import Any, Callable, Dict, List
 
 import pandas as pd
 from stanio.json import process_dictionary

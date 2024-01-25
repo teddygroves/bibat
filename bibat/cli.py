@@ -52,11 +52,6 @@ WIZARD_FIELDS = [
         default="Quarto",
     ),
     WizardStr(
-        "create_tests_directory",
-        "Would you like to create a tests directory?",
-        default="y",
-    ),
-    WizardStr(
         "create_dotgithub_directory",
         "Would you like to create a .github directory?",
         default="y",

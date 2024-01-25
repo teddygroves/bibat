@@ -174,12 +174,12 @@ and are as follows:
 - scipy
 - scikit-learn
 - toml
+- pytest
+- black
 
 In addition, the following Python packages may be installed, depending on how
 the user answers bibat's wizard:
 
-- pytest
-- black
 - sphinx
 
 Target project dependencies: Cmdstan
@@ -187,7 +187,7 @@ Target project dependencies: Cmdstan
 
 Bibat will attempt to install `cmdstan
 <https://mc-stan.org/docs/cmdstan-guide/index.html>`__, the command line
-interface to Stan, when you run the commands :code:`make env` or :code:`make analysis` 
+interface to Stan, when you run the commands :code:`make env` or :code:`make analysis`
 from the root of the target project.
 
 If bibat fails to install cmdstan, please raise an issue! The relevant

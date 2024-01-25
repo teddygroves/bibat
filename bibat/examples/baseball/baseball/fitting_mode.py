@@ -47,7 +47,7 @@ class FittingMode(BaseModel):
     name: str
     idata_target: IdataTarget
     fit: Callable[
-        [CmdStanModel, Dict, Dict[str, str]], Union[CmdStanMCMC, xr.Dataset]
+        [CmdStanModel, Dict, Dict[str, str]], Union[CmdStanMCMC, xr.DataArray]
     ]
 
 
@@ -136,10 +136,12 @@ def fit_kfold(model: CmdStanModel, input_dict: dict, kwargs) -> xr.DataArray:
     return xr.concat(lliks_by_fold, dim="llik_dim_0").sortby("llik_dim_0")
 
 
-prior_mode = FittingMode(name="prior", idata_target="prior", fit=fit_prior)
+prior_mode = FittingMode(
+    name="prior", idata_target=IdataTarget.prior, fit=fit_prior
+)
 posterior_mode = FittingMode(
-    name="posterior", idata_target="posterior", fit=fit_posterior
+    name="posterior", idata_target=IdataTarget.posterior, fit=fit_posterior
 )
 kfold_mode = FittingMode(
-    name="kfold", idata_target="log_likelihood", fit=fit_kfold
+    name="kfold", idata_target=IdataTarget.log_likelihood, fit=fit_kfold
 )
