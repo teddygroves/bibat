@@ -15,14 +15,16 @@ jobs:
         with:
           # To install LaTeX to build PDF book
           tinytex: true
+        run: |
+          quarto add  --no-prompt quarto-journals/acm
 
       - name: Render Quarto Project
         uses: quarto-dev/quarto-actions/render@v2
         with:
           to: acm-pdf
-          path: docs
+          path: paper
 
       - uses: actions/upload-artifact@v4
         with:
           name: pdfs
-          path: docs/*.pdf
+          path: paper/*.pdf
