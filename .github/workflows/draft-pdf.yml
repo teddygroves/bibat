@@ -1,23 +1,28 @@
 on: [push]
 
+name: Render pdfs
+
 jobs:
-  paper:
+  build-deploy:
     runs-on: ubuntu-latest
-    name: Paper Draft
+
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: Build draft PDF
-        uses: openjournals/openjournals-draft-action@master
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Quarto
+        uses: quarto-dev/quarto-actions/setup@v2
         with:
-          journal: joss
-          # This should be the path to the paper within your repo.
-          paper-path: paper.md
-      - name: Upload
-        uses: actions/upload-artifact@v1
+          # To install LaTeX to build PDF book
+          tinytex: true
+
+      - name: Render Quarto Project
+        uses: quarto-dev/quarto-actions/render@v2
         with:
-          name: paper
-          # This is the output path where Pandoc will write the compiled
-          # PDF. Note, this should be the same directory as the input
-          # paper.md
-          path: paper.pdf
+          to: acm-pdf
+          path: docs
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: pdfs
+          path: docs/*.pdf
