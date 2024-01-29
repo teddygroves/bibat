@@ -20,6 +20,7 @@ jobs:
         run: |
           cd paper
           quarto add --no-prompt quarto-journals/acm
+          sed -i '/{verbatim}/d' _extensions/quarto-journals/acm/acmarttemplate.tex
 
       - name: Render Quarto Project
         uses: quarto-dev/quarto-actions/render@v2
