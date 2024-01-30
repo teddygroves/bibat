@@ -1,6 +1,29 @@
-\documentclass[sigconf, review]{acmart}
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
+%
+\documentclass[
+  letterpaper,
+  DIV=11,
+  numbers=noendperiod]{scrartcl}
 
-
+\usepackage{amsmath,amssymb}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math}
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+    % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \IfFileExists{microtype.sty}{% use microtype if available
   \usepackage[]{microtype}
@@ -16,54 +39,18 @@
 }{% if KOMA class
   \KOMAoptions{parskip=half}}
 \makeatother
-
-%%
-%% This is file `sample-manuscript.tex',
-%% generated with the docstrip utility.
-%%
-%% The original source files were:
-%%
-%% samples.dtx  (with options: `manuscript')
-%%
-%% IMPORTANT NOTICE:
-%%
-%% For the copyright see the source file.
-%%
-%% Any modified versions of this file must be renamed
-%% with new filenames distinct from sample-manuscript.tex.
-%%
-%% For distribution of the original source see the terms
-%% for copying and modification in the file samples.dtx.
-%%
-%% This generated file may be distributed as long as the
-%% original source files, as listed above, are part of the
-%% same distribution. (The sources need not necessarily be
-%% in the same archive or directory.)
-%%
-%%
-%% Commands for TeXCount
-%TC:macro \cite [option:text,text]
-%TC:macro \citep [option:text,text]
-%TC:macro \citet [option:text,text]
-%TC:envir table 0 1
-%TC:envir table* 0 1
-%TC:envir tabular [ignore] word
-%TC:envir displaymath 0 word
-%TC:envir math 0 word
-%TC:envir comment 0 0
-%%
-%%
-%% The first command in your LaTeX source must be the \documentclass command.
-
-
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
-\PassOptionsToPackage{dvipsnames,svgnames,x11names}{xcolor}
-
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
-
-%% PANDOC PREAMBLE BEGINS
+\usepackage{xcolor}
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\setcounter{secnumdepth}{5}
+% Make \paragraph and \subparagraph free-standing
+\ifx\paragraph\undefined\else
+  \let\oldparagraph\paragraph
+  \renewcommand{\paragraph}[1]{\oldparagraph{#1}\mbox{}}
+\fi
+\ifx\subparagraph\undefined\else
+  \let\oldsubparagraph\subparagraph
+  \renewcommand{\subparagraph}[1]{\oldsubparagraph{#1}\mbox{}}
+\fi
 
 
 \providecommand{\tightlist}{%
@@ -90,8 +77,41 @@
 \makeatletter
 \def\fps@figure{htbp}
 \makeatother
+% definitions for citeproc citations
+\NewDocumentCommand\citeproctext{}{}
+\NewDocumentCommand\citeproc{mm}{%
+  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
+\makeatletter
+ % allow citations to break across lines
+ \let\@cite@ofmt\@firstofone
+ % avoid brackets around text for \cite:
+ \def\@biblabel#1{}
+ \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
+\makeatother
+\newlength{\cslhangindent}
+\setlength{\cslhangindent}{1.5em}
+\newlength{\csllabelwidth}
+\setlength{\csllabelwidth}{3em}
+\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
+ {\begin{list}{}{%
+  \setlength{\itemindent}{0pt}
+  \setlength{\leftmargin}{0pt}
+  \setlength{\parsep}{0pt}
+  % turn on hanging indent if param 1 is 1
+  \ifodd #1
+   \setlength{\leftmargin}{\cslhangindent}
+   \setlength{\itemindent}{-1\cslhangindent}
+  \fi
+  % set entry spacing
+  \setlength{\itemsep}{#2\baselineskip}}}
+ {\end{list}}
+\usepackage{calc}
+\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
+\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
+\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
 
-\definecolor{mypink}{RGB}{219, 48, 122}
+\KOMAoption{captions}{tableheading}
 \makeatletter
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \AtBeginDocument{%
@@ -133,108 +153,30 @@
 \@ifpackageloaded{caption}{}{\usepackage{caption}}
 \@ifpackageloaded{subcaption}{}{\usepackage{subcaption}}
 \makeatother
-%% PANDOC PREAMBLE ENDS
+\ifLuaTeX
+  \usepackage{selnolig}  % disable illegal ligatures
+\fi
+\usepackage{bookmark}
 
-\setlength{\parindent}{10pt}
-\setlength{\parskip}{0pt}
-
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same} % disable monospaced font for URLs
 \hypersetup{
   pdftitle={Bibat: Batteries-include Bayesian Analysis Template},
   pdfauthor={Teddy Groves},
+  pdfkeywords={Bayesian workflow, Methodology, Software},
   colorlinks=true,
   linkcolor={blue},
   filecolor={Maroon},
   citecolor={Blue},
-  urlcolor={red},
-  pdfcreator={LaTeX via pandoc, via quarto}}
+  urlcolor={Blue},
+  pdfcreator={LaTeX via pandoc}}
 
-%% \BibTeX command to typeset BibTeX logo in the docs
-\AtBeginDocument{%
-  \providecommand\BibTeX{{%
-    Bib\TeX}}}
-
-%% Rights management information.  This information is sent to you
-%% when you complete the rights form.  These commands have SAMPLE
-%% values in them; it is your responsibility as an author to replace
-%% the commands and values with those provided to you when you
-%% complete the rights form.
-\setcopyright{acmcopyright}
-\copyrightyear{2024}
-\acmYear{2024}
-\acmDOI{}
-
-%% These commands are for a PROCEEDINGS abstract or paper.
-\acmConference[KDD]{KDD}{Aug 25--29, 2024}{Barcelona, Esp}
-\acmPrice{}
-\acmISBN{}
-
-%% Submission ID.
-%% Use this when submitting an article to a sponsored event. You'll
-%% receive a unique submission ID from the organizers
-%% of the event, and this ID should be used as the parameter to this command.
-%%\acmSubmissionID{123-A56-BU3}
-
-%%
-%% For managing citations, it is recommended to use bibliography
-%% files in BibTeX format.
-%%
-%% You can then either use BibTeX with the ACM-Reference-Format style,
-%% or BibLaTeX with the acmnumeric or acmauthoryear sytles, that include
-%% support for advanced citation of software artefact from the
-%% biblatex-software package, also separately available on CTAN.
-%%
-%% Look at the sample-*-biblatex.tex files for templates showcasing
-%% the biblatex styles.
-%%
-
-%%
-%% The majority of ACM publications use numbered citations and
-%% references.  The command \citestyle{authoryear} switches to the
-%% "author year" style.
-%%
-%% If you are preparing content for an event
-%% sponsored by ACM SIGGRAPH, you must use the "author year" style of
-%% citations and references.
-%% Uncommenting
-%% the next command will enable that style.
-%%\citestyle{acmauthoryear}
-
-
-%% end of the preamble, start of the body of the document source.
-\begin{document}
-
-
-%%
-%% The "title" command has an optional parameter,
-%% allowing the author to define a "short title" to be used in page headers.
 \title{Bibat: Batteries-include Bayesian Analysis Template}
+\author{Teddy Groves}
+\date{}
 
-%%
-%% The "author" command and its associated commands are used to define
-%% the authors and their affiliations.
-%% Of note is the shared affiliation of the first two authors, and the
-%% "authornote" and "authornotemark" commands
-%% used to denote shared contribution to the research.
-
-
-  \author{Teddy Groves}
-  \orcid{0000-0002-7109-3270}
-            \affiliation{%
-                  \institution{Danish Technical University}
-                                  \city{Kongens Lyngby}
-                                  \country{Denmark}
-                      }
-
-
-%% By default, the full list of authors will be used in the page
-%% headers. Often, this list is too long, and will overlap
-%% other information printed in the page headers. This command allows
-%% the author to define a more concise list
-%% of authors' names for this purpose.
-%\renewcommand{\shortauthors}{Trovato et al.}
-%%
-%% The abstract is a short summary of the work to be presented in the
-%% article.
+\begin{document}
+\maketitle
 \begin{abstract}
 Bayesian statistical workflow offers a powerful way to learn from data,
 but software software projects that implement complex Bayesian workflows
@@ -244,38 +186,12 @@ providing a full-featured, scalable Bayesian statistical analysis
 project using an interactive template. Bibat is available on the Python
 Package index, documented at \url{https://bibat.readthedocs.io/} and
 developed at \url{https://github.com/teddygroves/bibat/}. This paper
-explains the motivation for bibat, briefly describes intended usage,
-discusses key design choices, and reviews several examples of bibat's
-use in scientific applications.
+explains the motivation for bibat, describes intended usage, discusses
+bibat's design goals and how key challenges that were overcome in the
+course of development, compares bibat with similar software, highlights
+several examples of bibat's use in science and provides links to
+community resources associated with bibat.
 \end{abstract}
-
-%%
-%% The code below is generated by the tool at http://dl.acm.org/ccs.cfm.
-%% Please copy and paste the code instead of the example below.
-%%
-
-%%
-%% Keywords. The author(s) should pick words that accurately describe
-%% the work being presented. Separate the keywords with commas.
-\keywords{Python, Bayesian workflow, Methodology}
-
-\begin{teaserfigure}
-  \includegraphics[width=\textwidth]{img/workflow.png}
-  \caption{Schematic representation of a Bayesian workflow implemented
-using bibat. The author inspects their analysis's results, edits files
-corresponding to the boxes on the left, runs the command
-\texttt{make\ analysis}, then repeats. Note that this workflow is
-modular, accommodates plurality and results in a final analysis that can
-be fully reproduced using a single command.}
-  \Description{DESCRIPTION}
-\end{teaserfigure}
-
-%%
-%% This command processes the author and affiliation and title
-%% information and builds the first part of the formatted document.
-\maketitle
-
-\setlength{\parskip}{-0.1pt}
 
 \section{Introduction: the problem of orchestrating Bayesian workflow
 software}\label{introduction-the-problem-of-orchestrating-bayesian-workflow-software}
@@ -283,13 +199,12 @@ software}\label{introduction-the-problem-of-orchestrating-bayesian-workflow-soft
 The idea that Bayesian statistical analysis comprises not just
 inference, but also specific approaches to related activities like data
 preparation, model design, diagnosis, debugging and criticism, dates at
-least to \citet{boxBayesianInferenceStatistical1992}. There is
-increasing scholarly recognition of the need for a holistic view of
-``Bayesian workflow''
-\citep{gelmanBayesianWorkflow2020, grinsztajnBayesianWorkflowDisease2021, gabryVisualizationBayesianWorkflow2019}.
-Relatedly, software tools now exist that address most individual aspects
-of a Bayesian workflow: see \citet{strumbeljPresentFutureSoftware} for a
-review of the state of the art.
+least to Box and Tiao (1992). There is increasing scholarly recognition
+of the need for a holistic view of ``Bayesian workflow'' (Gelman et al.
+2020; Grinsztajn et al. 2021; Gabry et al. 2019). Relatedly, software
+tools now exist that address most individual aspects of a Bayesian
+workflow: see Štrumbelj et al. (2024) for a review of the state of the
+art.
 
 Unfortunately, currently available tools typically address one, or at
 most a handful, of Bayesian workflow activities; it is left to the
@@ -307,7 +222,7 @@ a wide range of statistical analyses.
 
 \subsection{Installation and usage}\label{installation-and-usage}
 
-Bibat can be installed on the Windows, linux or macos command line on by
+Bibat can be installed on the Windows, Linux or macOS command line on by
 running the command \texttt{pip\ install\ bibat} and then used by
 running the command \texttt{bibat}. This command triggers an interactive
 form which prompts the user to select a range of customisation options.
@@ -315,7 +230,32 @@ Bibat then creates a new directory containing code that implements an
 example analysis, with customisations reflecting the user's choices.
 This analysis works immediately, and can be reproduced with the single
 command \texttt{make\ analysis} without the need for any further action
-by the user: in this sense bibat comes with ``batteries included''.
+by the user: in this sense bibat comes with batteries included.
+
+Figure~\ref{fig-workflow} illustrates the components of a bibat-based
+Bayesian workflow and shows how it proceeds: the project team edits the
+code components, then runs \texttt{make\ analysis} triggering creation
+of the result components. After inspecting these they repeat the
+process, leading to a cycle that ultimately results in a complete,
+easily reproducible analysis.
+
+\begin{figure}
+
+\centering{
+
+\includegraphics[width=1\textwidth,height=\textheight]{img/workflow.png}
+
+}
+
+\caption{\label{fig-workflow}Schematic representation of a Bayesian
+workflow implemented using bibat. The author inspects their analysis's
+results, edits code corresponding to the boxes on the left, runs the
+command \texttt{make\ analysis}, then repeats. The diagram illustrates
+several key features of bibat: inference components are modular and
+plural, the overall workflow is iterative and cyclical and the whole
+analysis can be executed with a single command.}
+
+\end{figure}%
 
 \subsection{Documentation}\label{documentation}
 
@@ -354,6 +294,11 @@ dependencies, data preparation, statistical computation and analysis of
 results. In this way a bibat analysis can be reproduced on most
 platforms using a single command.
 
+In particular, this target attempts to install cmdstan if necessary,
+using a recipe tailored to the host operating system. This functionality
+addresses a common issue where researchers find it difficult to install
+Stan, especially on Windows.
+
 Bibat also provides its Python code in the form of a package configured
 using modern conventions for specifying dependencies and configuring
 tooling, so that it is easy to maintain reproducibility as the analysis
@@ -363,23 +308,16 @@ develops.
 tools}\label{use-widely-adopted-open-source-and-actively-developed-tools}
 
 Bibat projects are is written in modern Python and uses pydantic
-\citet{pydanticdevelopersPydantic2022} and pandera
-\citep{niels_bantilan-proc-scipy-2020} for data modelling, Stan
-\citep{carpenterStanProbabilisticProgramming2017} for statistical
-inference, cmdstanpy \citep{standevelopmentteamCmdStanPy2022} for
-python-Stan interface, arviz \citep{kumarArviZUnifiedLibrary2019} for
-storing and analyzing inferences and sphinx
-\citep{georgbrandlandthesphinxteamSphinx2022} and quarto
-\citep{Allaire_Quarto_2022} for documentation.
+Pydantic developers (2022) and pandera (Niels Bantilan 2020) for data
+modelling, Stan (Carpenter et al. 2017) for statistical inference,
+cmdstanpy (Stan Development Team 2022) for python-Stan interface, arviz
+(Kumar et al. 2019) for storing and analyzing inferences and sphinx
+(Georg Brandl and the Sphinx team 2022) and quarto (Allaire et al. 2022)
+for documentation.
 
 Bibat itself is also written in modern Python and uses the popular tools
-cookiecutter \citep{greenfeldCookiecutter2021}, pydantic and click
-\citep{clickdevelopersClickPythonComposable2022}.
-
-Bibat's makefile detects the current operating system and attempts to
-install cmdstan appropriately if necessary. This functionality addresses
-a common issue where researchers find it difficult to install Stan,
-especially on Windows.
+cookiecutter (Greenfeld et al. 2021), pydantic and click (Click
+Developers 2022).
 
 \subsection{Implement community standards and best practices for
 collaborative software
@@ -397,12 +335,6 @@ operating systems Linux, macOS and Windows. Bibat's continuous
 integration runs a test suite as well as an end-to-end functional test
 on all supported Python versions.
 
-Bibat is part of the PyOpenSci ecosystem, allowing for community help
-with maintenance as well as peer review for code and documentation
-quality, usability and accessibility. The PyOpenSci peer review for
-bibat can be found here:
-\url{https://github.com/pyOpenSci/software-submission/issues/83}
-
 \section{Challenges}\label{challenges}
 
 This section describes some specific challenges that often affect
@@ -411,8 +343,8 @@ Bayesian workflow projects and how bibat addresses them.
 \subsection{Address complexity using a modular, file based
 approach}\label{address-complexity-using-a-modular-file-based-approach}
 
-As discussed in \citet{gelmanBayesianWorkflow2020}, Bayesian workflows
-are complicated, featuring plurality, cyclicity and complexity at many
+As discussed in Gelman et al. (2020), Bayesian workflows are
+complicated, featuring plurality, cyclicity and complexity at many
 levels. Bibat accommodates this by separating non-interacting analysis
 components into modules and by serialising data to files wherever
 possible. Prepared datasets, statistical models, inference
@@ -444,27 +376,57 @@ modes corresponding for prior sampling, posterior sampling and k-fold
 posterior sampling. Users can easily add additional fitting modes by
 copying these examples.
 
-\section{Post launch use}\label{post-launch-use}
+\section{Comparison with alternative
+software}\label{comparison-with-alternative-software}
 
-Bibat has been used for several real statistical analyses.
+Other than bibat, there is currently no interactive template that
+specifically targets Bayesian workflow projects. There are some
+templates that arguably encompass Bayesian workflow as a special case of
+data analysis project, such as cookiecutter-data-science (Driven Data
+2022), but these are of limited use compared with a specialised template
+due to the many specificities of Bayesian workflow.
 
-\citet{grovesteddyDgfreg2023} used bibat to compare a Bayesian and two
+There is some software that addresses the general task of facilitating
+Bayesian workflow, but using a different approach from bibat's. For
+example, bambi (Capretto et al. 2020) and brms (Bürkner 2017) aim to
+make implementing Bayesian workflows easier by providing ergonomic ways
+to specify and fit Bayesian regression models to tabular datasets. Bibat
+is complementary with these packages, as it targets use cases that they
+do not support, such as analyses where complex datasets or custom models
+might be required.
+
+\section{Case studies}\label{case-studies}
+
+The following cases illustrate how bibat has been used in practice to
+facilitate Bayesian workflow projects.
+
+Groves and Jooste (2023) used bibat to compare a Bayesian and two
 non-Bayesian approaches to modelling a biochemical thermodynamics
 dataset. Bibat facilitated this analysis even though it was not very
-large by providing the fitting mode abstraction, which was very useful
-for comparing the different methods.
+large---the final analysis contained one dataset, three models and three
+inferences---because the fitting mode abstraction allowed for
+straightforward comparison of the different methods. Additionally, bibat
+made it easier to iteratively investigate and discard models that did
+not form part of the final analysis.
 
-In \citet{grovesBaseball2022}, Bibat was used to implement a sports
-analysis involving two datasets, two models and four inferences,
-demonstrating that the generalised Pareto distribution can be used to
-describe hitting ability in baseball. This analysis is now included in
-bibat as an illustration, along with an accompanying tutorial.
+In Groves (2022), Bibat was used to implement a sports analysis
+involving two datasets, two models and four inferences, demonstrating
+that the generalised Pareto distribution can be used to describe hitting
+ability in baseball. This analysis is now included in bibat as an
+illustration, along with an accompanying tutorial. An illustrative
+graphic from this analysis is shown in Figure~\ref{fig-baseball}.
+
+In this case bibat was useful because of its ability to implement
+arbitrary statistical models, as latent generalised Pareto distributions
+are not supported by generic regression packages like brms and bambi.
+Further, bibat's modular design made it easier to implement this
+medium-sized analysis with two datasets, two models and six inferences.
 
 \begin{figure}
 
 \centering{
 
-\includegraphics[width=0.5\textwidth,height=\textheight]{img/baseball.png}
+\includegraphics[width=1\textwidth,height=\textheight]{img/baseball.png}
 
 }
 
@@ -478,56 +440,149 @@ for the full analysis.}
 
 \end{figure}%
 
-In \citet{grovesteddySphincter2024}, bibat was used to implement an
-analysis of cerebrovascular data from mice, involving two raw datasets,
-6 prepared datasets, 15 models and 15 inferences. In this case bibat's
-modular design made it straightforward to iteratively add data
-transformations and models while maintaining reproducibility.
+In Groves (2024), bibat was used to implement a large analysis of
+cerebrovascular data from mice, involving two raw datasets, 6 prepared
+datasets, 15 models and 15 inferences. Again it was not possible to
+implement the analysis using formula-based packages due to the need for
+custom modelling approaches to take into account expert knowledge about
+both the target system and the measurement apparatus. Due to the number
+of datasets and models that needed to be considered, implementing this
+analysis without using bibat or a similar structured approach would have
+required a combination of more time and/ or compromises in software
+quality.
 
 These cases illustrate that bibat can be useful in a variety of real
 Bayesian workflows, with different sizes, subject matters and emphases.
 
+\section{Community}\label{community}
+
+Bibat is developed in public and encourages community contribution.
+Please see the contributing page
+\url{https://github.com/teddygroves/bibat/blob/main/CONTRIBUTING.rst}
+and code of conduct
+\url{https://github.com/teddygroves/bibat/blob/main/CODE_OF_CONDUCT.md}
+if you would like to help develop bibat.
+
 Bibat has a growing user community, with 16 GitHub stars at the time of
-writing.
+writing, and is affiliated with cmdstanpy through a link on its
+documentation website. Bibat is also affiliated with the Python
+scientific software community PyOpenSci, allowing for help with
+maintenance as well as peer review for code and documentation quality,
+usability and accessibility. The PyOpenSci peer review for bibat can be
+found here:
+\url{https://github.com/pyOpenSci/software-submission/issues/83}.
 
-\section{Comparison with alternative
-software}\label{comparison-with-alternative-software}
+\section{Author contributions}\label{author-contributions}
 
-Other than bibat, there is currently no interactive template that
-specifically targets Bayesian workflow projects. There are some
-templates that arguably encompass Bayesian workflow as a special case of
-data analysis project, such as cookiecutter-data-science
-\citep{drivendataCookiecutterdatascience2022}, but these are of limited
-use compared with a specialised template due to the many specificities
-of Bayesian workflow.
+\section*{Acknowledgements}\label{acknowledgements}
+\addcontentsline{toc}{section}{Acknowledgements}
 
-There is some software that addresses the general task of facilitating
-Bayesian workflow, but using a different approach from bibat's. For
-example, bambi \citep{capretto2020} and brms
-\citep{burknerBrmsPackageBayesian2017} aim to make implementing Bayesian
-workflows easier by providing ergonomic ways to specify and fit Bayesian
-regression models to tabular datasets. Bibat is complementary with these
-packages, as it targets use cases that they do not support, such as
-analyses where complex datasets or custom models might be required.
+\phantomsection\label{refs}
+\begin{CSLReferences}{1}{0}
+\bibitem[\citeproctext]{ref-Allaire_Quarto_2022}
+Allaire, J. J., Charles Teague, Carlos Scheidegger, Yihui Xie, and
+Christophe Dervieux. 2022. {``Quarto.''}
+\url{https://doi.org/10.5281/zenodo.5960048}.
 
-\section{Statements and Declarations}\label{statements-and-declarations}
+\bibitem[\citeproctext]{ref-boxBayesianInferenceStatistical1992}
+Box, George E. P., and George C. Tiao. 1992. \emph{Bayesian Inference in
+Statistical Analysis}. Wiley classics library ed. A {Wiley-Interscience}
+Publication. {New York}: {Wiley}.
 
-The authors have no financial or non-financial interests that are
-directly or indirectly related to the work submitted for publication.
+\bibitem[\citeproctext]{ref-burknerBrmsPackageBayesian2017}
+Bürkner, Paul-Christian. 2017. {``Brms: {An R} Package for {Bayesian}
+Multilevel Models Using {Stan}.''} \emph{Journal of Statistical
+Software} 80 (1): 1--28. \url{https://doi.org/10.18637/jss.v080.i01}.
 
-\bibliographystyle{ACM-Reference-Format}
-\bibliography{bibliography.bib}
+\bibitem[\citeproctext]{ref-capretto2020}
+Capretto, Tomás, Camen Piho, Ravin Kumar, Jacob Westfall, Tal Yarkoni,
+and Osvaldo A. Martin. 2020. {``Bambi: {A} Simple Interface for Fitting
+{Bayesian} Linear Models in {Python}.''}
+\url{https://arxiv.org/abs/2012.10754}.
 
-%% begin pandoc before-bib
-%% end pandoc before-bib
-%% begin pandoc biblio
-%% end pandoc biblio
-%% begin pandoc include-after
-%% end pandoc include-after
-%% begin pandoc after-body
-%% end pandoc after-body
+\bibitem[\citeproctext]{ref-carpenterStanProbabilisticProgramming2017}
+Carpenter, Bob, Andrew Gelman, Matthew D. Hoffman, Daniel Lee, Ben
+Goodrich, Michael Betancourt, Marcus Brubaker, Jiqiang Guo, Peter Li,
+and Allen Riddell. 2017. {``Stan: {A Probabilistic Programming
+Language}.''} \emph{Journal of Statistical Software} 76 (1): 1--32.
+\url{https://doi.org/10.18637/jss.v076.i01}.
+
+\bibitem[\citeproctext]{ref-clickdevelopersClickPythonComposable2022}
+Click Developers. 2022. {``Click: {Python} Composable Command Line
+Interface Toolkit.''} Pallets. \url{https://pypi.org/project/click/}.
+
+\bibitem[\citeproctext]{ref-drivendataCookiecutterdatascience2022}
+Driven Data. 2022. {``Cookiecutter-Data-Science.''}
+\url{https://github.com/drivendata/cookiecutter-data-science/}.
+
+\bibitem[\citeproctext]{ref-gabryVisualizationBayesianWorkflow2019}
+Gabry, Jonah, Daniel Simpson, Aki Vehtari, Michael Betancourt, and
+Andrew Gelman. 2019. {``Visualization in {Bayesian Workflow}.''}
+\emph{Journal of the Royal Statistical Society Series A: Statistics in
+Society} 182 (2): 389--402. \url{https://doi.org/10.1111/rssa.12378}.
+
+\bibitem[\citeproctext]{ref-gelmanBayesianWorkflow2020}
+Gelman, Andrew, Aki Vehtari, Daniel Simpson, Charles C. Margossian, Bob
+Carpenter, Yuling Yao, Lauren Kennedy, Jonah Gabry, Paul-Christian
+Bürkner, and Martin Modrák. 2020. {``Bayesian {Workflow}.''}
+\emph{arXiv:2011.01808 {[}Stat{]}}, November.
+\url{http://arxiv.org/abs/2011.01808}.
+
+\bibitem[\citeproctext]{ref-georgbrandlandthesphinxteamSphinx2022}
+Georg Brandl and the Sphinx team. 2022. {``Sphinx.''}
+\url{https://www.sphinx-doc.org/}.
+
+\bibitem[\citeproctext]{ref-greenfeldCookiecutter2021}
+Greenfeld, Audrey Roy, Dainiel Roy Greenfeld, Raphael Pierzina, et al.
+2021. {``Cookiecutter.''} \url{https://pypi.org/project/cookiecutter/}.
+
+\bibitem[\citeproctext]{ref-grinsztajnBayesianWorkflowDisease2021}
+Grinsztajn, Léo, Elizaveta Semenova, Charles C. Margossian, and Julien
+Riou. 2021. {``Bayesian Workflow for Disease Transmission Modeling in
+{Stan}.''} \emph{Statistics in Medicine} 40 (27): 6209--34.
+\url{https://doi.org/10.1002/sim.9164}.
+
+\bibitem[\citeproctext]{ref-grovesBaseball2022}
+Groves, Teddy. 2022. {``Baseball.''}
+\url{https://github.com/teddygroves/baseball}.
+
+\bibitem[\citeproctext]{ref-grovesteddySphincter2024}
+---------. 2024. {``Sphincter.''}
+\url{https://github.com/teddygroves/sphincter}.
+
+\bibitem[\citeproctext]{ref-grovesteddyDgfreg2023}
+Groves, Teddy, and Jason Jooste. 2023. {``Dgfreg.''} DTU Biosustain.
+\url{https://github.com/biosustain/dgfreg}.
+
+\bibitem[\citeproctext]{ref-kumarArviZUnifiedLibrary2019}
+Kumar, Ravin, Colin Carroll, Ari Hartikainen, and Osvaldo Martin. 2019.
+{``{ArviZ} a Unified Library for Exploratory Analysis of {Bayesian}
+Models in {Python}.''} \emph{Journal of Open Source Software} 4 (33):
+1143. \url{https://doi.org/10.21105/joss.01143}.
+
+\bibitem[\citeproctext]{ref-niels_bantilan-proc-scipy-2020}
+Niels Bantilan. 2020. {``Pandera: {Statistical Data Validation} of
+{Pandas Dataframes}.''} In \emph{Proceedings of the 19th {Python} in
+{Science Conference}}, edited by Meghann Agarwal, Chris Calloway, Dillon
+Niederhut, and David Shupe, 116--24.
+\url{https://doi.org/10.25080/Majora-342d178e-010}.
+
+\bibitem[\citeproctext]{ref-pydanticdevelopersPydantic2022}
+Pydantic developers. 2022. {``Pydantic.''}
+\url{https://pypi.org/project/pydantic/}.
+
+\bibitem[\citeproctext]{ref-standevelopmentteamCmdStanPy2022}
+Stan Development Team. 2022. {``{CmdStanPy}.''}
+\url{https://github.com/stan-dev/cmdstanpy}.
+
+\bibitem[\citeproctext]{ref-strumbeljPresentFutureSoftware}
+Štrumbelj, Erik, Alexandre Bouchard-Côté, Jukka Corander, Andrew Gelman,
+Håvard Rue, Lawrence Murray, Henri Pesonen, Martyn Plummer, and Aki
+Vehtari. 2024. {``Past, {Present}, and {Future} of {Software} for
+{Bayesian Inference}.''}
+
+\end{CSLReferences}
+
+
 
 \end{document}
-\endinput
-%%
-%% End of file `sample-manuscript.tex'.
