@@ -19,7 +19,7 @@ jobs:
       - name: Render Quarto Project
         uses: quarto-dev/quarto-actions/render@v2
         with:
-          to: acm-pdf
+          to: typst
           path: paper
 
       - uses: actions/upload-artifact@v4
