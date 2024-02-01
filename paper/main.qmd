@@ -33,30 +33,29 @@ format:
 
 # Introduction: the problem of orchestrating Bayesian workflow software
 
-The idea that Bayesian statistical analysis comprises not just
-inference, but also specific approaches to related activities like data
-preparation, model design, diagnosis, debugging and criticism, dates
-at least to @boxBayesianInferenceStatistical1992. There is increasing
-scholarly recognition of the need for a holistic view of "Bayesian
-workflow" [@gelmanBayesianWorkflow2020;@grinsztajnBayesianWorkflowDisease2021;
-@gabryVisualizationBayesianWorkflow2019]. Relatedly, software tools now
-exist that address most individual aspects of a Bayesian workflow: see
+The term "Bayesian workflow" captures the idea that Bayesian statistical
+analysis comprises not just inference, but also specific approaches to related
+activities like data preparation, model design, diagnosis, debugging and
+criticism. This idea can be found in @boxBayesianInferenceStatistical1992
+and has recently received increasing scholarly recognition of
+[@gelmanBayesianWorkflow2020;@grinsztajnBayesianWorkflowDisease2021;
+@gabryVisualizationBayesianWorkflow2019]. Software tools now exist
+that address most individual aspects of a Bayesian workflow: see
 @strumbeljPresentFutureSoftware for a review of the state of the art.
 
-Unfortunately, currently available tools typically address one, or at most
-a handful, of Bayesian workflow activities; it is left to the individual
-project team to orchestrate the components. Writing software that performs
-this orchestration can be time-consuming and tricky, especially in the common
-scenario where it is not initially clear how many, or what kind of, statistical
-models, datasets, data manipulations or investigations an analysis will require.
+Unfortunately, each tool typically addresses one, or at most a few, of the many
+activities that comprise a real Bayesian workflow software project; it is left
+to the individual project team to orchestrate all of the tools they require.
+Writing software that performs this orchestration can be time-consuming and
+tricky, especially in the common scenario where it is not initially clear how
+many, or what kind of, statistical models, datasets, data manipulations or
+investigations an analysis will require.
 
-Bibat addresses this difficulty by providing a full-featured, high-quality
-Bayesian workflow project that can be extended to implement a wide range of
-statistical analyses.
+Bibat is a new tool that addresses the difficulty of orchestrating Bayesian
+workflow software by providing a full-featured, high-quality project that can be
+extended to implement a wide range of statistical analyses.
 
 # How bibat works
-
-## Installation and usage
 
 Bibat can be installed on the Windows, Linux or macOS command line on by running
 the command `pip install bibat` and then used by running the command `bibat`.
@@ -85,8 +84,6 @@ plural, the overall workflow is iterative and cyclical and the whole analysis
 can be executed with a single command.
 
 :::
-
-## Documentation
 
 Bibat is documented at <https://github.com/teddygroves/bibat/>. The
 documentation website includes instructions for getting started, a detailed
