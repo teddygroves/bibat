@@ -7,7 +7,7 @@ name = "bibat"
 authors = [
     {name = "Teddy Groves", email = "tedgro@dtu.dk"},
 ]
-version = "0.2.0"
+version = "0.3.0"
 classifiers = [
     "Development Status :: 2 - Pre-Alpha",
     "Intended Audience :: Science/Research",
@@ -24,14 +24,12 @@ readme = "README.rst"
 requires-python = ">=3.9"
 dependencies = [
     "pip >= 20",
-    "cookiecutter",
-    "click",
-    "pydantic >= 2.0.0",
 ]
 
 [project.optional-dependencies]
 development = [
     "black",
+    "copier",
     "isort",
     "pre-commit",
     "codecov",
@@ -48,11 +46,7 @@ download = "https://pypi.org/project/bibat"
 documentation = "https://bibat.readthedocs.io/"
 
 [tool.setuptools]
-include-package-data = true
-packages = ["bibat", "bibat.hooks"]
-
-[project.entry-points.console_scripts]
-bibat = "bibat.cli:generate_project"
+packages = ["template"]
 
 [tool.black]
 line-length = 80
@@ -70,7 +64,6 @@ extend-exclude = '''
   | buck-out
   | build
   | dist
-  | bibat/\{\{cookiecutter\.repo_name\}\}
 )/
 '''
 
@@ -99,4 +92,4 @@ warn_required_dynamic_aliases = true
 warn_untyped_fields = true
 
 [tool.coverage.run]
-omit = ["bibat/{{cookiecutter.repo_name}}/*"]
+omit = ["template/*", "example_projects/*"]
