@@ -1,4 +1,4 @@
-"""Provides function `prepare_data` and runs it.
+"""Provides data preparation definitions and functions.
 
 This function should run some other functions with names `prepare_data_x`, which
 each take in a dataframe of measurements and return a PreparedData object.
@@ -159,6 +159,12 @@ def prepare_data():
             os.mkdir(PREPARED_DIR)
         with open(output_file, "w") as f:
             f.write(prepared_data.model_dump_json())
+
+
+def load_prepared_data(path: Path) -> ExamplePreparedData:
+    """Load a prepared data object from a path."""
+    with open(path, "r") as f:
+        return ExamplePreparedData(**json.load(f))
 
 
 if __name__ == "__main__":

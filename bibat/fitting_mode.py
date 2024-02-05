@@ -88,57 +88,55 @@ def sample_hmc_posterior(
     return model.sample(input_dict, **sample_kwargs)
 
 
-# def sample_hmc_kfold(
-#     model: CmdStanModel, input_dict: dict, kwargs
-# ) -> xr.DataArray:
-#     """Do k-fold cross validation, given a CmdStanModel, some data and config.
+def sample_hmc_kfold(
+    ic: InferenceConfiguration,
+    data: PreparedData,
+    local_functions: dict[str, Callable],
+) -> xr.DataArray:
+    """Do k-fold cross validation, given a CmdStanModel, some data and config.
 
-#     :param model: a CmdStanModel. It must have a data variables called
-#     'likelihood', 'N_train', 'N_test', 'ix_train' and 'ix_test'.
+    :param model: a CmdStanModel. It must have a data variables called
+    'likelihood', 'N_train', 'N_test', 'ix_train' and 'ix_test'.
 
-#     :param input_dict: a Stan input dictionary. It doesn't need to have any of
-#     the required variables set (they will be overwritten if they are set).
+    :param input_dict: a Stan input dictionary. It doesn't need to have any of
+    the required variables set (they will be overwritten if they are set).
 
-#     :param kwargs: dictionary with an entry for 'n_folds' that specifies the
-#     value of k for k-fold cross-validation, plus keyword arguments for
-#     CmdStanModel.sample
+    :param kwargs: dictionary with an entry for 'n_folds' that specifies the
+    value of k for k-fold cross-validation, plus keyword arguments for
+    CmdStanModel.sample
 
-#     """
-#     if "n_folds" not in kwargs.keys():
-#         msg = textwrap.dedent(
-#             """
-#             kfold mode requires a set number of folds. Ensure that the
-#             inference configuration file contains a table called
-#             'mode_options.kfold' and that this table has an integer-valued
-#             field called 'n_folds'.
-#             """
-#         )
-#         raise ValueError(msg)
-#     else:
-#         n_folds = int(kwargs["n_folds"])
-#     sample_kwargs = {k: v for k, v in kwargs.items() if k != "n_folds"}
-#     kf = KFold(n_folds, shuffle=True, random_state=1234)
-#     lliks_by_fold = []
-#     full_ix = np.array(input_dict["ix_train"])
-#     for fold, (ix_train, ix_test) in enumerate(kf.split(full_ix)):
-#         input_dict_fold = input_dict | {
-#             "likelihood": 1,
-#             "N_train": len(ix_train),
-#             "N_test": len(ix_test),
-#             "ix_train": full_ix[ix_train].tolist(),
-#             "ix_test": full_ix[ix_test].tolist(),
-#         }
-#         mcmc = model.sample(data=input_dict_fold, **sample_kwargs)
-#         llik_fold = mcmc.draws_xr(vars=["llik"])
-#         # remember the fold
-#         llik_fold["fold"] = fold
-#         llik_fold = llik_fold.set_coords("fold")
-#         # set value of index "chain" to zero to match arviz convention
-#         llik_fold = llik_fold.assign_coords(
-#             {"new_chain": ("chain", [0])}
-#         ).set_index(chain="new_chain")
-#         lliks_by_fold.append(llik_fold["llik"])
-#     return xr.concat(lliks_by_fold, dim="llik_dim_0").sortby("llik_dim_0")
+    """
+    assert ic.mode_options is not None, "k-fold requires mode_options"
+    k = ic.mode_options["kfold"]["n_folds"]
+    kf = KFold(k, shuffle=True, random_state=1234)
+    sif = local_functions[ic.stan_input_function]
+    input_dict = sif(data) | {"likelihood": 1}
+    stan_file = Path("src") / "stan" / ic.stan_file
+    model = CmdStanModel(stan_file=stan_file)
+    sample_kwargs = ic.sample_kwargs | {
+        k: v for k, v in ic.mode_options["kfold"].items() if k != "n_folds"
+    }
+    lliks_by_fold = []
+    full_ix = np.array(input_dict["ix_train"])
+    for fold, (ix_train, ix_test) in enumerate(kf.split(full_ix)):
+        input_dict_fold = input_dict | {
+            "likelihood": 1,
+            "N_train": len(ix_train),
+            "N_test": len(ix_test),
+            "ix_train": full_ix[ix_train].tolist(),
+            "ix_test": full_ix[ix_test].tolist(),
+        }
+        mcmc = model.sample(data=input_dict_fold, **sample_kwargs)
+        llik_fold = mcmc.draws_xr(vars=["llik"])
+        # remember the fold
+        llik_fold["fold"] = fold
+        llik_fold = llik_fold.set_coords("fold")
+        # set value of index "chain" to zero to match arviz convention
+        llik_fold = llik_fold.assign_coords(
+            {"new_chain": ("chain", [0])}
+        ).set_index(chain="new_chain")
+        lliks_by_fold.append(llik_fold["llik"])
+    return xr.concat(lliks_by_fold, dim="llik_dim_0").sortby("llik_dim_0")
 
 
 prior_mode = FittingMode(
@@ -149,6 +147,6 @@ posterior_mode = FittingMode(
     idata_target=IdataTarget.posterior,
     fit=sample_hmc_posterior,
 )
-# kfold_mode = FittingMode(
-# name="kfold", idata_target=IdataTarget.log_likelihood, fit=sample_hmc_kfold
-# )
+kfold_mode = FittingMode(
+    name="kfold", idata_target=IdataTarget.log_likelihood, fit=sample_hmc_kfold
+)

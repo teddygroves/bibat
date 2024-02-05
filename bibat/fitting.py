@@ -14,7 +14,7 @@ def run_all_inferences(
     inferences_dir: Path,
     data_dir: Path,
     fitting_mode_options: dict[str, FittingMode],
-    preprared_data_options: Mapping[str, type[PreparedData]],
+    loader: Callable[[Path], PreparedData],
     local_functions: dict[str, Callable],
 ):
     """Fit all inferences in all modes."""
@@ -24,7 +24,7 @@ def run_all_inferences(
             dir,
             data_dir,
             fitting_mode_options,
-            preprared_data_options,
+            loader,
             local_functions,
         )
 
@@ -33,13 +33,12 @@ def run_inference(
     dir: Path,
     data_dir: Path,
     fitting_mode_options: dict[str, FittingMode],
-    preprared_data_options: Mapping[str, type[PreparedData]],
+    loader: Callable[[Path], PreparedData],
     local_functions: dict[str, Callable],
 ):
     ic = load_inference_configuration(dir)
-    prepdef = preprared_data_options[ic.prepared_data_dir]
-    with open(os.path.join(data_dir, ic.prepared_data_dir + ".json"), "r") as f:
-        prepared_data = prepdef(**json.load(f))
+    prepared_data_json = (data_dir / ic.prepared_data_dir).with_suffix(".json")
+    prepared_data = loader(prepared_data_json)
     idata_kwargs = {
         "log_likelihood": "llik",
         "coords": prepared_data.coords,

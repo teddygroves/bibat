@@ -5,14 +5,14 @@ from pathlib import Path
 
 import arviz as az
 import cmdstanpy
-from src.data_preparation import ExamplePreparedData
+from src.data_preparation import ExamplePreparedData, load_prepared_data
 from src.stan_input_functions import (
     get_stan_input_interaction,
     get_stan_input_no_interaction,
 )
 
 from bibat.fitting import run_all_inferences
-from bibat.fitting_mode import posterior_mode, prior_mode
+from bibat.fitting_mode import kfold_mode, posterior_mode, prior_mode
 from bibat.inference_configuration import load_inference_configuration
 
 HERE = Path(__file__).parent
@@ -22,12 +22,7 @@ STAN_DIR = HERE / "stan"
 FITTING_MODE_OPTIONS = {
     "prior": prior_mode,
     "posterior": posterior_mode,
-    # "kfold": kfold_mode,
-}
-PREPARED_DATA_OPTIONS = {
-    "interaction": ExamplePreparedData,
-    "no_interaction": ExamplePreparedData,
-    "fake_interaction": ExamplePreparedData,
+    "kfold": kfold_mode,
 }
 LOCAL_FUNCTIONS = {
     "get_stan_input_interaction": get_stan_input_interaction,
@@ -39,6 +34,6 @@ if __name__ == "__main__":
         INFERENCES_DIR,
         PREPARED_DATA_DIR,
         FITTING_MODE_OPTIONS,
-        PREPARED_DATA_OPTIONS,  # type: ignore
+        load_prepared_data,
         LOCAL_FUNCTIONS,
     )
