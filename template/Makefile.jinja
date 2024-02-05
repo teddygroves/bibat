@@ -49,7 +49,7 @@ test: $(ENV_MARKER)
 analysis: $(ENV_MARKER)
 	. $(ACTIVATE_VENV) && ( \
 	  python $(SRC)/data_preparation.py || exit 1; \
-	  python $(SRC)/sample.py || exit 1; \
+	  python $(SRC)/fitting.py || exit 1; \
 	  jupyter execute $(SRC)/investigate.ipynb || exit 1; \
 	)
 

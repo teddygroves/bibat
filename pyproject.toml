@@ -23,7 +23,15 @@ description = "Batteries-included Bayesian analysis template"
 readme = "README.rst"
 requires-python = ">=3.9"
 dependencies = [
+    "arviz",
+    "cmdstanpy",
+    "numpy",
+    "pandera",
     "pip >= 20",
+    "pydantic",
+    "scikit-learn",
+    "toml",
+    "xarray"
 ]
 
 [project.optional-dependencies]
@@ -46,7 +54,7 @@ download = "https://pypi.org/project/bibat"
 documentation = "https://bibat.readthedocs.io/"
 
 [tool.setuptools]
-packages = ["template"]
+packages = ["bibat"]
 
 [tool.black]
 line-length = 80

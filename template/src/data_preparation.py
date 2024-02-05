@@ -17,7 +17,9 @@ import pandera as pa
 from pandera.typing import DataFrame, Series
 from pandera.typing.common import DataFrameBase
 from pydantic import BaseModel, field_serializer, field_validator
-from src import util
+
+from bibat.prepared_data import PreparedData
+from bibat.util import CoordDict, make_columns_lower_case
 
 HERE = Path(__file__).parent
 RAW_DIR = HERE / ".." / "data" / "raw"
@@ -25,8 +27,8 @@ PREPARED_DIR = HERE / ".." / "data" / "prepared"
 RAW_DATA_FILES = {"measurements": RAW_DIR / "raw_measurements.csv"}
 
 
-class MeasurementsDF(pa.SchemaModel):
-    """A PreparedData should have a measurements dataframe like this.
+class ExampleMeasurementsDF(pa.SchemaModel):
+    """An ExamplePreparedData should have a measurements dataframe like this.
 
     Other columns are also allowed!
     """
@@ -37,62 +39,55 @@ class MeasurementsDF(pa.SchemaModel):
     y: Series[float]
 
 
-class PreparedData(BaseModel, arbitrary_types_allowed=True):
-    """What prepared data looks like in this analysis."""
-
+class ExamplePreparedData(PreparedData):
     name: str
-    coords: util.CoordDict
+    coords: CoordDict
     measurements: Any
 
     @field_validator("measurements")
-    def validate_measurements(cls, v: Any) -> DataFrameBase[MeasurementsDF]:
+    def validate_measurements(
+        cls, v: Any
+    ) -> DataFrameBase[ExampleMeasurementsDF]:
         """Validate the measurements table."""
         if isinstance(v, str):
             v = pd.read_json(StringIO(v))
-        return MeasurementsDF.validate(v)
+        return ExampleMeasurementsDF.validate(v)
 
     @field_serializer("measurements")
     def serialize_measurements(
-        self, measurements: DataFrame[MeasurementsDF], _info
+        self, measurements: DataFrame[ExampleMeasurementsDF], _info
     ):
         """Convert the measurements table to json."""
         return measurements.to_json()
 
 
-def load_prepared_data(path_to_data: str) -> PreparedData:
-    """Load a dataset."""
-    with open(path_to_data) as f:
-        raw = json.load(f)
-    return PreparedData(**raw)
-
-
 def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     """Prepare data with an interaction column."""
     measurements = process_measurements(measurements_raw)
-    return PreparedData(
+    return ExamplePreparedData(
         name="interaction",
-        coords=util.CoordDict(
+        coords=CoordDict(
             {
                 "covariate": ["x1", "x2", "x1:x2"],
                 "observation": measurements.index.map(str).tolist(),
             }
         ),
-        measurements=DataFrame[MeasurementsDF](measurements),
+        measurements=DataFrame[ExampleMeasurementsDF](measurements),
     )
 
 
 def prepare_data_no_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     """Prepare data with no interaction column."""
     measurements = process_measurements(measurements_raw)
-    return PreparedData(
+    return ExamplePreparedData(
         name="no_interaction",
-        coords=util.CoordDict(
+        coords=CoordDict(
             {
                 "covariate": ["x1", "x2"],
                 "observation": measurements.index.map(str).tolist(),
             }
         ),
-        measurements=DataFrame[MeasurementsDF](measurements),
+        measurements=DataFrame[ExampleMeasurementsDF](measurements),
     )
 
 
@@ -107,15 +102,15 @@ def prepare_data_fake_interaction(
     measurements["y"] = np.random.normal(
         yhat, TRUE_PARAMS["sigma"]
     )  # type: ignore
-    return PreparedData(
+    return ExamplePreparedData(
         name="fake_interaction",
-        coords=util.CoordDict(
+        coords=CoordDict(
             {
                 "covariate": x_cols,
                 "observation": measurements.index.map(str).tolist(),
             }
         ),
-        measurements=DataFrame[MeasurementsDF](measurements),
+        measurements=DataFrame[ExampleMeasurementsDF](measurements),
     )
 
 
@@ -133,7 +128,7 @@ def process_measurements(measurements: pd.DataFrame) -> pd.DataFrame:
     new_colnames = {"yButIThoughtIdAddSomeLetters": "y"}
     out = (
         measurements.rename(columns=new_colnames)
-        .pipe(util.make_columns_lower_case)
+        .pipe(make_columns_lower_case)
         .dropna(subset=dropna_cols, axis=0)
     ).copy()
     for col in ["x1", "x2", "y"]:
