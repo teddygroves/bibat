@@ -22,6 +22,6 @@ jobs:
     - name: Install bibat
       run: pip install -e .
     - name: Use bibat
-      run: bibat --config-file=tests/data/example_config.yml
+      run: copier copy -l --vcs-ref ${{ github.sha }} gh:teddygroves/bibat my_cool_project
     - name: Run analysis
       run: cd my_cool_project && make analysis

@@ -25,6 +25,7 @@ requires-python = ">=3.9"
 dependencies = [
     "arviz",
     "cmdstanpy",
+    "copier",
     "numpy",
     "pandera",
     "pip >= 20",
@@ -37,7 +38,6 @@ dependencies = [
 [project.optional-dependencies]
 development = [
     "black",
-    "copier",
     "isort",
     "pre-commit",
     "codecov",

@@ -30,12 +30,14 @@ open_source_license:
     - MIT
     - BSD-3-Clause
     - No licence
+  default: MIT
 docs_format:
   type: str
   choices:
     - Quarto
     - Sphinx
     - No docs
+  default: Quarto
 create_dotgithub_directory:
   type: bool
   default: yes
