@@ -3,6 +3,7 @@
 ENV_MARKER = .venv/.bibat.marker
 ACTIVATE_VENV = .venv/bin/activate
 SRC = src
+NOTEBOOK_DIR = notebooks
 {% if docs_format != 'No docs' %}DOCS_DIR = docs{% endif %}
 {% if docs_format == 'Sphinx' %}DOCS_BUILDDIR = docs/build{% endif %}
 {% if docs_format == 'Quarto' %}REPORT_STEM = docs/report
@@ -50,7 +51,7 @@ analysis: $(ENV_MARKER)
 	. $(ACTIVATE_VENV) && ( \
 	  python $(SRC)/data_preparation.py || exit 1; \
 	  python $(SRC)/fitting.py || exit 1; \
-	  jupyter execute $(SRC)/investigate.ipynb || exit 1; \
+	  jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1; \
 	)
 
 {% if docs_format != 'No docs' %}clean-docs:{% endif -%}
