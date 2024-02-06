@@ -60,7 +60,9 @@ class PreparedData(BaseModel, arbitrary_types_allowed=True):
 
     @field_serializer("measurements")
     def serialize_measurements(
-        self, measurements: DataFrame[MeasurementsDF], _info
+        self,
+        measurements: DataFrame[MeasurementsDF],
+        _info,
     ):
         """Serialise the measurements field."""
         return measurements.to_json()
@@ -76,7 +78,7 @@ def load_prepared_data(path_to_data: str) -> PreparedData:
 def prepare_data_2006(measurements_raw: pd.DataFrame) -> PreparedData:
     """Prepare the 2006 data."""
     measurements = measurements_raw.rename(
-        columns={"K": "n_attempt", "y": "n_success"}
+        columns={"K": "n_attempt", "y": "n_success"},
     ).assign(
         season="2006",
         player_season=lambda df: [f"2006-player-{i+1}" for i in range(len(df))],
@@ -113,7 +115,8 @@ def prepare_data_bdb(
 
     """
     pitchers = appearances.loc[
-        lambda df: df["G_p"] == df["G_all"], "playerID"
+        lambda df: df["G_p"] == df["G_all"],
+        "playerID",
     ].unique()
 
     def filter_batters(df: pd.DataFrame):
@@ -127,7 +130,7 @@ def prepare_data_bdb(
         m.rename(columns={"yearID": "season", "playerID": "player"})
         .assign(
             player_season=lambda df: df["player"].str.cat(
-                df["season"].astype(str)
+                df["season"].astype(str),
             ),
             n_attempt=lambda df: df[["AB", "BB", "HBP", "SF"]]
             .fillna(0)

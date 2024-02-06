@@ -1,11 +1,8 @@
 """Run all the inferences in the inferences folder."""
 
-import os
 from pathlib import Path
 
-import arviz as az
-import cmdstanpy
-from src.data_preparation import ExamplePreparedData, load_prepared_data
+from src.data_preparation import load_prepared_data
 from src.stan_input_functions import (
     get_stan_input_interaction,
     get_stan_input_no_interaction,
@@ -13,7 +10,6 @@ from src.stan_input_functions import (
 
 from bibat.fitting import run_all_inferences
 from bibat.fitting_mode import kfold_mode, posterior_mode, prior_mode
-from bibat.inference_configuration import load_inference_configuration
 
 HERE = Path(__file__).parent
 INFERENCES_DIR = HERE / ".." / "inferences"

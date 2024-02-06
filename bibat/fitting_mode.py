@@ -1,9 +1,10 @@
 """A general definition of a fitting mode, plus some mode instances."""
 
-import textwrap
+from __future__ import annotations
+
 from enum import Enum
 from pathlib import Path
-from typing import Callable, Dict, Union
+from typing import TYPE_CHECKING, Callable
 
 import numpy as np
 import xarray as xr
@@ -11,8 +12,9 @@ from cmdstanpy import CmdStanMCMC, CmdStanModel
 from pydantic import BaseModel
 from sklearn.model_selection import KFold
 
-from bibat.inference_configuration import InferenceConfiguration
-from bibat.prepared_data import PreparedData
+if TYPE_CHECKING:
+    from bibat.inference_configuration import InferenceConfiguration
+    from bibat.prepared_data import PreparedData
 
 
 class IdataTarget(str, Enum):
@@ -50,7 +52,7 @@ class FittingMode(BaseModel):
     idata_target: IdataTarget
     fit: Callable[
         [InferenceConfiguration, PreparedData, dict[str, Callable]],
-        Union[CmdStanMCMC, xr.DataArray],
+        CmdStanMCMC | xr.DataArray,
     ]
 
 
@@ -65,7 +67,7 @@ def sample_hmc_prior(
     stan_file = Path("src") / "stan" / ic.stan_file
     model = CmdStanModel(stan_file=stan_file)
     sample_kwargs = ic.sample_kwargs
-    if ic.mode_options is not None and "prior" in ic.mode_options.keys():
+    if ic.mode_options is not None and "prior" in ic.mode_options:
         sample_kwargs |= ic.mode_options["prior"]
     return model.sample(input_dict, **sample_kwargs)
 
@@ -81,7 +83,7 @@ def sample_hmc_posterior(
     stan_file = Path("src") / "stan" / ic.stan_file
     model = CmdStanModel(stan_file=stan_file)
     sample_kwargs = ic.sample_kwargs
-    if ic.mode_options is not None and "posterior" in ic.mode_options.keys():
+    if ic.mode_options is not None and "posterior" in ic.mode_options:
         sample_kwargs |= ic.mode_options["posterior"]
     return model.sample(input_dict, **sample_kwargs)
 
@@ -104,7 +106,9 @@ def sample_hmc_kfold(
     CmdStanModel.sample
 
     """
-    assert ic.mode_options is not None, "k-fold requires mode_options"
+    if ic.mode_options is None:
+        msg = "k-fold mode requires mode_options"
+        raise ValueError(msg)
     k = ic.mode_options["kfold"]["n_folds"]
     kf = KFold(k, shuffle=True, random_state=1234)
     sif = local_functions[ic.stan_input_function]
@@ -131,14 +135,18 @@ def sample_hmc_kfold(
         llik_fold = llik_fold.set_coords("fold")
         # set value of index "chain" to zero to match arviz convention
         llik_fold = llik_fold.assign_coords(
-            {"new_chain": ("chain", [0])}
-        ).set_index(chain="new_chain")
+            {"new_chain": ("chain", [0])},
+        ).set_index(
+            chain="new_chain",
+        )
         lliks_by_fold.append(llik_fold["llik"])
     return xr.concat(lliks_by_fold, dim="llik_dim_0").sortby("llik_dim_0")
 
 
 prior_mode = FittingMode(
-    name="prior", idata_target=IdataTarget.prior, fit=sample_hmc_prior
+    name="prior",
+    idata_target=IdataTarget.prior,
+    fit=sample_hmc_prior,
 )
 posterior_mode = FittingMode(
     name="posterior",
@@ -146,5 +154,7 @@ posterior_mode = FittingMode(
     fit=sample_hmc_posterior,
 )
 kfold_mode = FittingMode(
-    name="kfold", idata_target=IdataTarget.log_likelihood, fit=sample_hmc_kfold
+    name="kfold",
+    idata_target=IdataTarget.log_likelihood,
+    fit=sample_hmc_kfold,
 )

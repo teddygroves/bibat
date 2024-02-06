@@ -1,8 +1,8 @@
 """Definition of the InferenceConfiguration class."""
 
-import os
+from __future__ import annotations
+
 from pathlib import Path
-from typing import Callable, Dict, List, Optional
 
 import toml
 from pydantic import BaseModel, Field, field_validator, model_validator
@@ -49,45 +49,55 @@ class InferenceConfiguration(BaseModel):
     stan_file: str
     prepared_data_dir: str
     stan_input_function: str
-    fitting_modes: List[str] = Field(alias="modes")
+    fitting_modes: list[str] = Field(alias="modes")
     sample_kwargs: dict = Field(default_factory=lambda: DEFAULT_SAMPLE_KWARGS)
-    dims: Dict[str, List[str]] = Field(default_factory=lambda: DEFAULT_DIMS)
-    mode_options: Optional[Dict[str, dict]] = None
-    cpp_options: Optional[dict] = None
-    stanc_options: Optional[dict] = None
+    dims: dict[str, list[str]] = Field(default_factory=lambda: DEFAULT_DIMS)
+    mode_options: dict[str, dict] | None = None
+    cpp_options: dict | None = None
+    stanc_options: dict | None = None
 
     @model_validator(mode="after")
-    def check_folds(cls, m: "InferenceConfiguration"):
+    def check_folds(self: InferenceConfiguration) -> InferenceConfiguration:
         """Check that there is a number of folds if required."""
-        if any(m == "kfold" for m in m.fitting_modes):
-            if m.mode_options is None:
+        if any(m == "kfold" for m in self.fitting_modes):
+            if self.mode_options is None:
+                msg = "Mode 'kfold' requires a mode_options.kfold table."
                 raise ValueError(
-                    "Mode 'kfold' requires a mode_options.kfold table."
+                    msg,
                 )
-            if "kfold" not in m.mode_options.keys():
+            if "kfold" not in self.mode_options:
+                msg = "Mode 'kfold' requires a mode_options.kfold table."
                 raise ValueError(
-                    "Mode 'kfold' requires a mode_options.kfold table."
+                    msg,
                 )
-            elif "n_folds" not in m.mode_options["kfold"].keys():
-                raise ValueError("Set 'n_folds' field in kfold mode options.")
-            else:
-                assert int(m.mode_options["kfold"]["n_folds"]), (
+            if "n_folds" not in self.mode_options["kfold"]:
+                msg = "Set 'n_folds' field in kfold mode options."
+                raise ValueError(msg)
+            if not int(self.mode_options["kfold"]["n_folds"]):
+                msg = (
                     f"Could not coerce n_folds choice "
-                    f"{m.mode_options['kfold']['n_folds']} to int."
+                    f"{self.mode_options['kfold']['n_folds']} to int."
                 )
-        return m
+                raise ValueError(msg)
+        return self
 
     @field_validator("stan_file")
-    def check_stan_file_exists(cls, v):
+    @classmethod
+    def check_stan_file_exists(
+        cls: type[InferenceConfiguration],
+        v: str,
+    ) -> str:
         """Check that the stan file exists."""
-        here = Path(".")
+        here = Path()
         stan_dir = here / "src" / "stan"
-        if not os.path.exists(stan_dir / v):
-            raise ValueError(f"{v} is not a file in {stan_dir}.")
+        file = stan_dir / v
+        if not file.exists():
+            msg = f"{v} is not a file in {stan_dir}."
+            raise ValueError(msg)
         return v
 
 
-def load_inference_configuration(path: Path):
+def load_inference_configuration(path: Path) -> InferenceConfiguration:
     """Load an inference configuration object from a toml file.
 
     :param path: Path to directory containing a suitable config.toml file
@@ -95,8 +105,9 @@ def load_inference_configuration(path: Path):
     """
     kwargs = toml.load(path / "config.toml")
     for k, default in zip(
-        ["dims", "sample_kwargs"], [DEFAULT_DIMS, DEFAULT_SAMPLE_KWARGS]
+        ["dims", "sample_kwargs"],
+        [DEFAULT_DIMS, DEFAULT_SAMPLE_KWARGS],
     ):
-        if k in kwargs.keys():
+        if k in kwargs:
             kwargs[k] = default | kwargs[k]
     return InferenceConfiguration(**kwargs)

@@ -19,7 +19,7 @@ EXAMPLE_DATA = {
 }
 
 
-def test_copier_runs():
+def test_copier_runs() -> None:
     """Test that copier runs."""
     source = HERE / ".." / ".."
     with TemporaryDirectory() as destination:

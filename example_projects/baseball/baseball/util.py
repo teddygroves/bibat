@@ -29,7 +29,7 @@ def make_columns_lower_case(df: pd.DataFrame) -> pd.DataFrame:
             [
                 [c.lower() for c in new.columns.get_level_values(i)]
                 for i in range(len(new.columns.levels))
-            ]
+            ],
         )
     else:
         new.columns = pd.Index([c.lower() for c in new.columns])
@@ -50,7 +50,7 @@ def stanify_dict(d: Dict) -> StanInputDict:
     out: StanInputDict = {}
     for k, v in d.items():
         if not isinstance(k, str):
-            raise ValueError(f"key {str(k)} is not a string!")
+            raise ValueError(f"key {k!s} is not a string!")
         elif isinstance(v, pd.Series):
             out[k] = v.to_list()
         elif isinstance(v, pd.DataFrame):
@@ -63,7 +63,9 @@ def stanify_dict(d: Dict) -> StanInputDict:
 
 
 def standardise(
-    s: pd.Series, mu: Optional[float] = None, std: Optional[float] = None
+    s: pd.Series,
+    mu: Optional[float] = None,
+    std: Optional[float] = None,
 ) -> pd.Series:
     """Standardise a series by subtracting mu and dividing by sd."""
     if mu is None:

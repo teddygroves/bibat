@@ -1,7 +1,8 @@
-import json
-import os
+"""Functions for running inferences."""
+
+import logging
 from pathlib import Path
-from typing import Callable, Mapping
+from typing import Callable
 
 import arviz as az
 
@@ -16,12 +17,12 @@ def run_all_inferences(
     fitting_mode_options: dict[str, FittingMode],
     loader: Callable[[Path], PreparedData],
     local_functions: dict[str, Callable],
-):
+) -> None:
     """Fit all inferences in all modes."""
     inference_dirs = inferences_dir.iterdir()
-    for dir in sorted(inference_dirs):
+    for inference_dir in sorted(inference_dirs):
         run_inference(
-            dir,
+            inference_dir,
             data_dir,
             fitting_mode_options,
             loader,
@@ -30,13 +31,14 @@ def run_all_inferences(
 
 
 def run_inference(
-    dir: Path,
+    inference_dir: Path,
     data_dir: Path,
     fitting_mode_options: dict[str, FittingMode],
     loader: Callable[[Path], PreparedData],
     local_functions: dict[str, Callable],
-):
-    ic = load_inference_configuration(dir)
+) -> None:
+    """Run an inference."""
+    ic = load_inference_configuration(inference_dir)
     prepared_data_json = (data_dir / ic.prepared_data_dir).with_suffix(".json")
     prepared_data = loader(prepared_data_json)
     idata_kwargs = {
@@ -46,9 +48,9 @@ def run_inference(
     }
     if ic.stan_input_function is not None:
         idata_kwargs["observed_data"] = local_functions[ic.stan_input_function](
-            prepared_data
+            prepared_data,
         )
-    llik_outputs = dict()
+    llik_outputs: dict = {}
     for mode_name in ic.fitting_modes:
         mode = fitting_mode_options[mode_name]
         output = mode.fit(ic, prepared_data, local_functions)
@@ -58,12 +60,11 @@ def run_inference(
         elif mode.idata_target == "log_likelihood":
             llik_outputs[f"llik_{mode.name}"] = output
         else:
-            raise ValueError(
-                f"idata_target {mode.idata_target} is not yet supported"
-            )
+            msg = f"Unsupported idata_target {mode.idata_target}"
+            raise ValueError(msg)
     idata = az.from_cmdstanpy(**idata_kwargs)
     for varname, output in llik_outputs.items():
         idata.log_likelihood[varname] = output
-    idata_dir = os.path.join(dir, "idata")
-    print(f"Saving idata to {idata_dir}")
+    idata_dir = inference_dir / "idata"
+    logging.info("Saving idata to %s", idata_dir)
     idata.to_zarr(idata_dir)

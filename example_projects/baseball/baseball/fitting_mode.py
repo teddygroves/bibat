@@ -47,7 +47,8 @@ class FittingMode(BaseModel):
     name: str
     idata_target: IdataTarget
     fit: Callable[
-        [CmdStanModel, Dict, Dict[str, str]], Union[CmdStanMCMC, xr.DataArray]
+        [CmdStanModel, Dict, Dict[str, str]],
+        Union[CmdStanMCMC, xr.DataArray],
     ]
 
 
@@ -106,7 +107,7 @@ def fit_kfold(model: CmdStanModel, input_dict: dict, kwargs) -> xr.DataArray:
             inference configuration file contains a table called
             'mode_options.kfold' and that this table has an integer-valued
             field called 'n_folds'.
-            """
+            """,
         )
         raise ValueError(msg)
     else:
@@ -130,18 +131,24 @@ def fit_kfold(model: CmdStanModel, input_dict: dict, kwargs) -> xr.DataArray:
         llik_fold = llik_fold.set_coords("fold")
         # set value of index "chain" to zero to match arviz convention
         llik_fold = llik_fold.assign_coords(
-            {"new_chain": ("chain", [0])}
+            {"new_chain": ("chain", [0])},
         ).set_index(chain="new_chain")
         lliks_by_fold.append(llik_fold["llik"])
     return xr.concat(lliks_by_fold, dim="llik_dim_0").sortby("llik_dim_0")
 
 
 prior_mode = FittingMode(
-    name="prior", idata_target=IdataTarget.prior, fit=fit_prior
+    name="prior",
+    idata_target=IdataTarget.prior,
+    fit=fit_prior,
 )
 posterior_mode = FittingMode(
-    name="posterior", idata_target=IdataTarget.posterior, fit=fit_posterior
+    name="posterior",
+    idata_target=IdataTarget.posterior,
+    fit=fit_posterior,
 )
 kfold_mode = FittingMode(
-    name="kfold", idata_target=IdataTarget.log_likelihood, fit=fit_kfold
+    name="kfold",
+    idata_target=IdataTarget.log_likelihood,
+    fit=fit_kfold,
 )

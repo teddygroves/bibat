@@ -1,12 +1,34 @@
 """Some handy python functions."""
 
-from typing import Dict, List, NewType, Optional, Union
+from __future__ import annotations
+
+from collections.abc import Mapping
+from functools import wraps
+from typing import TYPE_CHECKING, Any, NewType, ParamSpec
 
 import numpy as np
 import pandas as pd
+from stanio.json import process_dictionary
 
-CoordDict = NewType("CoordDict", Dict[str, List[str]])
-StanInputDict = Dict["str", Union[int, float, List]]
+if TYPE_CHECKING:
+    from collections.abc import Callable
+
+CoordDict = NewType("CoordDict", dict[str, list[str]])
+StanInputDict = Mapping[str, Any]
+
+P = ParamSpec("P")
+
+
+def returns_stan_input[
+    **P
+](func: Callable[P, Mapping[str, Any]]) -> Callable[P, Mapping[str, Any]]:
+    """Decorate a function so it returns a json-serialisable dictionary."""
+
+    @wraps(func)
+    def wrapper(*args: P.args, **kwargs: P.kwargs) -> Mapping[str, Any]:
+        return process_dictionary(func(*args, **kwargs))
+
+    return wrapper
 
 
 def one_encode(s: pd.Series) -> pd.Series:
@@ -29,20 +51,22 @@ def make_columns_lower_case(df: pd.DataFrame) -> pd.DataFrame:
             [
                 [c.lower() for c in new.columns.get_level_values(i)]
                 for i in range(len(new.columns.levels))
-            ]
+            ],
         )
     else:
         new.columns = pd.Index([c.lower() for c in new.columns])
     return new
 
 
-def check_is_df(maybe_df) -> pd.DataFrame:
+def check_is_df(maybe_df: Any) -> pd.DataFrame:  # noqa: ANN401
     """Shut up the type checker."""
-    assert isinstance(maybe_df, pd.DataFrame)
+    if not isinstance(maybe_df, pd.DataFrame):
+        msg = "Want dataframe."
+        raise TypeError(msg)
     return maybe_df
 
 
-def stanify_dict(d: Dict) -> StanInputDict:
+def stanify_dict(d: dict) -> StanInputDict:
     """Make sure a dictionary is a valid Stan input.
 
     :param d: input dictionary, possibly with wrong types
@@ -50,11 +74,12 @@ def stanify_dict(d: Dict) -> StanInputDict:
     out: StanInputDict = {}
     for k, v in d.items():
         if not isinstance(k, str):
-            raise ValueError(f"key {str(k)} is not a string!")
-        elif isinstance(v, pd.Series):
+            msg = f"key {k!r} is not a string!"
+            raise TypeError(msg)
+        if isinstance(v, pd.Series):
             out[k] = v.to_list()
         elif isinstance(v, pd.DataFrame):
-            out[k] = v.values.tolist()
+            out[k] = v.to_numpy().tolist()
         elif isinstance(v, np.ndarray):
             out[k] = v.tolist()
         else:
@@ -63,7 +88,9 @@ def stanify_dict(d: Dict) -> StanInputDict:
 
 
 def standardise(
-    s: pd.Series, mu: Optional[float] = None, std: Optional[float] = None
+    s: pd.Series,
+    mu: float | None = None,
+    std: float | None = None,
 ) -> pd.Series:
     """Standardise a series by subtracting mu and dividing by sd."""
     if mu is None:
@@ -75,7 +102,7 @@ def standardise(
 
 def center(
     s: pd.Series,
-    mu: Optional[float] = None,
+    mu: float | None = None,
 ) -> pd.Series:
     """Center a series by subtracting mu."""
     if mu is None:

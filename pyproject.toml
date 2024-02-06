@@ -46,6 +46,7 @@ development = [
     "tox",
     "sphinx",
     "sphinx-click",
+    "ruff",
     "furo",
 ]
 [project.urls]
@@ -58,24 +59,26 @@ packages = ["bibat"]
 
 [tool.black]
 line-length = 80
-target-version = ['py311']
-include = '\.pyi?$'
-extend-exclude = '''
-/(
-   \.eggs         # exclude a few common directories in the
-  | \.git          # root of the project
-  | \.hg
-  | \.mypy_cache
-  | \.tox
-  | \.venv
-  | _build
-  | buck-out
-  | build
-  | dist
-)/
-'''
+
+[tool.ruff]
+line-length = 80
+[tool.ruff.lint]
+select = ["ALL"]
+ignore = [
+    "TD",  # ignore flake8-todo rules
+    "FIX",  # ignore flake8-fixme rules
+    "D203",  # we want no blank line before class docstrings
+    "D213",  # multiline docstrings should start just after the quotemarks
+    #"FA100",  # pydantic/__future__ problem: see https://github.com/astral-sh/ruff/issues/5434
+]
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["INP001"]
+"bibat/template/tests/*" = ["INP001"]
+"bibat/template/src/*" = ["INP001"]
+
 
 [tool.isort]
+profile = "black"
 known_first_party = ["bibat", "baseball"]
 multi_line_output = 3
 include_trailing_comma = true
@@ -88,16 +91,21 @@ line_length = 80
 disable = "C0330, C0326"
 
 [tool.mypy]
-ignore_missing_imports = true
 plugins = ["pydantic.mypy"]
-follow_imports = "skip"
-strict_optional = true
+follow_imports = "silent"
+warn_redundant_casts = true
+warn_unused_ignores = true
+disallow_any_generics = true
+check_untyped_defs = true
+no_implicit_reexport = true
+
+# for strict mypy: (this is the tricky one :-))
+disallow_untyped_defs = true
 
 [tool.pydantic-mypy]
 init_forbid_extra = true
 init_typed = true
 warn_required_dynamic_aliases = true
-warn_untyped_fields = true
 
 [tool.coverage.run]
 omit = ["template/*", "example_projects/*"]

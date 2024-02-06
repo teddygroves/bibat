@@ -24,7 +24,9 @@ def main():
         ic = load_inference_configuration(os.path.join(run_dir, "config.toml"))
         stan_file = os.path.join(STAN_DIR, ic.stan_file)
         prepared_data_file = os.path.join(
-            "data", "prepared", ic.prepared_data_dir + ".json"
+            "data",
+            "prepared",
+            ic.prepared_data_dir + ".json",
         )
         model = cmdstanpy.CmdStanModel(
             stan_file=stan_file,
@@ -55,7 +57,7 @@ def main():
                 llik_outputs[f"llik_{mode.name}"] = output
             else:
                 raise ValueError(
-                    f"idata_target {mode.idata_target} is not yet supported"
+                    f"idata_target {mode.idata_target} is not yet supported",
                 )
         idata = az.from_cmdstanpy(**idata_kwargs)
         for varname, output in llik_outputs.items():

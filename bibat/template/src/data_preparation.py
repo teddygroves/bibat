@@ -5,21 +5,24 @@ each take in a dataframe of measurements and return a PreparedData object.
 
 """
 
+from __future__ import annotations
+
 import json
-import os
 from io import StringIO
 from pathlib import Path
-from typing import Any
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import pandas as pd
 import pandera as pa
 from pandera.typing import DataFrame, Series
-from pandera.typing.common import DataFrameBase
-from pydantic import BaseModel, field_serializer, field_validator
+from pydantic import field_serializer, field_validator
 
 from bibat.prepared_data import PreparedData
 from bibat.util import CoordDict, make_columns_lower_case
+
+if TYPE_CHECKING:
+    from pandera.typing.common import DataFrameBase
 
 HERE = Path(__file__).parent
 RAW_DIR = HERE / ".." / "data" / "raw"
@@ -40,13 +43,16 @@ class ExampleMeasurementsDF(pa.SchemaModel):
 
 
 class ExamplePreparedData(PreparedData):
+    """What prepared data looks like in bibat's example analysis."""
+
     name: str
     coords: CoordDict
     measurements: Any
 
     @field_validator("measurements")
     def validate_measurements(
-        cls, v: Any
+        cls,  # noqa: N805, ANN101
+        v: Any,  # noqa: ANN401
     ) -> DataFrameBase[ExampleMeasurementsDF]:
         """Validate the measurements table."""
         if isinstance(v, str):
@@ -55,8 +61,10 @@ class ExamplePreparedData(PreparedData):
 
     @field_serializer("measurements")
     def serialize_measurements(
-        self, measurements: DataFrame[ExampleMeasurementsDF], _info
-    ):
+        self,  # noqa: ANN101
+        measurements: DataFrame[ExampleMeasurementsDF],
+        _info,  # noqa: ANN001
+    ) -> str | None:
         """Convert the measurements table to json."""
         return measurements.to_json()
 
@@ -70,7 +78,7 @@ def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
             {
                 "covariate": ["x1", "x2", "x1:x2"],
                 "observation": measurements.index.map(str).tolist(),
-            }
+            },
         ),
         measurements=DataFrame[ExampleMeasurementsDF](measurements),
     )
@@ -85,7 +93,7 @@ def prepare_data_no_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
             {
                 "covariate": ["x1", "x2"],
                 "observation": measurements.index.map(str).tolist(),
-            }
+            },
         ),
         measurements=DataFrame[ExampleMeasurementsDF](measurements),
     )
@@ -95,20 +103,21 @@ def prepare_data_fake_interaction(
     measurements_raw: pd.DataFrame,
 ) -> PreparedData:
     """Prepare fake data with an interaction column."""
-    TRUE_PARAMS = {"a": 1, "b": [0.6, -0.3, 0.2], "sigma": 0.3}
+    true_params = {"a": 1, "b": [0.6, -0.3, 0.2], "sigma": 0.3}
     x_cols = ["x1", "x2", "x1:x2"]
     measurements = process_measurements(measurements_raw)
-    yhat = TRUE_PARAMS["a"] + measurements[x_cols] @ np.array(TRUE_PARAMS["b"])
-    measurements["y"] = np.random.normal(
-        yhat, TRUE_PARAMS["sigma"]
-    )  # type: ignore
+    yhat = true_params["a"] + measurements[x_cols] @ np.array(true_params["b"])
+    measurements["y"] = np.random.default_rng().normal(
+        yhat,
+        true_params["sigma"],
+    )
     return ExamplePreparedData(
         name="fake_interaction",
         coords=CoordDict(
             {
                 "covariate": x_cols,
                 "observation": measurements.index.map(str).tolist(),
-            }
+            },
         ),
         measurements=DataFrame[ExampleMeasurementsDF](measurements),
     )
@@ -137,33 +146,28 @@ def process_measurements(measurements: pd.DataFrame) -> pd.DataFrame:
     return out
 
 
-def prepare_data():
+def prepare_data() -> None:
     """Run main function."""
-    print("Reading raw data...")
     raw_data = {
         k: pd.read_csv(v, index_col=None) for k, v in RAW_DATA_FILES.items()
     }
-    print("Preparing data...")
     for prepare_data_func in [
         prepare_data_interaction,
         prepare_data_no_interaction,
         prepare_data_fake_interaction,
     ]:
-        print(
-            f"Running data preparation function {prepare_data_func.__name__}..."
-        )
         prepared_data = prepare_data_func(raw_data["measurements"])
-        output_file = os.path.join(PREPARED_DIR, prepared_data.name + ".json")
-        print(f"\twriting prepared_data to {output_file}")
-        if not os.path.exists(PREPARED_DIR):
-            os.mkdir(PREPARED_DIR)
-        with open(output_file, "w") as f:
+        output_file = prepared_data.name + ".json"
+        output_path = PREPARED_DIR / output_file
+        if not PREPARED_DIR.exists():
+            PREPARED_DIR.mkdir()
+        with output_path.open("w") as f:
             f.write(prepared_data.model_dump_json())
 
 
 def load_prepared_data(path: Path) -> ExamplePreparedData:
     """Load a prepared data object from a path."""
-    with open(path, "r") as f:
+    with path.open("r") as f:
         return ExamplePreparedData(**json.load(f))
 
 

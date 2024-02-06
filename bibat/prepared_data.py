@@ -1,5 +1,4 @@
-from abc import ABC
-from typing import Protocol
+"""Provides the base class PreparedData."""
 
 from pydantic import BaseModel
 

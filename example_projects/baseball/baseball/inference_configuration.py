@@ -66,7 +66,8 @@ class InferenceConfiguration(BaseModel):
     def __init__(self, **data):
         """Initialise an InferenceConfiguration."""
         data["stan_input_function"] = getattr(
-            stan_input_functions, data["stan_input_function"]
+            stan_input_functions,
+            data["stan_input_function"],
         )
         data["fitting_modes"] = [
             getattr(fitting_mode, mode + "_mode") for mode in data["modes"]
@@ -79,11 +80,11 @@ class InferenceConfiguration(BaseModel):
         if any(m == "kfold" for m in m.fitting_mode_names):
             if m.mode_options is None:
                 raise ValueError(
-                    "Mode 'kfold' requires a mode_options.kfold table."
+                    "Mode 'kfold' requires a mode_options.kfold table.",
                 )
             if "kfold" not in m.mode_options.keys():
                 raise ValueError(
-                    "Mode 'kfold' requires a mode_options.kfold table."
+                    "Mode 'kfold' requires a mode_options.kfold table.",
                 )
             elif "n_folds" not in m.mode_options["kfold"].keys():
                 raise ValueError("Set 'n_folds' field in kfold mode options.")
@@ -110,7 +111,7 @@ class InferenceConfiguration(BaseModel):
             except ValueError:
                 raise ValueError(
                     f"{mode.name} not in available modes: "
-                    "check the file 'fitting_mode.py'."
+                    "check the file 'fitting_mode.py'.",
                 )
         return v
 
@@ -119,7 +120,8 @@ def load_inference_configuration(path: str):
     """Load an inference configuration object from a toml file."""
     kwargs = toml.load(path)
     for k, default in zip(
-        ["dims", "sample_kwargs"], [DEFAULT_DIMS, DEFAULT_SAMPLE_KWARGS]
+        ["dims", "sample_kwargs"],
+        [DEFAULT_DIMS, DEFAULT_SAMPLE_KWARGS],
     ):
         if k in kwargs.keys():
             kwargs[k] = default | kwargs[k]

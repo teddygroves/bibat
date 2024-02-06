@@ -1,0 +1,1 @@
+"""Initialises the bibat package."""

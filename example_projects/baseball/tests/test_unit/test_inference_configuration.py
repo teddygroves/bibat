@@ -33,7 +33,7 @@ def test_model_configuration_good_modes():
     )
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail()
 def test_model_configuration_bad_modes():
     """Check that an inference configuration with bad modes fails."""
     _ = InferenceConfiguration(
@@ -49,7 +49,7 @@ def test_model_configuration_bad_modes():
     )
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail()
 def test_model_configuration_no_k():
     """Check that an inference configuration with no kfold options fails."""
     _ = InferenceConfiguration(
@@ -65,7 +65,7 @@ def test_model_configuration_no_k():
     )
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail()
 def test_model_configuration_no_stan_file():
     """Check that an inference configuration with absent Stan file fails."""
     _ = InferenceConfiguration(
@@ -81,7 +81,7 @@ def test_model_configuration_no_stan_file():
     )
 
 
-@pytest.mark.xfail
+@pytest.mark.xfail()
 def test_model_configuration_no_stan_input_function():
     """Check that absent Stan input function causes failure."""
     _ = InferenceConfiguration(

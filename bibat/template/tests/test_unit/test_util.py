@@ -13,7 +13,7 @@ from src.util import (
 
 
 @pytest.mark.parametrize(
-    "s_in,expected",
+    ("s_in", "expected"),
     [
         (
             pd.Series(["8", 1, "????"], index=["a", "b", "c"]),
@@ -25,13 +25,13 @@ from src.util import (
         ),
     ],
 )
-def test_one_encode(s_in: pd.Series, expected: pd.Series):
+def test_one_encode(s_in: pd.Series, expected: pd.Series) -> None:
     """Check that the function one_encode works as expected."""
     assert_series_equal(one_encode(s_in), expected)
 
 
 @pytest.mark.parametrize(
-    "df_in,expected",
+    ("df_in", "expected"),
     [
         (
             pd.DataFrame({"A": [1, 2, 3], "B": ["a", "b", "c"]}),
@@ -49,13 +49,16 @@ def test_one_encode(s_in: pd.Series, expected: pd.Series):
         ),
     ],
 )
-def test_make_columns_lower_case(df_in: pd.DataFrame, expected: pd.DataFrame):
+def test_make_columns_lower_case(
+    df_in: pd.DataFrame,
+    expected: pd.DataFrame,
+) -> None:
     """Check that the function make_columns_lower_case works as expected."""
     assert_frame_equal(make_columns_lower_case(df_in), expected)
 
 
 @pytest.mark.parametrize(
-    "d_in,expected",
+    ("d_in", "expected"),
     [
         ({"a": pd.Series([1, 2, 3])}, {"a": [1, 2, 3]}),
         (
@@ -74,6 +77,9 @@ def test_make_columns_lower_case(df_in: pd.DataFrame, expected: pd.DataFrame):
         ),
     ],
 )
-def test_stanify_dict(d_in: dict, expected: StanInputDict):
+def test_stanify_dict(d_in: dict, expected: StanInputDict) -> None:
     """Check that the function stanify_dict works as expected."""
-    assert stanify_dict(d_in) == expected
+    actual = stanify_dict(d_in)
+    if actual != expected:
+        msg = f"stanify_dict produced  {actual}; expected {expected}"
+        raise ValueError(msg)

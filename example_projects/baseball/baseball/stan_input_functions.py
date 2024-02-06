@@ -87,7 +87,11 @@ def get_stan_input_gpareto_fake(ppd: PreparedData) -> Dict:
 
 
 def gpareto_rvs(
-    rng: np.random.Generator, size: int, mu: float, k: float, sigma: float
+    rng: np.random.Generator,
+    size: int,
+    mu: float,
+    k: float,
+    sigma: float,
 ):
     """Generate random numbers from a generalised pareto distribution.
 
