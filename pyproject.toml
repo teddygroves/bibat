@@ -21,7 +21,7 @@ classifiers = [
 license = {text = "GNU General Public License version 3"}
 description = "Batteries-included Bayesian analysis template"
 readme = "README.rst"
-requires-python = ">=3.9"
+requires-python = ">=3.11"
 dependencies = [
     "arviz",
     "cmdstanpy",
