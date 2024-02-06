@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
+from collections.abc import Callable  # noqa: TCH003
 from enum import Enum
 from pathlib import Path
-from typing import TYPE_CHECKING, Callable
 
 import numpy as np
 import xarray as xr
@@ -12,9 +12,8 @@ from cmdstanpy import CmdStanMCMC, CmdStanModel
 from pydantic import BaseModel
 from sklearn.model_selection import KFold
 
-if TYPE_CHECKING:
-    from bibat.inference_configuration import InferenceConfiguration
-    from bibat.prepared_data import PreparedData
+from bibat.inference_configuration import InferenceConfiguration  # noqa: TCH001
+from bibat.prepared_data import PreparedData  # noqa: TCH001
 
 
 class IdataTarget(str, Enum):

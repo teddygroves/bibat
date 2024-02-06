@@ -1,6 +1,6 @@
 """Integration tests for functions in src/data_preparation.py."""
 
-from typing import Callable
+from collections.abc import Callable
 
 import pandas as pd
 import pytest

@@ -108,4 +108,4 @@ init_typed = true
 warn_required_dynamic_aliases = true
 
 [tool.coverage.run]
-omit = ["template/*", "example_projects/*"]
+omit = ["bibat/template/*", "example_projects/*"]

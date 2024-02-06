@@ -4,7 +4,8 @@ import numpy as np
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal, assert_series_equal
-from src.util import (
+
+from bibat.util import (
     StanInputDict,
     make_columns_lower_case,
     one_encode,

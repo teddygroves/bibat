@@ -107,6 +107,7 @@ def load_inference_configuration(path: Path) -> InferenceConfiguration:
     for k, default in zip(
         ["dims", "sample_kwargs"],
         [DEFAULT_DIMS, DEFAULT_SAMPLE_KWARGS],
+        strict=True,
     ):
         if k in kwargs:
             kwargs[k] = default | kwargs[k]

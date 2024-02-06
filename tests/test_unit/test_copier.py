@@ -21,6 +21,6 @@ EXAMPLE_DATA = {
 
 def test_copier_runs() -> None:
     """Test that copier runs."""
-    source = HERE / ".." / ".."
+    source = HERE / ".." / ".." / "bibat" / "template"
     with TemporaryDirectory() as destination:
         copier.run_copy(str(source), destination, data=EXAMPLE_DATA)
