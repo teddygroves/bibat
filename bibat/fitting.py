@@ -44,6 +44,10 @@ def run_inference(
         "coords": prepared_data.coords,
         "dims": ic.dims,
     }
+    if ic.stan_input_function is not None:
+        idata_kwargs["observed_data"] = local_functions[ic.stan_input_function](
+            prepared_data
+        )
     llik_outputs = dict()
     for mode_name in ic.fitting_modes:
         mode = fitting_mode_options[mode_name]

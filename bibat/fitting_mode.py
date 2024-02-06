@@ -42,9 +42,7 @@ class FittingMode(BaseModel):
     output will be written to.
 
     Each fitting mode's fit function must match the signature specified in the
-    FittingMode class. This can also be changed, but must agree with the
-    'sample' module.
-
+    FittingMode class.
 
     """
 
