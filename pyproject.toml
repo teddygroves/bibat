@@ -75,7 +75,7 @@ ignore = [
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["INP001"]
 "bibat/template/tests/*" = ["INP001"]
-"bibat/template/src/*" = ["INP001", "TID252"]
+"bibat/template/src/*" = ["INP001"]
 
 
 [tool.isort]

@@ -2,14 +2,14 @@
 
 from pathlib import Path
 
-from bibat.fitting import run_all_inferences
-from bibat.fitting_mode import kfold_mode, posterior_mode, prior_mode
-
-from ..src.data_preparation import load_prepared_data
-from ..src.stan_input_functions import (
+from src.data_preparation import load_prepared_data
+from src.stan_input_functions import (
     get_stan_input_interaction,
     get_stan_input_no_interaction,
 )
+
+from bibat.fitting import run_all_inferences
+from bibat.fitting_mode import kfold_mode, posterior_mode, prior_mode
 
 HERE = Path(__file__).parent
 INFERENCES_DIR = HERE / ".." / "inferences"

@@ -1,10 +1,9 @@
 """Functions for generating input to Stan from prepared data."""
 
 import pandas as pd
+from src.data_preparation import ExamplePreparedData
 
 from bibat.util import StanInputDict, returns_stan_input
-
-from ..src.data_preparation import ExamplePreparedData
 
 
 @returns_stan_input
