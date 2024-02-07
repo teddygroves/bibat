@@ -1,9 +1,11 @@
 """Unit tests for the InferenceConfiguration class."""
 
+import os
 from pathlib import Path
 
 import pytest
-from src.inference_configuration import InferenceConfiguration
+
+from bibat.inference_configuration import InferenceConfiguration
 
 SAMPLE_KWARGS = {
     "iter_warmup": 50,
@@ -17,12 +19,23 @@ MODES_GOOD = ["prior", "posterior", "kfold"]
 MODES_BAD = ["prio", "prserior", "cross-validation"]
 
 
-def test_model_configuration_good_modes() -> None:
+@pytest.fixture(scope="session")
+def stan_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Create a Stan file."""
+    stan_dir = tmp_path_factory.getbasetemp() / "src" / "stan"
+    stan_dir.mkdir(parents=True, exist_ok=True)
+    file = stan_dir / "multilevel-linear-regression.stan"
+    file.write_text("data {int N;}")
+    return file
+
+
+def test_model_configuration_good_modes(stan_file: Path) -> None:
     """Check that an inference configuration with good modes initialises."""
+    os.chdir(stan_file.parent.parent.parent)
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
-        prepared_data_dir=Path("hi") / "hello" / "hey",
+        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         mode_options={"kfold": {"n_folds": 10}},
@@ -33,12 +46,13 @@ def test_model_configuration_good_modes() -> None:
 
 
 @pytest.mark.xfail()
-def test_model_configuration_bad_modes() -> None:
+def test_model_configuration_bad_modes(stan_file: Path) -> None:
     """Check that an inference configuration with bad modes fails."""
+    os.chdir(stan_file.parent.parent.parent)
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
-        prepared_data_dir=Path("hi") / "hello" / "hey",
+        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_BAD,
@@ -49,12 +63,13 @@ def test_model_configuration_bad_modes() -> None:
 
 
 @pytest.mark.xfail()
-def test_model_configuration_no_k() -> None:
+def test_model_configuration_no_k(stan_file: Path) -> None:
     """Check that an inference configuration with no kfold options fails."""
+    os.chdir(stan_file.parent.parent.parent)
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
-        prepared_data_dir=Path("hi") / "hello" / "hey",
+        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         mode_options={"kfold": None},  # This is the bad mode!
@@ -65,12 +80,13 @@ def test_model_configuration_no_k() -> None:
 
 
 @pytest.mark.xfail()
-def test_model_configuration_no_stan_file() -> None:
+def test_model_configuration_no_stan_file(stan_file: Path) -> None:
     """Check that an inference configuration with absent Stan file fails."""
+    os.chdir(stan_file.parent.parent.parent)
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="XXXXXXXXXXXXXXXXXXXX",
-        prepared_data_dir=Path("hi") / "hello" / "hey",
+        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_GOOD,
@@ -81,12 +97,13 @@ def test_model_configuration_no_stan_file() -> None:
 
 
 @pytest.mark.xfail()
-def test_model_configuration_no_stan_input_function() -> None:
+def test_model_configuration_no_stan_input_function(stan_file: Path) -> None:
     """Check that absent Stan input function causes failure."""
+    os.chdir(stan_file.parent.parent.parent)
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
-        prepared_data_dir=Path("hi") / "hello" / "hey",
+        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
         stan_input_function="XXXXXXXXXXXXXXXXXX",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_GOOD,

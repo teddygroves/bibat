@@ -19,9 +19,9 @@ StanInputDict = Mapping[str, Any]
 P = ParamSpec("P")
 
 
-def returns_stan_input[
-    **P
-](func: Callable[P, Mapping[str, Any]]) -> Callable[P, Mapping[str, Any]]:
+def returns_stan_input(
+    func: Callable[P, Mapping[str, Any]],
+) -> Callable[P, Mapping[str, Any]]:
     """Decorate a function so it returns a json-serialisable dictionary."""
 
     @wraps(func)

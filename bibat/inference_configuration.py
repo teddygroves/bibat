@@ -88,8 +88,7 @@ class InferenceConfiguration(BaseModel):
         v: str,
     ) -> str:
         """Check that the stan file exists."""
-        here = Path()
-        stan_dir = here / "src" / "stan"
+        stan_dir = Path("src") / "stan"
         file = stan_dir / v
         if not file.exists():
             msg = f"{v} is not a file in {stan_dir}."
