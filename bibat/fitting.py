@@ -2,6 +2,7 @@
 
 import logging
 from collections.abc import Callable
+from enum import Enum
 from pathlib import Path
 
 import arviz as az
@@ -11,23 +12,38 @@ from bibat.inference_configuration import load_inference_configuration
 from bibat.prepared_data import PreparedData
 
 
-def run_all_inferences(
+class IdataSaveFormat(str, Enum):
+    """An enum for choosing the group that a fitting mode writes to."""
+
+    zarr = "prior"
+    json = "json"
+
+
+def run_all_inferences(  # noqa: PLR0913
     inferences_dir: Path,
     data_dir: Path,
     fitting_mode_options: dict[str, FittingMode],
     loader: Callable[[Path], PreparedData],
     local_functions: dict[str, Callable],
+    idata_save_format: IdataSaveFormat = IdataSaveFormat.zarr,
 ) -> None:
     """Fit all inferences in all modes."""
     inference_dirs = inferences_dir.iterdir()
     for inference_dir in sorted(inference_dirs):
-        run_inference(
+        idata = run_inference(
             inference_dir,
             data_dir,
             fitting_mode_options,
             loader,
             local_functions,
         )
+        if idata_save_format == IdataSaveFormat.zarr:
+            idata_dir = inference_dir / "idata"
+            idata.to_zarr(idata_dir)
+        else:
+            idata_file = inference_dir / "idata.json"
+            logging.info("Saving idata to %s", idata_file)
+            az.to_json(idata, idata_file)
 
 
 def run_inference(
@@ -36,7 +52,7 @@ def run_inference(
     fitting_mode_options: dict[str, FittingMode],
     loader: Callable[[Path], PreparedData],
     local_functions: dict[str, Callable],
-) -> None:
+) -> az.InferenceData:
     """Run an inference."""
     ic = load_inference_configuration(inference_dir)
     prepared_data_json = (data_dir / ic.prepared_data_dir).with_suffix(".json")
@@ -65,6 +81,4 @@ def run_inference(
     idata = az.from_cmdstanpy(**idata_kwargs)
     for varname, output in llik_outputs.items():
         idata.log_likelihood[varname] = output
-    idata_dir = inference_dir / "idata"
-    logging.info("Saving idata to %s", idata_dir)
-    idata.to_zarr(idata_dir)
+    return idata
