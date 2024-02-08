@@ -19,12 +19,6 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.12
-    - name: Install bibat
-      run: |
-        python -m pip install --upgrade pip
-        pip install -e .[development]
-    - name: Install cmdstan
-      run: python -m cmdstanpy.install_cmdstan --version git:develop --cores 2
     - name: Run tox
       run: tox
     - name: Upload coverage reports to Codecov
