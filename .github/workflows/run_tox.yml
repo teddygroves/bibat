@@ -20,7 +20,7 @@ jobs:
       with:
         python-version: 3.12
     - name: Install bibat
-      run: pip install -e .'[development]'
+      run: pip install -e .[development]
     - name: Run tox
       run: tox
     - name: Upload coverage reports to Codecov
