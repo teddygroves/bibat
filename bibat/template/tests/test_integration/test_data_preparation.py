@@ -5,6 +5,7 @@ from collections.abc import Callable
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
+
 from src.data_preparation import (
     prepare_data_interaction,
     prepare_data_no_interaction,
