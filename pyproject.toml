@@ -38,7 +38,6 @@ dependencies = [
 [project.optional-dependencies]
 development = [
     "black",
-    "isort",
     "pre-commit",
     "codecov",
     "pytest",
@@ -72,21 +71,14 @@ ignore = [
     "D213",  # multiline docstrings should start just after the quotemarks
     #"FA100",  # pydantic/__future__ problem: see https://github.com/astral-sh/ruff/issues/5434
 ]
+[tool.ruff.lint.isort]
+known-first-party = ["bibat", "src"]
+
 [tool.ruff.lint.per-file-ignores]
 "tests/*" = ["INP001"]
 "bibat/template/tests/*" = ["INP001"]
 "bibat/template/src/*" = ["INP001"]
 
-
-[tool.isort]
-profile = "black"
-known_first_party = ["bibat", "baseball"]
-multi_line_output = 3
-include_trailing_comma = true
-force_grid_wrap = 0
-use_parentheses = true
-ensure_newline_before_comments = true
-line_length = 80
 
 [tool.pylint.messages_control]
 disable = "C0330, C0326"
