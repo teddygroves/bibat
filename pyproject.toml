@@ -27,12 +27,15 @@ dependencies = [
     "cmdstanpy",
     "copier",
     "numpy",
+    "pandas",
     "pandera",
     "pip >= 20",
     "pydantic",
     "scikit-learn",
+    "stanio",
     "toml",
-    "xarray"
+    "xarray",
+    "zarr",
 ]
 
 [project.optional-dependencies]
@@ -47,7 +50,6 @@ development = [
     "sphinx-click",
     "ruff",
     "furo",
-    "zarr",
 ]
 [project.urls]
 homepage = "https://github.com/teddygroves/bibat"
