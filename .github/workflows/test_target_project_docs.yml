@@ -18,7 +18,9 @@ jobs:
         python-version: 3.12
     - name: install bibat with development packages
       run: pip install -e .\[development\]
+    - name: Use bibat
+      run: copier copy -l --vcs-ref ${{ github.sha }} gh:teddygroves/bibat my_cool_project
     - name: build docs with sphinx
       run: |
-        cd bibat/template
+        cd my_cool_project
         sphinx-build docs ./docs/_build/html/
