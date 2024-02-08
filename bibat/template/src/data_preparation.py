@@ -165,8 +165,10 @@ def prepare_data() -> None:
             f.write(prepared_data.model_dump_json())
 
 
-def load_prepared_data(path: Path) -> ExamplePreparedData:
+def load_prepared_data(path: Path | str) -> ExamplePreparedData:
     """Load a prepared data object from a path."""
+    if isinstance(path, str):
+        path = Path(path)
     with path.open("r") as f:
         return ExamplePreparedData(**json.load(f))
 
