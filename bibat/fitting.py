@@ -39,7 +39,7 @@ def run_all_inferences(  # noqa: PLR0913
         )
         if idata_save_format == IdataSaveFormat.zarr:
             idata_dir = inference_dir / "idata"
-            idata.to_zarr(idata_dir)
+            idata.to_zarr(str(idata_dir))
         else:
             idata_file = inference_dir / "idata.json"
             logging.info("Saving idata to %s", idata_file)
