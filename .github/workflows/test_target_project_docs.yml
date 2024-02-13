@@ -16,6 +16,8 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: 3.12
+    - name: install copier
+      run: pip install copier
     - name: Use bibat
       run: copier copy -l -d docs_format=Sphinx --vcs-ref ${{ github.sha }} gh:teddygroves/bibat my_cool_project
     - name: build docs with sphinx
