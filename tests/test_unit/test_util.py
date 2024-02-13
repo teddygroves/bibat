@@ -1,15 +1,12 @@
 """Unit tests for functions in src/util.py."""
 
-import numpy as np
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal, assert_series_equal
 
 from bibat.util import (
-    StanInputDict,
     make_columns_lower_case,
     one_encode,
-    stanify_dict,
 )
 
 
@@ -56,31 +53,3 @@ def test_make_columns_lower_case(
 ) -> None:
     """Check that the function make_columns_lower_case works as expected."""
     assert_frame_equal(make_columns_lower_case(df_in), expected)
-
-
-@pytest.mark.parametrize(
-    ("d_in", "expected"),
-    [
-        ({"a": pd.Series([1, 2, 3])}, {"a": [1, 2, 3]}),
-        (
-            {"a": pd.DataFrame([[1, 2, 3], [4, 5, 6]])},
-            {"a": [[1, 2, 3], [4, 5, 6]]},
-        ),
-        (
-            {
-                "a": np.array([[1, 2, 3], [4, 5, 6]]),
-            },
-            {"a": [[1, 2, 3], [4, 5, 6]]},
-        ),
-        (
-            {"a": [[1, 2, 3], [4, 5, 6]]},
-            {"a": [[1, 2, 3], [4, 5, 6]]},
-        ),
-    ],
-)
-def test_stanify_dict(d_in: dict, expected: StanInputDict) -> None:
-    """Check that the function stanify_dict works as expected."""
-    actual = stanify_dict(d_in)
-    if actual != expected:
-        msg = f"stanify_dict produced  {actual}; expected {expected}"
-        raise ValueError(msg)

@@ -19,7 +19,7 @@ jobs:
         python-version: 3.12
     - name: install bibat with development packages
       run: pip install -e .\[development\]
-    - name: build docs with sphinx
+    - name: build docs with mkdocs
       run: mkdocs build
     - name: Audit with Lighthouse
       uses: treosh/lighthouse-ci-action@v10
