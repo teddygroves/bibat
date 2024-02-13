@@ -1,4 +1,9 @@
-"""Definition of the InferenceConfiguration class."""
+"""The inference_configuration module.
+
+This module provides the class InferenceConfiguration and the function
+`load_inference_configuration`.
+
+"""
 
 from __future__ import annotations
 
@@ -12,13 +17,9 @@ DEFAULT_SAMPLE_KWARGS = {"show_progress": False}
 
 
 class InferenceConfiguration(BaseModel):
-    """Container for a path to a Stan model and some configuration.
+    """Configuration for a statistical inference.
 
-    For example, you may want to compare how well two stan programs fit the
-    same data, or how well the same model fits the data with different
-    covariates.
-
-    :param name: string name identifying the model configuration
+    :param name: A name identifying the model configuration
 
     :param stan_file: Path to a Stan program, with "/" even on windows
 
@@ -42,7 +43,6 @@ class InferenceConfiguration(BaseModel):
 
     :param stanc_options: valid choices for the `cpp_options` argument to
     CmdStanModel
-
     """
 
     name: str

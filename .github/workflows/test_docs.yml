@@ -20,7 +20,7 @@ jobs:
     - name: install bibat with development packages
       run: pip install -e .\[development\]
     - name: build docs with sphinx
-      run: sphinx-build docs ./docs/_build/html/
+      run: mkdocs build
     - name: Audit with Lighthouse
       uses: treosh/lighthouse-ci-action@v10
       with:

@@ -1,4 +1,4 @@
-"""Some handy python functions."""
+"""A module that provides some Bayesian analysis oriented utility code."""
 
 from __future__ import annotations
 
@@ -6,7 +6,6 @@ from collections.abc import Mapping
 from functools import wraps
 from typing import TYPE_CHECKING, Any, NewType, ParamSpec
 
-import numpy as np
 import pandas as pd
 from stanio.json import process_dictionary
 
@@ -59,52 +58,8 @@ def make_columns_lower_case(df: pd.DataFrame) -> pd.DataFrame:
 
 
 def check_is_df(maybe_df: Any) -> pd.DataFrame:  # noqa: ANN401
-    """Shut up the type checker."""
+    """Check that an object is a DataFrame."""
     if not isinstance(maybe_df, pd.DataFrame):
         msg = "Want dataframe."
         raise TypeError(msg)
     return maybe_df
-
-
-def stanify_dict(d: dict) -> StanInputDict:
-    """Make sure a dictionary is a valid Stan input.
-
-    :param d: input dictionary, possibly with wrong types
-    """
-    out: StanInputDict = {}
-    for k, v in d.items():
-        if not isinstance(k, str):
-            msg = f"key {k!r} is not a string!"
-            raise TypeError(msg)
-        if isinstance(v, pd.Series):
-            out[k] = v.to_list()
-        elif isinstance(v, pd.DataFrame):
-            out[k] = v.to_numpy().tolist()
-        elif isinstance(v, np.ndarray):
-            out[k] = v.tolist()
-        else:
-            out[k] = v
-    return out
-
-
-def standardise(
-    s: pd.Series,
-    mu: float | None = None,
-    std: float | None = None,
-) -> pd.Series:
-    """Standardise a series by subtracting mu and dividing by sd."""
-    if mu is None:
-        mu = s.mean()
-    if std is None:
-        std = s.std()
-    return s.subtract(mu).divide(std)
-
-
-def center(
-    s: pd.Series,
-    mu: float | None = None,
-) -> pd.Series:
-    """Center a series by subtracting mu."""
-    if mu is None:
-        mu = s.mean()
-    return s.subtract(mu)

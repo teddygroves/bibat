@@ -1,0 +1,45 @@
+site_name: "Bibat"
+site_description: Batteries-included Bayesian analysis template
+use_directory_urls: False
+theme:
+  name: "material"
+  features:
+    - content.tabs.link
+    - content.code.annotate
+    - content.code.copy
+    - announce.dismiss
+    - navigation.sections
+  logo: '_static/bibat-light.svg'
+
+plugins:
+- search
+- mkdocstrings:
+    handlers:
+      python:
+        paths: [bibat]
+        options:
+          show_bases: false
+          docstring_style: sphinx
+          members_order: source
+          group_by_category: false
+          filters: ["!^_"]
+          docstring_options:
+            warn_unknown_params: false
+
+markdown_extensions:
+  - admonition
+  - pymdownx.keys
+  - pymdownx.snippets
+  - pymdownx.superfences
+  - pymdownx.tabbed
+  - attr_list
+  - md_in_html
+
+nav:
+  - Home: 'index.md'
+  - Getting started: 'getting_started.md'
+  - Working with bibat: 'working_with_bibat.md'
+  - Vignettes: 'vignettes.md'
+  - API: 'api.md'
+  - Contributing: 'contributing.md'
+  - Accessibility: 'accessibility.md'

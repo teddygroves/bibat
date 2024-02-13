@@ -27,24 +27,27 @@ class IdataTarget(str, Enum):
 class FittingMode(BaseModel):
     """A way of fitting a statistical model.
 
-    Each fitting mode has a name, an 'idata_target', i.e. the group that this
-    mode will create in the output InferenceData, and a function that performs
-    the fitting.
-
     Inferences can be configured to use any of the fitting modes defined here
     by including them by name in the top-level list 'modes'. For example:
 
+    ```toml
       ...
       modes = ['prior', 'posterior', 'kfold']
       ...
+    ```
 
-    The idata_target must be one out of 'prior', 'posterior' and
-    'log_likelihood', and specifies which out of these InferenceData groups the
-    output will be written to.
+    :param name: A string identifying the fitting mode
 
-    Each fitting mode's fit function must match the signature specified in the
-    FittingMode class.
+    :param idata_target: A string identifying the
+    [`InferenceData`](https://python.arviz.org/en/stable/api/inference_data.html)
+    group that the mode writes to. Must be one of "prior", "posterior" or
+    "log_likelihood".
 
+    :param fit: A function that takes in an `InferenceConfiguration` object, a
+    `PreparedData` object and a dictionary of local functions, and returns
+    either a CmdStanMCMC object (if the `idata_target` is "prior" or
+    "posterior") or an xarray DataArray object (if the `idata_target` is
+    "log_likelihood")
     """
 
     name: str

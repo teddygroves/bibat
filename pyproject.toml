@@ -43,13 +43,15 @@ development = [
     "black",
     "pre-commit",
     "codecov",
+    "mkdocs",
+    "mkdocs-material",
+    "mkdocstrings",
+    "mkdocstrings-python",
+    "pymdown-extensions",
     "pytest",
     "pytest-cov",
     "tox",
-    "sphinx",
-    "sphinx-click",
     "ruff",
-    "furo",
 ]
 [project.urls]
 homepage = "https://github.com/teddygroves/bibat"
