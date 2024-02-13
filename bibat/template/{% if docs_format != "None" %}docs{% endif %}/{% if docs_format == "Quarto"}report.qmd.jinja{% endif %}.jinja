@@ -1,0 +1,73 @@
+---
+title: "{{ project_name }}"
+resource_path: ["../"]
+subtitle: "A report created using bibat version {{ bibat_version }}"
+author: "{{ author_name }}"
+bibliography: bibliography.bib
+reference-location: margin
+format:
+  html: default
+  pdf: default
+---
+
+Write your report here in [pandoc
+markdown](https://pandoc.org/MANUAL.html#pandocs-markdown).
+
+Create Pdf and Html files based on this document by running `quarto render
+report.qmd` from the project root. If you want to remove some of these formats
+or add a new one, you can do so by editing the `format` field of the
+document's yaml front matter. For example if you want to create a version that
+your collaborators can open in Microsoft Word:
+
+```{.yaml}
+---
+format:
+  html: default
+  pdf: default
+  docx: default
+---
+```
+
+Refer to entries in `bibliography.bib` using their bibtex keys like
+this: @gelmanBayesianWorkflow2020.
+
+Include images like this:
+
+![This is an example image](img/example.png)
+
+Note that you can also include links to images in the main project's `plots`
+folder:
+
+![This image comes from the main analysis!](../plots/posterior_predictive_comparison.png)
+
+Include margin notes like this^[I'm a margin note!]
+
+Write code blocks like this:
+
+```{python}
+def print_hello():
+    print("Hello!")
+print_hello()
+```
+
+Note that when quarto rendered the document it evaluated the code above and
+printed the results! Quarto supports execution of Python, R and Julia code, and
+can print figures that or even interactive widgets. If you want to include a
+block of code from one of these languages, but don't want quarto to execute it,
+or want to [customise what quarto does with the code in another
+way](https://quarto.org/docs/computations/execution-options.html) make sure the
+first line is `#| `, e.g.:
+
+```{python}
+#| eval: false
+def print_hello():
+    print("Hello!")
+print_hello()
+```
+
+Check out the [quarto guide](https://quarto.org/docs/guide/) for more
+information about how to document your work using quarto.
+
+# References
+
+A list of references should appear here:
