@@ -19,7 +19,7 @@ jobs:
     - name: install bibat with development packages
       run: pip install -e .\[development\]
     - name: Use bibat
-      run: copier copy -l --vcs-ref ${{ github.sha }} gh:teddygroves/bibat my_cool_project
+      run: copier copy -l -d docs_format=Sphinx --vcs-ref ${{ github.sha }} gh:teddygroves/bibat my_cool_project
     - name: build docs with sphinx
       run: |
         cd my_cool_project
