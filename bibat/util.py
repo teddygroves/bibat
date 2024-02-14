@@ -4,9 +4,11 @@ from __future__ import annotations
 
 from collections.abc import Mapping
 from functools import wraps
-from typing import TYPE_CHECKING, Any, NewType, ParamSpec
+from io import StringIO
+from typing import TYPE_CHECKING, Annotated, Any, NewType, ParamSpec
 
 import pandas as pd
+from pydantic import PlainSerializer, PlainValidator
 from stanio.json import process_dictionary
 
 if TYPE_CHECKING:
@@ -16,6 +18,22 @@ CoordDict = NewType("CoordDict", dict[str, list[str]])
 StanInputDict = Mapping[str, Any]
 
 P = ParamSpec("P")
+
+
+def validate_df_or_string(v: pd.DataFrame | str) -> pd.DataFrame:
+    """Load a dataframe even if it is in json string form."""
+    if isinstance(v, str):
+        v = pd.read_json(StringIO(v))
+    return v
+
+
+# A type for DataFrames in pydantic models that makes them validate and json
+# serialize nicely. see https://github.com/pydantic/pydantic/discussions/4243
+DfInPydanticModel = Annotated[
+    pd.DataFrame,
+    PlainValidator(validate_df_or_string),
+    PlainSerializer(lambda x: x.to_json(), when_used="always"),
+]
 
 
 def returns_stan_input(

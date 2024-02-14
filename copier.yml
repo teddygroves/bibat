@@ -18,12 +18,12 @@ author_name:
   default: "{{ project_name }} developers"
 author_email:
   type: str
-  help: Author email
+  help: Author email (will be included in pyproject.toml)
   default: author@email.com
 coc_contact:
   type: str
   help: Code of conduct contact
-  default: author@email.com
+  default: "{{ author_email }}"
 open_source_license:
   type: str
   choices:

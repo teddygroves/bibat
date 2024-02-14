@@ -1,6 +1,6 @@
 name = "no_interaction"
 stan_file = "multilevel-linear-regression.stan"
-prepared_data_dir = "no_interaction"
+prepared_data = "no_interaction"
 stan_input_function = "get_stan_input_no_interaction"
 modes = ["prior", "posterior", "kfold"]
 

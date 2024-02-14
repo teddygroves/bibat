@@ -1,6 +1,6 @@
 name = "fake_interaction"
 stan_file = "multilevel-linear-regression.stan"
-prepared_data_dir = "fake_interaction"
+prepared_data = "fake_interaction"
 stan_input_function = "get_stan_input_interaction"
 modes = ["prior", "posterior", "kfold"]
 

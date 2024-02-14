@@ -23,7 +23,7 @@ class InferenceConfiguration(BaseModel):
 
     :param stan_file: Path to a Stan program, with "/" even on windows
 
-    :param prepared_data_dir: Path to a directory containing prepared data
+    :param prepared_data: Name of the prepared data for this inference
 
     :param stan_input_function: name of a function from src.stan_input_functions
     used to get a Stan input dictionary from a PreparedData object.
@@ -34,9 +34,7 @@ class InferenceConfiguration(BaseModel):
     :param modes: which modes to run the model in. Choose one or more of the
     AVAILABLE_MODES.
 
-    :param dims: map from parameter names to lists of coordinate names. See the
-    field names of the file "coords.json" in the prepared_data_dir for possible
-    coordinate names.
+    :param dims: map from parameter names to lists of coordinate names.
 
     :param cpp_options: valid choices for the `cpp_options` argument to
     CmdStanModel
@@ -47,7 +45,7 @@ class InferenceConfiguration(BaseModel):
 
     name: str
     stan_file: str
-    prepared_data_dir: str
+    prepared_data: str
     stan_input_function: str
     fitting_modes: list[str] = Field(alias="modes")
     sample_kwargs: dict = Field(default_factory=lambda: DEFAULT_SAMPLE_KWARGS)

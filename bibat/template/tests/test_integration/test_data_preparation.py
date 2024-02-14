@@ -6,11 +6,11 @@ import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal
 
+from bibat.util import CoordDict
 from src.data_preparation import (
     prepare_data_interaction,
     prepare_data_no_interaction,
 )
-from src.util import CoordDict
 
 EXAMPLE_RAW_MEASUREMENTS = pd.DataFrame(
     {

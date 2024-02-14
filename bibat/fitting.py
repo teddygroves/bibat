@@ -8,7 +8,10 @@ from pathlib import Path
 import arviz as az
 
 from bibat.fitting_mode import FittingMode
-from bibat.inference_configuration import load_inference_configuration
+from bibat.inference_configuration import (
+    InferenceConfiguration,
+    load_inference_configuration,
+)
 from bibat.prepared_data import PreparedData
 
 
@@ -30,11 +33,13 @@ def run_all_inferences(  # noqa: PLR0913
     """Fit all inferences in all modes."""
     inference_dirs = inferences_dir.iterdir()
     for inference_dir in sorted(inference_dirs):
+        ic = load_inference_configuration(inference_dir)
+        prepared_data_json = (data_dir / ic.prepared_data).with_suffix(".json")
+        prepared_data = loader(prepared_data_json)
         idata = run_inference(
-            inference_dir,
-            data_dir,
+            ic,
+            prepared_data,
             fitting_mode_options,
-            loader,
             local_functions,
         )
         if idata_save_format == IdataSaveFormat.zarr:
@@ -47,16 +52,12 @@ def run_all_inferences(  # noqa: PLR0913
 
 
 def run_inference(
-    inference_dir: Path,
-    data_dir: Path,
+    ic: InferenceConfiguration,
+    prepared_data: PreparedData,
     fitting_mode_options: dict[str, FittingMode],
-    loader: Callable[[Path], PreparedData],
     local_functions: dict[str, Callable],
 ) -> az.InferenceData:
     """Run an inference."""
-    ic = load_inference_configuration(inference_dir)
-    prepared_data_json = (data_dir / ic.prepared_data_dir).with_suffix(".json")
-    prepared_data = loader(prepared_data_json)
     idata_kwargs = {
         "log_likelihood": "llik",
         "coords": prepared_data.coords,

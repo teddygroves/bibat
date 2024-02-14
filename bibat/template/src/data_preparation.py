@@ -8,18 +8,17 @@ each take in a dataframe of measurements and return a PreparedData object.
 from __future__ import annotations
 
 import json
-from io import StringIO
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
 import pandera as pa
 from pandera.typing import DataFrame, Series
-from pydantic import field_serializer, field_validator
+from pydantic import field_validator
 
 from bibat.prepared_data import PreparedData
-from bibat.util import CoordDict, make_columns_lower_case
+from bibat.util import CoordDict, DfInPydanticModel, make_columns_lower_case
 
 if TYPE_CHECKING:
     from pandera.typing.common import DataFrameBase
@@ -47,29 +46,20 @@ class ExamplePreparedData(PreparedData):
 
     name: str
     coords: CoordDict
-    measurements: Any
+    measurements: DfInPydanticModel
 
     @field_validator("measurements")
     def validate_measurements(
         cls,  # noqa: N805, ANN101
-        v: Any,  # noqa: ANN401
+        v: DfInPydanticModel,
     ) -> DataFrameBase[ExampleMeasurementsDF]:
         """Validate the measurements table."""
-        if isinstance(v, str):
-            v = pd.read_json(StringIO(v))
         return ExampleMeasurementsDF.validate(v)
 
-    @field_serializer("measurements")
-    def serialize_measurements(
-        self,  # noqa: ANN101
-        measurements: DataFrame[ExampleMeasurementsDF],
-        _info,  # noqa: ANN001
-    ) -> str | None:
-        """Convert the measurements table to json."""
-        return measurements.to_json()
 
-
-def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
+def prepare_data_interaction(
+    measurements_raw: pd.DataFrame,
+) -> ExamplePreparedData:
     """Prepare data with an interaction column."""
     measurements = process_measurements(measurements_raw)
     return ExamplePreparedData(
@@ -84,7 +74,9 @@ def prepare_data_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
     )
 
 
-def prepare_data_no_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
+def prepare_data_no_interaction(
+    measurements_raw: pd.DataFrame,
+) -> ExamplePreparedData:
     """Prepare data with no interaction column."""
     measurements = process_measurements(measurements_raw)
     return ExamplePreparedData(
@@ -101,7 +93,7 @@ def prepare_data_no_interaction(measurements_raw: pd.DataFrame) -> PreparedData:
 
 def prepare_data_fake_interaction(
     measurements_raw: pd.DataFrame,
-) -> PreparedData:
+) -> ExamplePreparedData:
     """Prepare fake data with an interaction column."""
     true_params = {"a": 1, "b": [0.6, -0.3, 0.2], "sigma": 0.3}
     x_cols = ["x1", "x2", "x1:x2"]

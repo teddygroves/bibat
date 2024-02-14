@@ -10,7 +10,8 @@ theme:
     - announce.dismiss
     - navigation.sections
   logo: '_static/bibat-light.svg'
-
+  favicon: '_static/bibat-light.svg'
+repo_url: https://github.com/teddygroves/bibat
 plugins:
 - search
 - mkdocstrings:
