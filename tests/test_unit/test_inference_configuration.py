@@ -35,7 +35,7 @@ def test_model_configuration_good_modes(stan_file: Path) -> None:
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
-        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
+        prepared_data=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         mode_options={"kfold": {"n_folds": 10}},
@@ -52,7 +52,7 @@ def test_model_configuration_bad_modes(stan_file: Path) -> None:
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
-        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
+        prepared_data=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_BAD,
@@ -69,7 +69,7 @@ def test_model_configuration_no_k(stan_file: Path) -> None:
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
-        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
+        prepared_data=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         mode_options={"kfold": None},  # This is the bad mode!
@@ -86,7 +86,7 @@ def test_model_configuration_no_stan_file(stan_file: Path) -> None:
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="XXXXXXXXXXXXXXXXXXXX",
-        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
+        prepared_data=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_GOOD,
@@ -103,7 +103,7 @@ def test_model_configuration_no_stan_input_function(stan_file: Path) -> None:
     _ = InferenceConfiguration(
         name="my_mc",
         stan_file="multilevel-linear-regression.stan",
-        prepared_data_dir=str(Path("hi") / "hello" / "hey"),
+        prepared_data=str(Path("hi") / "hello" / "hey"),
         stan_input_function="XXXXXXXXXXXXXXXXXX",
         sample_kwargs=SAMPLE_KWARGS,
         modes=MODES_GOOD,

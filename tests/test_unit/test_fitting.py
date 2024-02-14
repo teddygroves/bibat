@@ -13,7 +13,10 @@ from pydantic import ConfigDict, field_serializer, field_validator
 
 from bibat.fitting import run_inference
 from bibat.fitting_mode import prior_mode
-from bibat.inference_configuration import InferenceConfiguration
+from bibat.inference_configuration import (
+    InferenceConfiguration,
+    load_inference_configuration,
+)
 from bibat.prepared_data import PreparedData
 from bibat.util import CoordDict, StanInputDict, returns_stan_input
 
@@ -86,7 +89,7 @@ def inference_config(tmp_path_factory: pytest.TempPathFactory) -> Path:
     os.chdir(inf_dir.parent.parent)
     ic = InferenceConfiguration(
         name="example",
-        prepared_data_dir="interaction",
+        prepared_data="interaction",
         stan_file="multilevel-linear-regression.stan",
         stan_input_function="get_stan_input_interaction",
         modes=["prior"],
@@ -129,11 +132,12 @@ def test_run_inference(
     inference_config: Path,
 ) -> None:
     """Test a good case of run_inference."""
+    ic = load_inference_configuration(inference_config.parent)
+    prepared_data = load_prepared_data(prepared_data_json)
     _ = run_inference(
-        inference_dir=inference_config.parent,
-        data_dir=prepared_data_json.parent,
+        ic=ic,
+        prepared_data=prepared_data,
         fitting_mode_options={"prior": prior_mode},
-        loader=load_prepared_data,
         local_functions={
             "get_stan_input_interaction": get_stan_input_interaction,
         },
