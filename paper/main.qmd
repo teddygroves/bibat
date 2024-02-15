@@ -133,7 +133,7 @@ for other researchers to work with, thereby facilitating replication while also
 making initial development more convenient.
 
 Bibat integrates many widely-adopted, open-source and powerful tools to
-implement the components of a Bayesian workflow. Bibat projects are  written
+implement the components of a Bayesian workflow. Bibat projects are written
 in modern Python and uses pydantic [@pydanticdevelopersPydantic2022]
 and pandera [@niels_bantilan-proc-scipy-2020] for data modelling, Stan
 [@carpenterStanProbabilisticProgramming2017] for statistical inference,
