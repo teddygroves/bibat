@@ -29,7 +29,7 @@ PREPARED_DIR = HERE / ".." / "data" / "prepared"
 RAW_DATA_FILES = {"measurements": RAW_DIR / "raw_measurements.csv"}
 
 
-class ExampleMeasurementsDF(pa.SchemaModel):
+class ExampleMeasurementsDF(pa.DataFrameModel):
     """An ExamplePreparedData should have a measurements dataframe like this.
 
     Other columns are also allowed!

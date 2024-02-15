@@ -4,8 +4,12 @@ import os
 from pathlib import Path
 
 import pytest
+import toml
 
-from bibat.inference_configuration import InferenceConfiguration
+from bibat.inference_configuration import (
+    InferenceConfiguration,
+    load_inference_configuration,
+)
 
 SAMPLE_KWARGS = {
     "iter_warmup": 50,
@@ -27,6 +31,31 @@ def stan_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     file = stan_dir / "multilevel-linear-regression.stan"
     file.write_text("data {int N;}")
     return file
+
+
+@pytest.fixture(scope="session")
+def inference_config(tmp_path_factory: pytest.TempPathFactory) -> Path:
+    """Create an inference directory containing a toml file."""
+    inf_dir = tmp_path_factory.getbasetemp() / "inferences" / "example"
+    inf_dir.mkdir(parents=True, exist_ok=True)
+    os.chdir(inf_dir.parent.parent)
+    ic = InferenceConfiguration(
+        name="example",
+        prepared_data="interaction",
+        stan_file="multilevel-linear-regression.stan",
+        stan_input_function="get_stan_input_interaction",
+        modes=["posterior", "kfold"],
+        sample_kwargs={"chains": 1, "iter_warmup": 2, "iter_sampling": 2},
+        mode_options={
+            "kfold": {"n_folds": 2},
+            "prior": {"max_treedepth": 2},
+            "posterior": {"iter_warmup": 3},
+        },
+    )
+    path = inf_dir / "config.toml"
+    with path.open("w") as f:
+        toml.dump(ic.model_dump(by_alias=True), f)
+    return path
 
 
 def test_model_configuration_good_modes(stan_file: Path) -> None:
@@ -63,6 +92,40 @@ def test_model_configuration_bad_modes(stan_file: Path) -> None:
 
 
 @pytest.mark.xfail()
+def test_model_configuration_no_mode_options_kfold(stan_file: Path) -> None:
+    """Check that an inference configuration with no kfold options fails."""
+    os.chdir(stan_file.parent.parent.parent)
+    _ = InferenceConfiguration(
+        name="my_mc",
+        stan_file="multilevel-linear-regression.stan",
+        prepared_data=str(Path("hi") / "hello" / "hey"),
+        stan_input_function="get_stan_input_interaction",
+        sample_kwargs=SAMPLE_KWARGS,
+        mode_options={},  # This is the bad bit!
+        modes=MODES_GOOD,  # it would be ok if 'kfold' weren't in here.
+        cpp_options=None,
+        stanc_options=None,
+    )
+
+
+@pytest.mark.xfail()
+def test_model_configuration_kfold_not_in_mode_options(stan_file: Path) -> None:
+    """Check that an inference configuration with no kfold options fails."""
+    os.chdir(stan_file.parent.parent.parent)
+    _ = InferenceConfiguration(
+        name="my_mc",
+        stan_file="multilevel-linear-regression.stan",
+        prepared_data=str(Path("hi") / "hello" / "hey"),
+        stan_input_function="get_stan_input_interaction",
+        sample_kwargs=SAMPLE_KWARGS,
+        mode_options={"bla": {"something": "?"}},  # This is the bad bit!
+        modes=MODES_GOOD,  # it would be ok if 'kfold' weren't in here.
+        cpp_options=None,
+        stanc_options=None,
+    )
+
+
+@pytest.mark.xfail()
 def test_model_configuration_no_k(stan_file: Path) -> None:
     """Check that an inference configuration with no kfold options fails."""
     os.chdir(stan_file.parent.parent.parent)
@@ -72,7 +135,24 @@ def test_model_configuration_no_k(stan_file: Path) -> None:
         prepared_data=str(Path("hi") / "hello" / "hey"),
         stan_input_function="get_stan_input_interaction",
         sample_kwargs=SAMPLE_KWARGS,
-        mode_options={"kfold": None},  # This is the bad mode!
+        mode_options={"kfold": {}},  # This is the bad bit!
+        modes=MODES_GOOD,  # it would be ok if 'kfold' weren't in here.
+        cpp_options=None,
+        stanc_options=None,
+    )
+
+
+@pytest.mark.xfail()
+def test_model_configuration_bad_k(stan_file: Path) -> None:
+    """Check that an inference configuration with no kfold options fails."""
+    os.chdir(stan_file.parent.parent.parent)
+    _ = InferenceConfiguration(
+        name="my_mc",
+        stan_file="multilevel-linear-regression.stan",
+        prepared_data=str(Path("hi") / "hello" / "hey"),
+        stan_input_function="get_stan_input_interaction",
+        sample_kwargs=SAMPLE_KWARGS,
+        mode_options={"kfold": {"n_folds": "!"}},  # This is the bad bit!
         modes=MODES_GOOD,  # it would be ok if 'kfold' weren't in here.
         cpp_options=None,
         stanc_options=None,
@@ -111,3 +191,8 @@ def test_model_configuration_no_stan_input_function(stan_file: Path) -> None:
         cpp_options=None,
         stanc_options=None,
     )
+
+
+def test_load_inference_configuration(inference_config: Path) -> None:
+    """Test the function load_inference_configuration."""
+    _ = load_inference_configuration(inference_config.parent)

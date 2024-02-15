@@ -50,7 +50,7 @@ class InferenceConfiguration(BaseModel):
     fitting_modes: list[str] = Field(alias="modes")
     sample_kwargs: dict = Field(default_factory=lambda: DEFAULT_SAMPLE_KWARGS)
     dims: dict[str, list[str]] = Field(default_factory=lambda: DEFAULT_DIMS)
-    mode_options: dict[str, dict] | None = None
+    mode_options: dict[str, dict] = Field(default_factory=dict)
     cpp_options: dict | None = None
     stanc_options: dict | None = None
 
@@ -58,7 +58,7 @@ class InferenceConfiguration(BaseModel):
     def check_folds(self: InferenceConfiguration) -> InferenceConfiguration:
         """Check that there is a number of folds if required."""
         if any(m == "kfold" for m in self.fitting_modes):
-            if self.mode_options is None:
+            if self.mode_options == {}:
                 msg = "Mode 'kfold' requires a mode_options.kfold table."
                 raise ValueError(
                     msg,
@@ -71,7 +71,8 @@ class InferenceConfiguration(BaseModel):
             if "n_folds" not in self.mode_options["kfold"]:
                 msg = "Set 'n_folds' field in kfold mode options."
                 raise ValueError(msg)
-            if not int(self.mode_options["kfold"]["n_folds"]):
+            mo = self.mode_options["kfold"]["n_folds"]
+            if isinstance(mo, str) and not mo.isdigit():
                 msg = (
                     f"Could not coerce n_folds choice "
                     f"{self.mode_options['kfold']['n_folds']} to int."

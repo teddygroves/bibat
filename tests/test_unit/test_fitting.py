@@ -2,23 +2,43 @@
 
 import json
 import os
-from io import StringIO
 from pathlib import Path
-from typing import Any
 
 import pandas as pd
 import pytest
 import toml
-from pydantic import ConfigDict, field_serializer, field_validator
 
-from bibat.fitting import run_inference
-from bibat.fitting_mode import prior_mode
+from bibat.fitting import IdataSaveFormat, run_all_inferences, run_inference
+from bibat.fitting_mode import (
+    kfold_mode,
+    posterior_mode,
+)
 from bibat.inference_configuration import (
     InferenceConfiguration,
     load_inference_configuration,
 )
 from bibat.prepared_data import PreparedData
-from bibat.util import CoordDict, StanInputDict, returns_stan_input
+from bibat.util import (
+    CoordDict,
+    DfInPydanticModel,
+    StanInputDict,
+    returns_stan_input,
+)
+
+TEST_MODEL = """
+    data {
+        int N;
+        vector[N] y;
+    }
+    generated quantities {
+        vector[N] llik;
+        vector[N] yrep;
+        for (n in 1:N){
+          llik[n] = normal_lpdf(y[n] | 0, 1);
+          yrep[n] = normal_rng(0, 1);
+        }
+    }
+"""
 
 
 @pytest.fixture(scope="session")
@@ -27,41 +47,16 @@ def stan_file(tmp_path_factory: pytest.TempPathFactory) -> Path:
     stan_dir = tmp_path_factory.getbasetemp() / "src" / "stan"
     stan_dir.mkdir(parents=True, exist_ok=True)
     file = stan_dir / "multilevel-linear-regression.stan"
-    file.write_text(
-        "data {int N; vector[N] y;}"
-        "generated quantities {vector[N] yrep;"
-        "for (n in 1:N) yrep[n] = normal_rng(0, 1);}",
-    )
+    file.write_text(TEST_MODEL)
     return file
 
 
 class ExamplePreparedData(PreparedData):
     """An example prepared data dataclass."""
 
-    model_config = ConfigDict(arbitrary_types_allowed=True)
-
     name: str
     coords: CoordDict
-    measurements: Any
-
-    @field_validator("measurements")
-    def validate_measurements(
-        cls,  # noqa: N805, ANN101
-        v: Any,  # noqa: ANN401
-    ) -> pd.DataFrame:
-        """Validate the measurements table."""
-        if isinstance(v, str):
-            v = pd.read_json(StringIO(v))
-        return v
-
-    @field_serializer("measurements")
-    def serialize_measurements(
-        self,  # noqa: ANN101
-        measurements: pd.DataFrame,
-        _info,  # noqa: ANN001
-    ) -> str | None:
-        """Convert the measurements table to json."""
-        return measurements.to_json()
+    measurements: DfInPydanticModel
 
 
 @pytest.fixture(scope="session")
@@ -92,8 +87,9 @@ def inference_config(tmp_path_factory: pytest.TempPathFactory) -> Path:
         prepared_data="interaction",
         stan_file="multilevel-linear-regression.stan",
         stan_input_function="get_stan_input_interaction",
-        modes=["prior"],
+        modes=["posterior", "kfold"],
         sample_kwargs={"chains": 1, "iter_warmup": 2, "iter_sampling": 2},
+        mode_options={"kfold": {"n_folds": 2}},
     )
     path = inf_dir / "config.toml"
     with path.open("w") as f:
@@ -137,8 +133,44 @@ def test_run_inference(
     _ = run_inference(
         ic=ic,
         prepared_data=prepared_data,
-        fitting_mode_options={"prior": prior_mode},
+        fitting_mode_options={"posterior": posterior_mode, "kfold": kfold_mode},
         local_functions={
             "get_stan_input_interaction": get_stan_input_interaction,
         },
+    )
+
+
+def test_run_all_inferences(
+    stan_file: Path,  # noqa: ARG001
+    prepared_data_json: Path,
+    inference_config: Path,
+) -> None:
+    """Test a good case of run_inference."""
+    _ = run_all_inferences(
+        inferences_dir=inference_config.parent.parent,
+        data_dir=prepared_data_json.parent,
+        fitting_mode_options={"posterior": posterior_mode, "kfold": kfold_mode},
+        loader=load_prepared_data,
+        local_functions={
+            "get_stan_input_interaction": get_stan_input_interaction,
+        },
+        idata_save_format=IdataSaveFormat.zarr,
+    )
+
+
+def test_run_all_inferences_json(
+    stan_file: Path,  # noqa: ARG001
+    prepared_data_json: Path,
+    inference_config: Path,
+) -> None:
+    """Test a good case of run_inference."""
+    _ = run_all_inferences(
+        inferences_dir=inference_config.parent.parent,
+        data_dir=prepared_data_json.parent,
+        fitting_mode_options={"posterior": posterior_mode, "kfold": kfold_mode},
+        loader=load_prepared_data,
+        local_functions={
+            "get_stan_input_interaction": get_stan_input_interaction,
+        },
+        idata_save_format=IdataSaveFormat.json,
     )

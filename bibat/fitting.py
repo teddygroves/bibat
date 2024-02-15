@@ -76,9 +76,6 @@ def run_inference(
             idata_kwargs[f"{mode.idata_target.value}_predictive"] = "yrep"
         elif mode.idata_target == "log_likelihood":
             llik_outputs[f"llik_{mode.name}"] = output
-        else:
-            msg = f"Unsupported idata_target {mode.idata_target}"
-            raise ValueError(msg)
     idata = az.from_cmdstanpy(**idata_kwargs)
     for varname, output in llik_outputs.items():
         idata.log_likelihood[varname] = output

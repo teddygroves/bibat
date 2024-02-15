@@ -73,11 +73,3 @@ def make_columns_lower_case(df: pd.DataFrame) -> pd.DataFrame:
     else:
         new.columns = pd.Index([c.lower() for c in new.columns])
     return new
-
-
-def check_is_df(maybe_df: Any) -> pd.DataFrame:  # noqa: ANN401
-    """Check that an object is a DataFrame."""
-    if not isinstance(maybe_df, pd.DataFrame):
-        msg = "Want dataframe."
-        raise TypeError(msg)
-    return maybe_df

@@ -108,9 +108,6 @@ def sample_hmc_kfold(
     CmdStanModel.sample
 
     """
-    if ic.mode_options is None:
-        msg = "k-fold mode requires mode_options"
-        raise ValueError(msg)
     k = ic.mode_options["kfold"]["n_folds"]
     kf = KFold(k, shuffle=True, random_state=1234)
     sif = local_functions[ic.stan_input_function]

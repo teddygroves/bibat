@@ -1,5 +1,7 @@
 """Unit tests for functions in src/util.py."""
 
+import json
+
 import pandas as pd
 import pytest
 from pandas.testing import assert_frame_equal, assert_series_equal
@@ -7,6 +9,8 @@ from pandas.testing import assert_frame_equal, assert_series_equal
 from bibat.util import (
     make_columns_lower_case,
     one_encode,
+    returns_stan_input,
+    validate_df_or_string,
 )
 
 
@@ -53,3 +57,21 @@ def test_make_columns_lower_case(
 ) -> None:
     """Check that the function make_columns_lower_case works as expected."""
     assert_frame_equal(make_columns_lower_case(df_in), expected)
+
+
+def test_validate_df_or_string() -> None:
+    """Test the function validate_df_or_string."""
+    example_df = pd.DataFrame({"a": [1, 2]})
+    _ = validate_df_or_string(example_df)
+    _ = validate_df_or_string(str(example_df.to_json()))
+
+
+def test_returns_stan_input() -> None:
+    """Test the function returns_stan_input."""
+
+    @returns_stan_input
+    def does_return_stan_input() -> dict:
+        return {"a": pd.Series([1, 2, 3])}
+
+    stan_input = does_return_stan_input()
+    _ = json.dumps(stan_input)
