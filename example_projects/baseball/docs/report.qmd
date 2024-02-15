@@ -1,6 +1,7 @@
 ---
-title: "Modelling at-bats in baseball using the generalised Pareto distribution"
-subtitle: "A report created using bibat version 0.1.6"
+title: "Baseball"
+resource_path: ["../"]
+subtitle: "A report created using bibat version 0.3.0"
 author: "Teddy Groves"
 bibliography: bibliography.bib
 reference-location: margin
@@ -8,6 +9,7 @@ toc: true
 format:
   html:
     embed-resources: true
+  pdf: default
 filters:
   - include-code-files
 ---
@@ -29,18 +31,17 @@ certain about the abilities of low-data players, but also be biased, thinking
 that these players are probably a bit better than they actually are. I never
 came up with a good way to solve this problem, despite trying a lot of things!
 
-Even though I don't work with sports data very much any more, the problem still
-haunted me, so when I read [this great case
+Even though I don't work with sports data very much any more, these issues still
+lingered in my mind, so when I read [this great case
 study](https://mc-stan.org/users/documentation/case-studies/gpareto_functions.html#conclusion-on-the-data-analysis)
 about geomagnetic storms it gave me an idea for yet another potential solution.
 
-The idea was this: just as data about intense storms that cause electricity
-problems tell us about a tail of the bigger solar magnetism distribution, maybe
-data about professional sportspeople is best thought about as coming from a tail
-of the general sports ability distribution. If so, maybe something like the
-[generalised pareto
+The idea was this: just as data about intense storms tell us about a tail
+of the bigger solar magnetism distribution, maybe data about professional
+sportspeople is best thought about as coming from a tail of the general sports
+ability distribution. If so, perhaps something like the [generalised pareto
 distribution](https://en.wikipedia.org/wiki/Generalized_Pareto_distribution)
-might be better than the bog standard normal distribution for describing the
+might be better than the bog-standard normal distribution for describing the
 pros' abilities.
 
 I thought I'd test this out with some sports data, and luckily there is a really
@@ -54,53 +55,59 @@ other users suggested that it might be interesting to model similar data from
 different seasons. This data can now be found quite easily on the [baseball
 databank](https://baseballdb.lawlesst.net/).
 
-With a few datasets and at least two different statistical models to consider,
-the full analysis looked like it would be a little too big to fit in a trivial
-file structure, so it seemed like a good opportunity to showcase my
-batteries-included Bayesian analysis template package
-[bibat](https://github.com/teddygroves/bibat).
+With a few datasets and statistical models to consider, the full analysis looked
+like it would be too big to fit in a single file, so this seemed like a job for a
+batteries-included Bayesian analysis template like [bibat](https://github.com/teddygroves/bibat).
 
 The rest of this vignette describes how I used bibat to (relatively) painlessly
 see if my generalised Pareto distribution idea would work.
 
-Check out the analysis's [github
-repository](https://github.com/teddygroves/baseball) for all the details.
+Check out [the full analysis](https://github.com/teddygroves/bibat/example_projects/baseball) for all the details.
 
 # Setup
 
-First I installed bibat in my global Python 3.11 environment with this command:
+First I installed [copier](https://copier.readthedocs.io/en/stable/) in my
+global Python 3.12 environment with this command:
 
 ```zsh
-> pip install bibat
+> pipx install copier
 ```
 
 Next I ran bibat's wizard like this:
 
 ```{.zsh}
-> bibat
-Welcome to the Batteries-Included Bayesian Analysis Template!
-What is your project called? [Project Name]: Baseball
-What should the project repository be called [baseball]: baseball
-What is your name? [Author name]: Teddy Groves
-What is your email? [author@email.com]:
-Who should be the code of conduct contact? [author@email.com]:
-Please briefly describe your project [A short description of the project.]: Comparison of distributions for modelling baseball hitting
-Choose an open source license from these options: (MIT, BSD-3-Clause, No license file) [MIT]:
-How would you like to document your project? (Quarto, Sphinx, No docs) [Quarto]:
-Would you like to create a .github directory? [y]: n
->
+☁  teddygroves  copier copy gh:teddygroves/bibat baseballl
+🎤 Name of your project
+   Baseball
+🎤 Name of your project, with no spaces (used for venv and package names)
+   baseball
+🎤 A short description of the project.
+   Is the generalised Pareto distribution good for modelling latent hitting
+ability?
+🎤 Your name (or your organization/company/team)
+   Teddy Groves
+🎤 Author email (will be included in pyproject.toml)
+   groves.teddy@gmail.com
+🎤 Code of conduct contact
+   groves.teddy@gmail.com
+🎤 open_source_license
+   MIT
+🎤 docs_format
+   Quarto
+🎤 create_dotgithub_directory (bool)
+   No
 ```
 
 After I answered the wizard's questions bibat creted a new folder called
 `baseball` that looked like this:
 
 ```{.zsh}
+☁  teddygroves  tree baseball
 baseball
 ├── CODE_OF_CONDUCT.md
 ├── LICENSE
 ├── Makefile
 ├── README.md
-├── bibat_version.txt
 ├── data
 │   └── raw
 │       ├── raw_measurements.csv
@@ -110,24 +117,7 @@ baseball
 │   ├── img
 │   │   ├── example.png
 │   │   └── readme.md
-│   ├── report.html
-│   ├── report.pdf
 │   └── report.qmd
-├── baseball
-│   ├── __init__.py
-│   ├── data_preparation.py
-│   ├── fitting_mode.py
-│   ├── inference_configuration.py
-│   ├── investigate.ipynb
-│   ├── notebooks
-│   ├── readme.md
-│   ├── sample.py
-│   ├── stan
-│   │   ├── custom_functions.stan
-│   │   ├── multilevel-linear-regression.stan
-│   │   └── readme.md
-│   ├── stan_input_functions.py
-│   └── util.py
 ├── inferences
 │   ├── fake_interaction
 │   │   └── config.toml
@@ -135,20 +125,27 @@ baseball
 │   │   └── config.toml
 │   └── no_interaction
 │       └── config.toml
+├── notebooks
+│   └── investigate.ipynb
 ├── plots
-│   ├── posterior_ll_comparison.png
-│   └── posterior_predictive_comparison.png
+│   └── readme.md
 ├── pyproject.toml
+├── src
+│   ├── __init__.py
+│   ├── data_preparation.py
+│   ├── fitting.py
+│   ├── stan
+│   │   ├── custom_functions.stan
+│   │   ├── multilevel-linear-regression.stan
+│   │   └── readme.md
+│   └── stan_input_functions.py
 └── tests
-    ├── test_integration
-    │   └── test_data_preparation.py
-    └── test_unit
-        ├── test_inference_configuration.py
-        └── test_util.py
+    └── test_integration
+        └── test_data_preparation.py
 ```
 
-This folder implements bibat's example analysis – a comparison of linear
-regression with two different design matrices. To check that everything was
+This folder implements bibat's example analysis, which compares linear
+regression models with different design matrices. To check that everything was
 working correctly I ran the analysis like this:
 
 ```zsh
@@ -156,84 +153,98 @@ $ cd baseball
 $ make analysis
 ```
 
-This ran without errors, running some data preparation functions and then analysing the data with Stan in a few configurations.
+This ran without errors, running some data preparation functions and then
+analysing the data with Stan in a few configurations.
 
 # Getting raw data
 
 To fetch raw data from the internet, I wrote a new script in the file
 `baseball/fetch_data.py`:
 
-```{.python include="../baseball/fetch_data.py"}
+```{.python include="../src/fetch_data.py"}
 ```
 
 To get the files I ran the script:
 
 ```zsh
-> source .venv/bin/activate
-(baseball) > python baseball/fetch_data.py
-Fetching 2006 data from https://raw.githubusercontent.com/stan-dev/example-models/master/knitr/pool-binary-trials/baseball-hits-2006.csv
-Writing 2006 data to data/raw/2006.csv
-Fetching bdb-main data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/Batting.csv
-Writing bdb-main data to data/raw/bdb-main.csv
-Fetching bdb-post data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/BattingPost.csv
-Writing bdb-post data to data/raw/bdb-post.csv
-Fetching bdb-apps data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/Appearances.csv
-Writing bdb-apps data to data/raw/bdb-apps.csv
+(baseball) ☁  baseball  python src/fetch_data.py --verbose
+/Users/tedgro/repos/teddygroves/baseball/src/fetch_data.py:6: DeprecationWarning:
+Pyarrow will become a required dependency of pandas in the next major release of pandas (pandas 3.0),
+(to allow more performant data types, such as the Arrow string type, and better interoperability with other libraries)
+but was not found to be installed on your system.
+If this would cause problems for you,
+please provide us feedback at https://github.com/pandas-dev/pandas/issues/54466
+
+  import pandas as pd
+INFO:root:Fetching 2006 data from https://raw.githubusercontent.com/stan-dev/example-models/master/knitr/pool-binary-trials/baseball-hits-2006.csv
+INFO:root:Writing 2006 data to data/raw/2006.csv
+INFO:root:Fetching bdb-main data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/Batting.csv
+INFO:root:Writing bdb-main data to data/raw/bdb-main.csv
+INFO:root:Fetching bdb-post data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/BattingPost.csv
+INFO:root:Writing bdb-post data to data/raw/bdb-post.csv
+INFO:root:Fetching bdb-apps data from https://raw.githubusercontent.com/cbwinslow/baseballdatabank/master/core/Appearances.csv
+INFO:root:Writing bdb-apps data to data/raw/bdb-apps.csv
 ```
 
 Finally, I removed the example analysis's raw data:
 
 ```zsh
-(baseball) > rm data/raw/raw_measurements.csv
+> rm data/raw/raw_measurements.csv
 ```
 
-# Preparing the data
+# Data Preparation
 
-The first step in preparing data is to decide what prepared data looks like for
-the purposes of our analysis. Bibat provides dataclasses called `PreparedData`
-and `MeasurementsDF` to help get started with this, which I found in the file
-`baseball/data_preparation.py`.
+The example project already has some data preparation code in the file
+`src/data_preparation.py`: I mostly just had to adapt what was already there.
 
-As it happens, prepared data looks very similar in this analysis and the
-example. All I had to do was change the `MeasurementsDF` definition a
-little^[note that this class uses [pandera](https://pandera.readthedocs.io), a
-handy library for defining what a pandas dataframe should look like]:
+The first data preparation step was to decide what prepared data should
+look like for my analysis and represent this definition using a subclass of
+bibat's `PreparedData` [Pydantic `BaseModel`](https://docs.pydantic.dev/latest/api/base_model/). Looking at the example analysis's
+`ExamplePreparedData` class, I could see that it already had the components
+that I needed, namely a name, a dictionary of coordinates and a table of
+measurements:
 
-```python
-class MeasurementsDF(pa.SchemaModel):
-    """A PreparedData should have a measurements dataframe like this.
-
-    Other columns are also allowed!
-    """
-
-    player_season: Series[str]
-    season: Series[str] = pa.Field(coerce=True)
-    n_attempt: Series[int] = pa.Field(ge = 1)
-    n_success: Series[int] = pa.Field(ge = 0)
+```{.python include="../../../bibat/template/src/data_preparation.py" start-line=44 end-line=57}
 ```
 
-The next step is to write functions that return `PreparedData` objects. In this
-case I wrote a couple of data preparation functions: `prepare_data_2006` and
-`prepare_data_bdb`:
+There are a few interesting things about this model. First, it uses some
+specialised types from bibat's `util` module, namely `CoordDict` and
+`DfInPydanticModel`. The latter is quite handy as it ensures that the table of
+measurements can be saved to json and then safely read back again. Second, the
+measurement table has a validator that refers to a [pandera `DataFrameModel`](https://pandera.readthedocs.io/en/stable/reference/generated/pandera.api.pandas.model.DataFrameModel.html?highlight=SchemaModel) called `ExampleMeasurementsDF` that defines what a measurement table should be like. It is defined just before `ExamplePreparedData`:
 
-```{.python include="../baseball/data_preparation.py" start-line=75 end-line=159}
+```{.python include="../../../bibat/template/src/data_preparation.py" start-line=32 end-line=41}
 ```
 
-To take into account the inconsistency between the two raw data sources, I
-first had to change the variable `RAW_DATA_FILES`:
+I only had to change a few things to make new definitions for my analysis:
 
-```{.python include="../baseball/data_preparation.py" start-line=26 end-line=33}
+```{.python include="../src/data_preparation.py" start-line=39 end-line=61}
+```
+
+The next step is to write functions that return `BaseballPreparedData` objects.
+In this case I wrote a couple of data preparation functions: `prepare_data_2006`
+and `prepare_data_bdb`:
+
+```{.python include="../src/data_preparation.py" start-line=64 end-line=157}
+```
+
+To take into account the inconsistency between my two raw data sources, I first
+had to change the variable RAW_DATA_FILES:
+
+```{.python include="../src/data_preparation.py" start-line=29 end-line=36}
 ```
 
 Next I changed the `prepare_data` function to handle the two different data
 sources.
 
-```{.python include="../baseball/data_preparation.py" start-line=162 end-line=182}
+```{.python include="../src/data_preparation.py" start-line=159 end-line=177}
 ```
 
-To finish off I deleted the unused global variables `NEW_COLNAMES`,
-`DROPNA_COLS` and `DIMS`, then checked if the function `load_prepared_data`
-needed any changes: I was pretty sure it didn't.
+To finish off the data preparation step I deleted any unused code from the
+example analysis, and updated the function `load_prepared_data`'s signature:
+
+```{.python include="../src/data_preparation.py" start-line=180 end-line=185}
+```
 
 To check that all this worked, I ran the data preparation script manually:^[I
 could also have just run `make analysis` again. This would have caused an error
@@ -244,19 +255,23 @@ on the step after prepare_data.py, which is fine!]
 (baseball) > python baseball/data_preparation.py
 ```
 
-Now the folder `data/prepared/bdb` contained a file
-`data/prepared/bdb/measurements.csv` that looked like this:
+Now the folder `data/prepared/` contained json files `2006.json` and `bdb.json`
+that looked like this:
 
-```{csv}
-,player_season,season,n_attempt,n_success
-0,abreujo02,2018,553,180
-1,acunaro01,2018,487,178
-3,adamewi01,2018,322,112
-6,adamsla01,2018,29,10
-7,adamsma01,2018,337,104
-8,adamsma01,2018,277,92
-9,adamsma01,2018,60,12
+```zsh
+(baseball) > jq . data/prepared/bdb.json | head -n 10
+{
+  "name": "bdb",
+  "coords": {
+    "player_season": [
+      "abreujo022017",
+      "abreujo022018",
+      "abreujo022019",
+      "abreujo022020",
+      "abreujo022021",
+      "acunaro012018",
 ```
+
 
 # Specifying statistical models
 
@@ -316,44 +331,62 @@ real gpareto_lpdf(vector y, real ymin, real k, real sigma) {
 
 Next I wrote a file `gpareto.stan`:
 
-```{.stan include="../baseball/stan/gpareto.stan"}
+```{.stan include="../src/stan/gpareto.stan"}
 ```
 
 Finally I wrote a file `normal.stan`:
 
-```{.stan include="../baseball/stan/normal.stan"}
+```{.stan include="../src/stan/normal.stan"}
 ```
 
 # Generating Stan inputs
 
 Next I needed to tell the analysis how to turn some prepared data into a
-dictionary that can be used as input for Stan. Bibat assumes that this task is
-handled by functions that live in the file `baseball/stan_input_functions.py`,
-each of which takes in a `PreparedData` and returns a Python dictionary. You
-can write as many Stan input functions as you like and choose which one to run
-for any given inference.
+dictionary that can be used as input for Stan. The example analysis includes
+some functions that do this in the file `src/stan_input_functions.py`.
 
-I started by defining some Stan input functions that pass arbitrary prepared
-data on to each of the models:^[Note that this code uses the scipy function
-`logit`, which it imported like this: `from scipy.special import logit`]
+I followed the examples to create similar functions for my two Stan
+models:^[Note that this code uses the scipy function `logit`, which it imported
+like this: `from scipy.special import logit`]
 
-```{.python include="../baseball/stan_input_functions.py" start-line=22 end-line=46}
+```{.python include="../src/stan_input_functions.py" end-line=33}
 ```
 
-But why stop there? It can also be useful to generate Stan input data with a
-model, by running it in simulation mode with hardcoded parameter values. Here
-are some functions that do this for both of our models:
-^[These functions require some more imports: `numpy` and `scipy.special.expit`]
-```{.python include="../baseball/stan_input_functions.py" start-line=49}
+<!-- todo: add link for returns_stan_input below -->
+
+These function use a handy decorator called `returns_stan_input` that uses the
+power of [`stanio`](https://github.com/WardBrian/stanio) to convert a dictionary
+to a json serialisable, Stan-friendly form. Thanks to this decorator I didn't
+have to spend time appending `.values.tolist()` to the inputs that came from
+pandas objects.
+
+I now had functions that turned my prepared data into input for either of my
+Stan models. But why stop there? It can also be useful to generate fake input
+data, by running a model in simulation mode using hardcoded parameter values.
+Here are some functions that do this for both of my models: ^[These functions
+require some more imports: `numpy` and `scipy.special.expit`]
+
+```{.python include="../src/stan_input_functions.py" start-line=37}
+```
+
+# Configuring fitting
+
+To tell my analysis how to run inferences, I had to edit the file `src/
+fitting.py`. The only changes I made from the example analysis were to remove
+the `kfold` fitting mode, which I didn't need to use in this analysis, and to
+add my Stan input functions to the `LOCAL_FUNCTIONS` constant:
+
+
+```{.python include="../src/fitting.py"}
 ```
 
 # Specifying inferences
 
 Now all the building blocks for making statistical inferences – raw data, data
-preparation rules, statistical models and recipes for turning prepared data
-into model inputs – were in place. The last step before actually running Stan
-was to write down how put the blocks together. Bibat has another concept for
-this, called 'inferences'.
+preparation rules, statistical models, recipes for turning prepared data into
+model inputs and a procedure for running inferences – were in place. The last
+step before actually running my analysis was to write down how put the blocks
+together. Bibat has another concept for this, called 'inferences'.
 
 An inference in bibat is a folder containing a special file called
 `config.toml`. This file sets out what inferences you want to make: which
@@ -387,8 +420,7 @@ Note that:
 
 - The Stan file, prepared data folder and Stan input function are referred to by
   strings. The analysis should raise an error if you enter a non-existing value.
-- Both inferences are set to run in "prior" and "posterior" modes – the other
-  pre-defined mode is "kfold", but you can also write your own!
+- Both inferences are set to run in `prior` and `posterior` modes
 - You can enter arbitrary arguments to cmdstanpy's `CmdStanModel.sample` method
   in the `[sample_kwargs]` table.
 - You can enter mode-specific overrides in `[mode_options.<MODE>]`. This can be
@@ -403,19 +435,19 @@ found that the `inferences` subfolders had been populated:
 inferences
 ├── gpareto2006
 │   ├── config.toml
-│   └── idata.json
+│   └── idata
 └── normal2006
     ├── config.toml
-    └── idata.json
+    └── idata
 ```
 
 # Investigating the inferences
 
 Now that the inferences are ready it's time to check them out. Bibat provides a
-Jupyter notebook at `baseball/investigate.ipynb` for exactly this purpose. The
+Jupyter notebook at `notebooks/investigate.ipynb` for exactly this purpose. The
 notebook's main job is to create plots and save them in the `plots` directory
-when it is executed with the command `jupyter execute investigate.ipynb`, which
-is the final step in the chain of commands that is triggered by `make
+when it is executed with the command `jupyter execute notebooks/investigate.ipynb`,
+ which is the final step in the chain of commands that is triggered by `make
 analysis`.
 
 A notebook is arguably a nicer home for code that creates plots than a plain
@@ -429,7 +461,7 @@ reusable with a few tweaks to avoid missing file errors, so I kept it. On the
 other hand, I wanted to make some different plots from the ones in the example
 analysis, including some that required loading prepared data. To check out
 everything I did, see
-[here](https://github.com/teddygroves/bibat/blob/main/bibat/examples/baseball/baseball/investigate.ipynb).
+[here](https://github.com/teddygroves/bibat/blob/main/bibat/example_projects/baseball/notebooks/investigate.ipynb).
 
 # Choosing priors using push-forward calibration
 
@@ -447,7 +479,7 @@ actually realised success rates.
 # Extending the analysis to the baseballdatabank data
 
 To model the more recent data, all I had to do was create some new inference
-folders with appropriate `prepared_data_dir` fields in their `config.toml`
+folders with appropriate `prepared_data` fields in their `config.toml`
 files. For example, here is the `config.toml` file for the `gparetobdb`
 inference:
 
@@ -455,7 +487,7 @@ inference:
 ```
 
 After running `make analysis` one more time, I went back to the notebook
-`baseball/investigate.ipynb` and made plots of both models' posterior 1%-99%
+`notebooks/investigate.ipynb` and made plots of both models' posterior 1%-99%
 success rate intervals for both datasets:
 
 ![](../plots/posterior_quantiles.png)
@@ -474,4 +506,4 @@ The final step was to document my analysis. To do this I edited the file
 `docs/report.qmd`, then ran `make docs`, which produced the
 very HTML document that you are probably reading now! You can find the complete
 `report.qmd` file
-[here](https://github.com/teddygroves/bibat/blob/main/bibat/examples/baseball/docs/report.qmd).
+[here](https://github.com/teddygroves/bibat/blob/main/example_projects/baseball/docs/report.qmd).

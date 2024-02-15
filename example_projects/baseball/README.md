@@ -1,7 +1,8 @@
 Baseball
-==============================
+========
 
-Comparison of distributions for modelling baseball hitting
+Is the generalised Pareto distribution good for modelling latent hitting
+ability? This analysis attempts to find out!
 
 # How to run the analysis
 
@@ -24,9 +25,6 @@ Now run this command from the project root:
 $ make docs
 ```
 
-
-
-
 # How to run tests
 
 From the project root, either run
@@ -39,6 +37,6 @@ or
 
 ```
 $ source .venv/bin/activate
-$ pip install -e .'[dev]'
+$ pip install -e .'[development]'
 $ python -m pytest
 ```

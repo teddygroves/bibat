@@ -2,7 +2,8 @@
 
 ENV_MARKER = .venv/.bibat.marker
 ACTIVATE_VENV = .venv/bin/activate
-SRC = baseball
+SRC = src
+NOTEBOOK_DIR = notebooks
 DOCS_DIR = docs
 
 REPORT_STEM = docs/report
@@ -45,8 +46,8 @@ test: $(ENV_MARKER)
 analysis: $(ENV_MARKER)
 	. $(ACTIVATE_VENV) && ( \
 	  python $(SRC)/data_preparation.py || exit 1; \
-	  python $(SRC)/sample.py || exit 1; \
-	  jupyter execute $(SRC)/investigate.ipynb || exit 1; \
+	  python $(SRC)/fitting.py || exit 1; \
+	  jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1; \
 	)
 
 clean-docs:

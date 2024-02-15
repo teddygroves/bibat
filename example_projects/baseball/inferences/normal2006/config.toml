@@ -1,6 +1,6 @@
 name = "normal2006"
 stan_file = "normal.stan"
-prepared_data_dir = "2006"
+prepared_data = "2006"
 stan_input_function = "get_stan_input_normal"
 modes = ["prior", "posterior"]
 
