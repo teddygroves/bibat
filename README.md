@@ -5,7 +5,7 @@
 [![Tox](https://github.com/teddygroves/bibat/actions/workflows/run_tox.yml/badge.svg)](https://github.com/teddygroves/bibat/actions/workflows/run_tox.yml)
 [![Test end-to-end](https://github.com/teddygroves/bibat/actions/workflows/test_end_to_end.yml/badge.svg)](https://github.com/teddygroves/bibat/actions/workflows/test_end_to_end.yml)
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
-[![Supported Python versions: 3.11 and newer](https://img.shields.io/badge/python->=3.12-blue.svg)](https://www.python.org/)
+[![Supported Python versions: 3.11 and newer](https://img.shields.io/badge/python->=3.11-blue.svg)](https://www.python.org/)
 [![](https://badge.fury.io/py/bibat.svg)](https://badge.fury.io/py/bibat)
 [![](https://codecov.io/github/teddygroves/bibat/branch/main/graph/badge.svg?token=ck0IKyzP7J)](https://codecov.io/github/teddygroves/bibat)
 [![pyOpenSci](https://tinyurl.com/y22nb8up)](https://github.com/pyOpenSci/software-review/issues/83)
