@@ -48,14 +48,19 @@ and copy bibat's example project there:
 $ copier copy gh:teddygroves/bibat my_cool_project
 ```
 
-If you want to use bibat's Python api but not the example project, you can
+This will trigger an interactive questionnaire and then create a brand
+new, custom, batteries-included, Bayesian analysis project in the directory
+`my_cool_project`. See [bibat's documentation](https://bibat.readthedocs.io) for
+what to do next.
+
+If you want to use bibat's Python code separately from the template, you can
 install it to your python environment as follows:
 
 ```sh
 $ pip install bibat
 ```
 
-Finally, to install bibat with development dependencies:
+To install bibat with development dependencies:
 
 ```sh
 $ pip install bibat'[development]'
