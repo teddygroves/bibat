@@ -1,22 +1,14 @@
 # Bibat: Batteries-Included Bayesian Analysis Template
 
-![](https://zenodo.org/badge/latestdoi/344553551)
-
-![Documentation Status](https://bibat.readthedocs.io/en/latest/?badge=latest)
-
-![Tox](https://github.com/teddygroves/bibat/actions/workflows/run_tox.yml/badge.svg)
-
-![Test end-to-end](https://github.com/teddygroves/bibat/actions/workflows/test_end_to_end.yml/badge.svg)
-
-![https://python.arviz.org/en/stable/api/inference_data.html](https://www.repostatus.org/badges/latest/active.svg)
-
-![Supported Python versions: 3.9 and newer](https://img.shields.io/badge/python->=3.12-blue.svg)
-
-![](https://badge.fury.io/py/bibat.svg)
-
-![](https://codecov.io/github/teddygroves/bibat/branch/main/graph/badge.svg?token=ck0IKyzP7J)
-
-![pyOpenSci](https://tinyurl.com/y22nb8up)
+[![](https://zenodo.org/badge/344553551.svg)](https://zenodo.org/badge/latestdoi/344553551)
+[![Documentation Status](https://readthedocs.org/projects/bibat/badge/?version=latest)](https://bibat.readthedocs.io/en/latest/?badge=latest)
+[![Tox](https://github.com/teddygroves/bibat/actions/workflows/run_tox.yml/badge.svg)](https://github.com/teddygroves/bibat/actions/workflows/run_tox.yml)
+[![Test end-to-end](https://github.com/teddygroves/bibat/actions/workflows/test_end_to_end.yml/badge.svg)](https://github.com/teddygroves/bibat/actions/workflows/test_end_to_end.yml)
+[![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
+[![Supported Python versions: 3.11 and newer](https://img.shields.io/badge/python->=3.12-blue.svg)](https://www.python.org/)
+[![](https://badge.fury.io/py/bibat.svg)](https://badge.fury.io/py/bibat)
+[![](https://codecov.io/github/teddygroves/bibat/branch/main/graph/badge.svg?token=ck0IKyzP7J)](https://codecov.io/github/teddygroves/bibat)
+[![pyOpenSci](https://tinyurl.com/y22nb8up)](https://github.com/pyOpenSci/software-review/issues/83)
 
 Bibat is a Python package providing a flexible interactive template for Bayesian
 statistical analysis projects.
