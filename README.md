@@ -38,7 +38,7 @@ step, how to use bibat to implement a complex statistical analysis.
 To start a Bayesian statistical analysis project using bibat, first install [copier](https://copier.readthedocs.io), for example like this:
 
 ```sh
-$ pipx install bibat
+$ pipx install copier
 ```
 
 Now choose a directory name for your analysis, for example `my_cool_project`,
@@ -49,7 +49,7 @@ $ copier copy gh:teddygroves/bibat my_cool_project
 ```
 
 If you want to use bibat's Python api but not the example project, you can
-install it to your python enviornment as follows:
+install it to your python environment as follows:
 
 ```sh
 $ pip install bibat
