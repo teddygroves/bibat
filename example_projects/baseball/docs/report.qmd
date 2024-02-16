@@ -204,7 +204,7 @@ bibat's `PreparedData` [Pydantic `BaseModel`](https://docs.pydantic.dev/latest/a
 that I needed, namely a name, a dictionary of coordinates and a table of
 measurements:
 
-```{.python include="../../../bibat/template/src/data_preparation.py" start-line=44 end-line=57}
+```{.python include="../../../template/src/data_preparation.py" start-line=44 end-line=57}
 ```
 
 There are a few interesting things about this model. First, it uses some
@@ -213,7 +213,7 @@ specialised types from bibat's `util` module, namely `CoordDict` and
 measurements can be saved to json and then safely read back again. Second, the
 measurement table has a validator that refers to a [pandera `DataFrameModel`](https://pandera.readthedocs.io/en/stable/reference/generated/pandera.api.pandas.model.DataFrameModel.html?highlight=SchemaModel) called `ExampleMeasurementsDF` that defines what a measurement table should be like. It is defined just before `ExamplePreparedData`:
 
-```{.python include="../../../bibat/template/src/data_preparation.py" start-line=32 end-line=41}
+```{.python include="../../../template/src/data_preparation.py" start-line=32 end-line=41}
 ```
 
 I only had to change a few things to make new definitions for my analysis:

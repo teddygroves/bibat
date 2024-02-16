@@ -1,4 +1,4 @@
-_subdirectory: bibat/template
+_subdirectory: template
 project_name:
   type: str
   help: Name of your project

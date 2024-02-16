@@ -104,7 +104,7 @@ bibat'[development]'`):
 - ruff
 - furo
 
-Projects created by bibat have Python dependencies listed in their [pyproject.toml] file](https://github.com/teddygroves/bibat/blob/main/bibat/template/pyproject.toml.jinja). The additional ones are as follows:
+Projects created by bibat have Python dependencies listed in their [pyproject.toml] file](https://github.com/teddygroves/bibat/blob/main/template/pyproject.toml.jinja). The additional ones are as follows:
 
 - bibat
 - jupyter

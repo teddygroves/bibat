@@ -249,5 +249,5 @@ and Sphinx, the official documentation for both tools are very good. The
 learning Sphinx and its primary document format reStructuredText are linked
 from the [Sphinx homepage](https://www.sphinx-doc.org/en/master/). For a more
 focused introduction, try looking at the example source documents that bibat
-provides. The example [quarto report is here](https://github.com/teddygroves/bibat/blob/copier/bibat/template/%7B%25%20if%20docs_format%20!%3D%20'None'%20%25%7Ddocs%7B%25%20endif%20%25%7D/%7B%25%20if%20docs_format%20%3D%3D%20'Quarto'%20%25%7Dreport.qmd%7B%25%20endif%20%25%7D.jinja)
-and the [Sphinx index document can be found here](https://github.com/teddygroves/bibat/blob/copier/bibat/template/%7B%25%20if%20docs_format%20!%3D%20'None'%20%25%7Ddocs%7B%25%20endif%20%25%7D/%7B%25%20if%20docs_format%20%3D%3D%20'Sphinx'%20%25%7Dindex.rst%7B%25%20endif%20%25%7D.jinja).
+provides. The example [quarto report is here](https://github.com/teddygroves/bibat/blob/copier/template/%7B%25%20if%20docs_format%20!%3D%20'None'%20%25%7Ddocs%7B%25%20endif%20%25%7D/%7B%25%20if%20docs_format%20%3D%3D%20'Quarto'%20%25%7Dreport.qmd%7B%25%20endif%20%25%7D.jinja)
+and the [Sphinx index document can be found here](https://github.com/teddygroves/bibat/blob/copier/template/%7B%25%20if%20docs_format%20!%3D%20'None'%20%25%7Ddocs%7B%25%20endif%20%25%7D/%7B%25%20if%20docs_format%20%3D%3D%20'Sphinx'%20%25%7Dindex.rst%7B%25%20endif%20%25%7D.jinja).

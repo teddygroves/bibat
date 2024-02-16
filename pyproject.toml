@@ -102,6 +102,6 @@ init_typed = true
 warn_required_dynamic_aliases = true
 
 [tool.coverage.run]
-omit = ["bibat/template/*", "example_projects/*"]
+omit = ["template/*", "example_projects/*"]
 [tool.coverage.report]
 exclude_also = ["if TYPE_CHECKING:"]
