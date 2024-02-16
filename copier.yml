@@ -1,0 +1,43 @@
+_subdirectory: template
+project_name:
+  type: str
+  help: Name of your project
+  default: My Cool Project
+project_name_no_spaces:
+  type: str
+  help: Name of your project, with no spaces (used for venv and package names)
+  default: "{{project_name|lower|replace(' ', '_')}}"
+  validator: "{% if ' ' in project_name_no_spaces %}No spaces!{% endif %}"
+description:
+  type: str
+  help: A short description of the project.
+  default: A very cool project
+author_name:
+  type: str
+  help: Your name (or your organization/company/team)
+  default: "{{ project_name }} developers"
+author_email:
+  type: str
+  help: Author email (will be included in pyproject.toml)
+  default: author@email.com
+coc_contact:
+  type: str
+  help: Code of conduct contact
+  default: "{{ author_email }}"
+open_source_license:
+  type: str
+  choices:
+    - MIT
+    - BSD-3-Clause
+    - No licence
+  default: MIT
+docs_format:
+  type: str
+  choices:
+    - Quarto
+    - Sphinx
+    - No docs
+  default: Quarto
+create_dotgithub_directory:
+  type: bool
+  default: yes

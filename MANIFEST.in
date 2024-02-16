@@ -1,3 +1,0 @@
-include bibat/cookiecutter.json
-recursive-include bibat/examples *
-recursive-include bibat/{{cookiecutter.repo_name}} *

@@ -1,4 +1,5 @@
-bibat/examples/**/idata/
+site
+bibat/example_projects/**/idata/
 .tox",
 __pycache__",
 .ipynb_checkpoints/",

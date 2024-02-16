@@ -1,0 +1,73 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "baseball"
+authors = [
+    {name = "Teddy Groves", email = "groves.teddy@gmail.com"},
+]
+version = "0.0.1"
+description = "Is the generalised Pareto distribution good for modelling latent hitting ability?"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "arviz",
+    "bibat@git+https://github.com/teddygroves/bibat.git@copier",
+    "cmdstanpy",
+    "jupyter",
+    "numpy",
+    "pandas",
+    "pandera >= 0.18.0",
+    "pydantic >= 2.0.0",
+    "toml","zarr",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest",
+    "black",
+    "ruff",
+]
+
+[tool.setuptools]
+packages = ["src"]
+
+[tool.black]
+line-length = 80
+target-version = ['py38']
+include = '\.pyi?$'
+exclude = '''
+
+(
+  /(
+      \.eggs         # exclude a few common directories in the
+    | \.git          # root of the project
+    | \.hg
+    | \.mypy_cache
+    | \.tox
+    | \.venv
+    | _build
+    | buck-out
+    | build
+    | dist
+  )/
+  | foo.py           # also separately exclude a file named foo.py in
+                     # the root of the project
+)
+'''
+
+[tool.pylint.messages_control]
+disable = "C0330, C0326"
+
+[tool.pylint.format]
+max-line-length = "80"
+
+[tool.ruff]
+line-length = 80
+[tool.ruff.lint]
+select = ["ALL"]
+[tool.ruff.lint.isort]
+known-first-party = ["bibat", "src"]
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["INP001"]

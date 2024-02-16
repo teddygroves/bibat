@@ -1,9 +1,9 @@
 
 Checklist:
 
-- [ ] No pytest errors
+- [ ] No tox errors
 - [ ] `make analysis` works
 - [ ] `README.md` up to date
 - [ ] docs up to date
-- [ ] `{{cookiecutter.repo_name}}/README.md` up to date
-- [ ] `investigate.ipynb` up to date
+- [ ] `template/README.md` up to date
+- [ ] `template/notebooks/investigate.ipynb` up to date

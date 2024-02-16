@@ -1,0 +1,28 @@
+# GitHub workflow to install python and run pytest.
+
+# See here for more about GitHub workflows:
+# https://docs.github.com/en/actions/using-workflows
+
+name: Run pytest
+
+on: push
+
+jobs:
+  build:
+
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+        matrix:
+            os: [ubuntu-latest, windows-latest]
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python 3.12
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.12
+    - name: Set up environment
+      run: make env
+    - name: Run pytest
+      run: ./venv/bin/activate && python -m pytest tests
