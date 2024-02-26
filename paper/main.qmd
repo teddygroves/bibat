@@ -38,11 +38,11 @@ The term "Bayesian workflow" captures the idea that Bayesian statistical
 analysis comprises not just inference, but also specific approaches to related
 activities like data preparation, model design, diagnosis, debugging and
 criticism. This idea can be found in @boxBayesianInferenceStatistical1992
-and has recently received increasing scholarly recognition of
+and has recently received increasing scholarly recognition
 [@gelmanBayesianWorkflow2020;@grinsztajnBayesianWorkflowDisease2021;
-@gabryVisualizationBayesianWorkflow2019]. Software tools now exist
-that address most individual aspects of a Bayesian workflow: see
-@strumbeljPresentFutureSoftware for a review of the state of the art.
+@gabryVisualizationBayesianWorkflow2019]. Software tools now exist that address
+most individual aspects of a Bayesian workflow: see @vstrumbelj2024past for a
+review of the state of the art.
 
 Unfortunately, each tool typically addresses one, or at most a few, of the many
 activities that comprise a real Bayesian workflow software project; it is left
@@ -58,18 +58,25 @@ extended to implement a wide range of statistical analyses.
 
 # How bibat works
 
-Bibat can be installed on the Windows, Linux or macOS command line on by running
-the command `pip install bibat` and then used by running the command `bibat`.
-This command triggers an interactive form which prompts the user to select a
-range of customisation options. Bibat then creates a new directory containing
-code that implements an example analysis, with customisations reflecting the
-user's choices. This analysis works immediately, and can be reproduced with
-the single command `make analysis` without the need for any further action by
-the user: in this sense bibat comes with batteries included.
+In order to use bibat, a user must first install the templating library copier
+[@copierdevelopersCopier2024], then choose a directory name and run this command
+from the command line:
+
+```sh
+$ copier copy gh:teddygroves/bibat my-chosen-directory-name
+```
+
+This command triggers an interactive form which prompts the user to select
+a range of customisation options. The new directory will then be created
+if necessary and filled with code that implements an example analysis, with
+customisations reflecting the user's choices. This analysis works immediately,
+and can be reproduced with the single command `make analysis` without the need
+for any further action by the user: in this sense bibat comes with batteries
+included.
 
 @fig-workflow illustrates the components of a bibat-based Bayesian workflow and
 shows how it proceeds: the project team edits the code components, then runs
-`make analysis` triggering creation of the result components. After inspecting
+`make analysis`, triggering creation of the result components. After inspecting
 these they repeat the process, leading to a cycle that ultimately results in a
 complete, easily reproducible analysis.
 
@@ -114,12 +121,12 @@ modular approach it is possible to perform small sub analyses individually
 and to iteratively expand the analysis by adding components without needing to
 consider everything at once. In addition, bibat ensures that there are minimal
 restrictions on the components: for example, datasets need not be singular or
-tabular and statistical models need not be representable in formula syntax.
+tabular, and it is possible to use any statistical model that Stan can compile.
 Thanks to these accommodations a project team using bibat should typically not
 need to foresee the ultimate requirements of their analysis before starting
 the project.
 
-Bibat encourages reproducibility mainly by providing a preconfigured makefile
+Bibat encourages reproducibility by providing a preconfigured makefile
 with a target `analysis` that triggers creation of an isolated environment,
 installation of dependencies, data preparation, statistical computation and
 analysis of results. In this way a bibat analysis can be reproduced on most
@@ -127,32 +134,28 @@ platforms using a single command. In particular, this target attempts to install
 cmdstan if necessary, using a recipe tailored to the host operating system.
 This functionality addresses a common issue where researchers find it difficult
 to install Stan, especially on Windows. A second way in which bibat encourages
-reproducibility is by providing its Python code in the form of a preconfigured
-package. Thanks to the use of modern conventions for specifying dependencies
-and configuring tooling, we expect that this will make bibat analyses easier
-for other researchers to work with, thereby facilitating replication while also
-making initial development more convenient.
+reproducibility is by providing a preconfigured Python project following modern
+conventions, making bibat analyses straightforward to replicated and extend for
+other researchers who are already familiar with these conventions.
 
-Bibat integrates many widely-adopted, open-source and powerful tools to
-implement the components of a Bayesian workflow. Bibat projects are written
-in modern Python and uses pydantic [@pydanticdevelopersPydantic2022]
-and pandera [@niels_bantilan-proc-scipy-2020] for data modelling, Stan
-[@carpenterStanProbabilisticProgramming2017] for statistical inference,
-cmdstanpy [@standevelopmentteamCmdStanPy2022] for python-Stan interface, arviz
-[@kumarArviZUnifiedLibrary2019] for storing and analyzing inferences and sphinx
-[@georgbrandlandthesphinxteamSphinx2022] and quarto [@Allaire_Quarto_2022]
-for documentation.  Bibat itself is also written in modern Python and uses the
-previously mentioned software as well as the popular  popular template tool
-copier [@copierdevelopersCopier2024].
+Bibat integrates many widely-adopted open-source tools to implement
+the components of a Bayesian workflow. These include pydantic
+[@pydanticdevelopersPydantic2022] and pandera [@niels_bantilan-proc-scipy-2020]
+for data modelling, Stan [@carpenterStanProbabilisticProgramming2017] for
+statistical inference, cmdstanpy [@standevelopmentteamCmdStanPy2022] for
+python-Stan interface, arviz [@kumarArviZUnifiedLibrary2019] for storing and
+analysing inferences and sphinx [@georgbrandlandthesphinxteamSphinx2022] and
+quarto [@Allaire_Quarto_2022] for documentation.
 
 To encourage collaborative development of Bayesian workflow projects, Bibat
 projects include a preconfigured test environment, continuous integration,
-linting and pre-commit hooks. In addition, including documentation as a
-first class component of the analysis addresses a common problem in academic
-statistics projects where the paper gets out of sync with the code. Bibat is
-continuously tested to ensure that it works on the operating systems Linux,
-macOS and Windows. Bibat's continuous integration runs a test suite as well as
-an end-to-end functional test on all supported Python versions.
+linting and pre-commit hooks. In addition, bibat includes documentation as a
+first class, integrated component of the analysis, helping to keep it in sync
+with the other components.
+
+Bibat is continuously tested to ensure that it works on the operating systems
+Linux, macOS and Windows. Bibat's continuous integration runs a test suite as
+well as an end-to-end functional test on all supported Python versions.
 
 # Fitting modes
 
@@ -168,25 +171,35 @@ Fitting modes in bibat projects take the form of instances of the class
 `FittingMode`. Each fitting mode contains a name, a function that fits a
 prepared dataset and instructions for how and where to save the results. For
 example, the provided prior sampling fitting mode is called "prior", contains
-a function that runs MCMC sampling with the `likelihood` input variable set
-to `0`, returning a `CmdStanMCMC` instance, and performs MCMC sampling and writes data to the `InferenceData` group
-`prior`. This design allows multiple fits to be stored alongside each other
-naturally, facilitating many common Bayesian workflow analyses, and can easily
-be configured to prevent unnecessary computations.
+a function that runs MCMC sampling with the `likelihood` input variable set to
+`0`, returning a `CmdStanMCMC` instance, and specifies that this result should
+be written to the `InferenceData` group `prior`.  Bibat provides fitting modes
+corresponding for prior sampling, posterior sampling and k-fold posterior
+sampling. Users can easily implement additional fitting modes or modify the
+`FittingMode` class to achieve even richer functionality. Fitting modes can be
+referenced by name from the file that configures an inferece: for example, the
+following lines indicate that the inference should be run in prior, posterior
+and kfold modes:
 
-Bibat provides fitting modes corresponding for prior sampling, posterior
-sampling and k-fold posterior sampling. Users can easily add additional fitting
-modes by copying these examples, or modify the `FittingMode` class to achieve
-even richer functionality.
+```toml
+modes = ["prior", "posterior", "kfold"]
+```
+
+Fitting modes allow bibat projects to succinctly but flexibly declare how to
+perform inferences, and allow results corresponding to the same inference to be
+stored alongside each other appropriately.
 
 # Comparison with alternative software
 
-Other than bibat, there is currently no interactive template that specifically
+Other than bibat, we are not aware of any interactive template that specifically
 targets Bayesian workflow projects. There are some templates that arguably
-encompass Bayesian workflow as a special case of data analysis project, such
-as cookiecutter-data-science [@drivendataCookiecutterdatascience2022], but
-these are of limited use compared with a specialised template due to the many
-specificities of Bayesian workflow.
+encompass Bayesian workflow as a special case of data analysis project,
+such as cookiecutter-data-science [@drivendataCookiecutterdatascience2022],
+but these are of limited use compared with a specialised template due to
+the many specificities of Bayesian workflow. cookiecutter-cmdstanpy-wrapper
+[@wardWardBrianCookiecuttercmdstanpywrapper2024] is an interactive template that
+targets a different use case than Bayesian workflow projects, namely setting up
+a Python package that provides pre-compiled Stan models.
 
 There is some software that addresses the general task of facilitating
 Bayesian workflow, but using a different approach from bibat's. For example,
@@ -207,25 +220,23 @@ Bayesian workflows may prefer to simply write their software from scratch rather
 than use bibat, using tools like bambi or brms to ensure that the software
 challenge remains manageable.
 
-Similarly, bibat includes features that not all analyses will need, such as
-accommodating plural inferences, fitting modes and datasets. As a result, bibat
-is not optimal for projects that are known in advance to be singular. This could
-happen, for example, because there is no uncertainty as to the necessary data
-manipulations, or because the aim of the project is to maintain and streamline
-an existing statistical model rather than to compare it with others.
-
-While inclusion of potentially unneeded features is an important limitation
-of bibat, it is worth noting that it is often difficult to predict in advance
-what features a Bayesian workflow project will require, and that it can
-be time-consuming to re-write a project after belatedly realising that an
-unsupported feature is needed. We therefore think there is value in using bibat
-as a default.
+Similarly, bibat accommodates plural inferences, fitting modes and datasets,
+but many analyses are singular in at least one of these components and could
+therefore be implemented more simply and concisely than an equivalent bibat
+project. On the other hand, it is typically difficult to predict in advance
+which components of a Bayesian workflow will be plural, and costly to re-write
+a project after mistakenly assuming that a component will be singular. While we
+acknowledge that accommodating potentially unneeded plurality is an important
+limitation of bibat, we nonetheless think that it is the correct choice for a
+general-purpose template.
 
 Another limitation of bibat is that it makes many opinionated choices about
 which tools to use. In particular, languages other than Python, inference
-frameworks other than Stan and validation frameworks other than Pydantic are
-not supported. We think this limitation is best addressed by the development of
-additional analysis templates.
+frameworks other than Stan and validation frameworks other than Pydantic
+are not supported. We think that it is on the whole good for templates to be
+opinionated, as unopinionated templates are necessarily more complicated; this
+limitation of bibat is therefore best addressed by the development of additional
+analysis templates that make different choices.
 
 # Case studies
 
@@ -248,7 +259,7 @@ tutorial. An illustrative graphic from this analysis is shown in @fig-baseball.
 
 In this case bibat was useful because of its ability to implement arbitrary
 statistical models, as latent generalised Pareto distributions are not supported
-by generic regression packages like brms and bambi. Further, bibat's modular
+by any available formula-based regression packages. Further, bibat's modular
 design made it easier to implement this medium-sized analysis with two datasets,
 two models and six inferences.
 
@@ -263,16 +274,6 @@ and the black dots show the two observed datasets.  See <https://github.com/tedd
 for the full analysis.
 
 :::
-
-In @grovesteddySphincter2024, bibat was used to implement a large analysis
-of cerebrovascular data from mice, involving two raw datasets, 6 prepared
-datasets, 15 models and 15 inferences. Again it was not possible to implement
-the analysis using formula-based packages due to the need for custom modelling
-approaches to take into account expert knowledge about both the target system
-and the measurement apparatus. Due to the number of datasets and models that
-needed to be considered, implementing this analysis without using bibat or a
-similar structured approach would have required a combination of more time and/
-or compromises in software quality.
 
 These cases illustrate that bibat can be useful in a variety of real Bayesian
 workflows, with different sizes, subject matters and emphases.
