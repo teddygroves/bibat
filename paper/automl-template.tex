@@ -1,0 +1,265 @@
+\documentclass[11pt]{article}
+
+\usepackage{microtype} % microtypography
+\usepackage{booktabs}  % tables
+\usepackage{url}  % urls
+
+% With no package options, the submission will be anonymized, the supplemental
+% material will be visible, and line numbers will be added to the manuscript.
+%
+% To compile a non-anonymized camera-ready version, add the [final] option:
+%
+% \usepackage[final]{automl}
+%
+% To compile for the workshop track, add the [workshop] option:
+%
+% \usepackage[workshop]{automl}
+% \usepackage[final,workshop]{automl}
+%
+% To compile a single-blind submission, e.g. for the ABCD track, add the
+% [revealauthors] option:
+%
+% \usepackage[revealauthors]{automl}
+%
+% To compile a non-anonymized pre-print version that can be uploaded to arXiv,
+% add the [preprint] option:
+%
+% \usepackage[preprint]{automl}
+%
+% The [hidesupplement] option may be used to hide the supplementary material from any of the
+% above commands, e.g.:
+%
+% \usepackage[hidesupplement,final,workshop]{automl}
+
+\usepackage[revealauthors]{automl}
+
+$pandoc.tex()$
+$title.tex()$
+
+\begin{document}
+\maketitle
+\begin{abstract}
+$abstract$
+\end{abstract}
+$body$
+
+\newpage
+\section*{Submission Checklist}
+
+% All submissions must include a section containing the AutoML submission
+% checklist, shown below. The submission checklist does not count towards the
+% page limit and must be included at submission and camera-ready time.  The
+% submission checklist draws upon related submission checklists:
+%
+% the NeurIPS '22 checklist: https://neurips.cc/Conferences/2022/PaperInformation/PaperChecklist
+%     and the NAS checklist: https://www.automl.org/wp-content/uploads/NAS/NAS_checklist.pdf
+%
+% For each question, change the default \answerTODO{} to either:
+%
+%     \answerYes{[justification]},
+%     \answerNo{[justification]}, or
+%     \answerNA{[justification]}.
+
+% *You must include a brief justification to your answer,} either by referencing
+% *the appropriate section of your paper or providing a brief inline
+% *description.* For example:
+%
+% -  Did you include the license of the code and datasets?
+%
+%    \answerYes{See Section~\ref{sec:code}.
+%
+% - Did you include all the code for running experiments?
+%
+%   \answerNo{We include the code we wrote for conducting the experiments, but
+%   complete replication depends on proprietary libraries for executing on a
+%   private compute cluster. The code therefore is not runnable without
+%   modification. To compensate, we provide a runnable but non-parallelized
+%   version of the code that could replicate the results at the expense of a
+%   greater wall-clock time.}
+%
+% - Did you include the license of the datasets?
+%
+%   \answerNA{Our experiments were conducted on publicly available datasets and
+%   we have not introduced new datasets.}
+%
+% Please note that if you answer a question with \verb|\answerNo{}|, we expect
+% that you provide an explanation and/or compensation for the omission. For
+% example, if you cannot provide complete evaluation code for some reason, you
+% might instead provide code for a minimal reproduction of the main insights of
+% your paper.
+%
+% Please do not modify the questions and only use the provided macros for your
+% answers. Note that the submission checklist does not count towards the page
+% limit.
+
+\begin{enumerate}
+\item For all authors\dots
+  %
+  \begin{enumerate}
+  \item Do the main claims made in the abstract and introduction accurately
+    reflect the paper's contributions and scope?
+    %
+    \answerYes{}
+    %
+  \item Did you describe the limitations of your work?
+    %
+    \answerYes{See section ``Limitations''}
+    %
+  \item Did you discuss any potential negative societal impacts of your work?
+    %
+    \answerYes{}
+    %
+  \item Did you read the ethics review guidelines and ensure that your paper
+    conforms to them? \url{https://2022.automl.cc/ethics-accessibility/}
+    %
+    \answerYes{}
+    %
+  \end{enumerate}
+  %
+\item If you ran experiments\dots
+  %
+  \begin{enumerate}
+  \item Did you use the same evaluation protocol for all methods being compared (e.g.,
+    same benchmarks, data (sub)sets, available resources)?
+    %
+    \answerNA{}
+    %
+  \item Did you specify all the necessary details of your evaluation (e.g., data splits,
+    pre-processing, search spaces, hyperparameter tuning)?
+    %
+    \answerNA{}
+    %
+  \item Did you repeat your experiments (e.g., across multiple random seeds or splits) to account for the impact of randomness in your methods or data?
+    %
+    \answerNA{}
+    %
+  \item Did you report the uncertainty of your results (e.g., the variance across random seeds or splits)?
+    %
+    \answerNA{}
+    %
+  \item Did you report the statistical significance of your results?
+    %
+    \answerNA{}
+    %
+  \item Did you use tabular or surrogate benchmarks for in-depth evaluations?
+    %
+    \answerNA{}
+    %
+  \item Did you compare performance over time and describe how you selected the maximum duration?
+    %
+    \answerNA{}
+    %
+  \item Did you include the total amount of compute and the type of resources
+    used (e.g., type of \textsc{gpu}s, internal cluster, or cloud provider)?
+    %
+    \answerNA{}
+    %
+  \item Did you run ablation studies to assess the impact of different
+    components of your approach?
+    %
+    \answerNA{}
+    %
+  \end{enumerate}
+  %
+\item With respect to the code used to obtain your results\dots
+  %
+  \begin{enumerate}
+\item Did you include the code, data, and instructions needed to reproduce the
+    main experimental results, including all requirements (e.g.,
+    \texttt{requirements.txt} with explicit versions), random seeds, an instructive
+    \texttt{README} with installation, and execution commands (either in the
+    supplemental material or as a \textsc{url})?
+    %
+    \answerYes{}
+    %
+  \item Did you include a minimal example to replicate results on a small subset
+    of the experiments or on toy data?
+    %
+    \answerYes{}
+    %
+  \item Did you ensure sufficient code quality and documentation so that someone else
+    can execute and understand your code?
+    %
+    \answerYes{See pyopensci review \url{https://github.com/pyOpenSci/software-submission/issues/83}}
+    %
+  \item Did you include the raw results of running your experiments with the given
+    code, data, and instructions?
+    %
+    \answerNA{}
+    %
+  \item Did you include the code, additional data, and instructions needed to generate
+    the figures and tables in your paper based on the raw results?
+    %
+    \answerYes{}
+    %
+  \end{enumerate}
+  %
+\item If you used existing assets (e.g., code, data, models)\dots
+  %
+  \begin{enumerate}
+  \item Did you cite the creators of used assets?
+    %
+    \answerYes{}
+    %
+  \item Did you discuss whether and how consent was obtained from people whose
+    data you're using/curating if the license requires it?
+    %
+    \answerNA{}
+    %
+  \item Did you discuss whether the data you are using/curating contains
+    personally identifiable information or offensive content?
+    %
+    \answerNA{}
+    %
+  \end{enumerate}
+  %
+\item If you created/released new assets (e.g., code, data, models)\dots
+  %
+  \begin{enumerate}
+    %
+    \item Did you mention the license of the new assets (e.g., as part of your code submission)?
+    %
+    \answerYes{}
+    %
+    \item Did you include the new assets either in the supplemental material or as
+    a \textsc{url} (to, e.g., GitHub or Hugging Face)?
+    %
+    \answerYes{}
+    %
+  \end{enumerate}
+  %
+\item If you used crowdsourcing or conducted research with human subjects\dots
+  %
+  \begin{enumerate}
+  \item Did you include the full text of instructions given to participants and
+    screenshots, if applicable?
+    %
+    \answerNA{}
+    %
+  \item Did you describe any potential participant risks, with links to
+    Institutional Review Board (\textsc{irb}) approvals, if applicable?
+    %
+    \answerNA{}
+    %
+  \item Did you include the estimated hourly wage paid to participants and the
+    total amount spent on participant compensation?
+    %
+    \answerNA{}
+    %
+  \end{enumerate}
+\item If you included theoretical results\dots
+  %
+  \begin{enumerate}
+  \item Did you state the full set of assumptions of all theoretical results?
+    %
+    \answerNA{}
+    %
+  \item Did you include complete proofs of all theoretical results?
+    %
+    \answerNA{}
+    %
+  \end{enumerate}
+  %
+\end{enumerate}
+
+\end{document}

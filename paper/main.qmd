@@ -7,8 +7,7 @@ abstract: >
   Bayesian statistical software. Bibat addresses this challenge by providing
   a full-featured, scalable Bayesian statistical analysis project using
   an interactive template. Bibat is available on the Python Package index,
-  documented at <https://bibat.readthedocs.io/> and developed at <https://github.com/teddygroves/bibat/>. This paper explains the motivation for bibat,
-  describes intended usage, discusses bibat's design, compares bibat with similar software, highlights several examples of bibat's use in science and provides links to community resources associated with bibat.
+  documented at <https://bibat.readthedocs.io/> and developed at <https://github.com/teddygroves/bibat/>. Bibat is free to use under the MIT license. This paper explains the motivation for bibat, describes intended usage, discusses bibat's design, compares bibat with similar software, highlights several examples of bibat's use in science and provides links to community resources associated with bibat.
 number-sections: true
 author:
   - name: "Teddy Groves"
@@ -25,10 +24,12 @@ author:
 bibliography: bibliography.bib
 keywords: [Bayesian workflow, Methodology, Software]
 format:
-  typst: default
   html:
     embed-resources: true
-  latex: default
+  pdf:
+    template: automl-template.tex
+    template-partials:
+      - title.tex
 ---
 
 # Introduction: the problem of orchestrating Bayesian workflow software
@@ -156,22 +157,22 @@ an end-to-end functional test on all supported Python versions.
 # Fitting modes
 
 The most novel part of bibat's design is the introduction of an abstraction
-called "fitting mode", which allows bibat project to handle different ways
-of fitting a model to a dataset appropriately and flexibly.  This is often
-necessary as part of a Bayesian workflow: for example, one might perform
-MCMC sampling of both the prior and posterior distributions, perform multiple
-leave-out-one-fold fits for cross-validation or need to compare MCMC sampling
-with an optimisation-based alternative.
+called "fitting mode", which allows bibat projects to handle fitting a model
+to a dataset in different ways. This is often necessary as part of a Bayesian
+workflow: for example, one might perform MCMC sampling of both the prior
+and posterior distributions, or perform multiple leave-out-one-fold fits for
+cross-validation, or compare MCMC-based posterior inference with an alternative
+computation method.
 
 Fitting modes in bibat projects take the form of instances of the class
 `FittingMode`. Each fitting mode contains a name, a function that fits a
-prepared dataset and instructions for how and where to save the results.
-For example, the provided prior sampling fitting mode creates a Stan input
-dictionary with the `likelihood` data variable set to `0`, performs MCMC
-sampling and writes data to the `InferenceData` group `prior`. This design
-allows multiple fits to be stored alongside each other naturally, facilitating
-many common Bayesian workflow analyses, and can easily be configured to prevent
-unnecessary computations.
+prepared dataset and instructions for how and where to save the results. For
+example, the provided prior sampling fitting mode is called "prior", contains
+a function that runs MCMC sampling with the `likelihood` input variable set
+to `0`, returning a `CmdStanMCMC` instance, and performs MCMC sampling and writes data to the `InferenceData` group
+`prior`. This design allows multiple fits to be stored alongside each other
+naturally, facilitating many common Bayesian workflow analyses, and can easily
+be configured to prevent unnecessary computations.
 
 Bibat provides fitting modes corresponding for prior sampling, posterior
 sampling and k-fold posterior sampling. Users can easily add additional fitting
@@ -194,6 +195,37 @@ implementing Bayesian workflows easier by providing ergonomic ways to specify
 and fit Bayesian regression models to tabular datasets. Bibat is complementary
 with these packages, as it targets use cases that they do not support, such as
 analyses where complex datasets or custom models might be required.
+
+# Limitations
+
+Using bibat effectively requires familiarity with Pydantic, pandera, arviz, Stan
+and managing a medium-sized Python project. Many statistical analysis projects
+do not require using these tools, for example if data preparation or validation
+is trivial, if custom statistical models are not required, or if the analysis
+can be carried out by a single script. Practitioners who wish to implement such
+Bayesian workflows may prefer to simply write their software from scratch rather
+than use bibat, using tools like bambi or brms to ensure that the software
+challenge remains manageable.
+
+Similarly, bibat includes features that not all analyses will need, such as
+accommodating plural inferences, fitting modes and datasets. As a result, bibat
+is not optimal for projects that are known in advance to be singular. This could
+happen, for example, because there is no uncertainty as to the necessary data
+manipulations, or because the aim of the project is to maintain and streamline
+an existing statistical model rather than to compare it with others.
+
+While inclusion of potentially unneeded features is an important limitation
+of bibat, it is worth noting that it is often difficult to predict in advance
+what features a Bayesian workflow project will require, and that it can
+be time-consuming to re-write a project after belatedly realising that an
+unsupported feature is needed. We therefore think there is value in using bibat
+as a default.
+
+Another limitation of bibat is that it makes many opinionated choices about
+which tools to use. In particular, languages other than Python, inference
+frameworks other than Stan and validation frameworks other than Pydantic are
+not supported. We think this limitation is best addressed by the development of
+additional analysis templates.
 
 # Case studies
 
@@ -256,6 +288,14 @@ PyOpenSci, allowing for help with maintenance as well as peer review for
 code and documentation quality, usability and accessibility. The PyOpenSci
 peer review for bibat can be found here: <https://github.com/pyOpenSci/software-submission/issues/83>.
 
-# Author contributions
+# Broader impact statement
 
-# Acknowledgements
+After careful reflection, the authors have determined that this work presents no
+notable negative impacts to society or the environment.
+
+\begin{acknowledgements}
+
+This research was funded by the Novo Nordisk Foundation (Grant numbers
+NNF20CC0035580 NNF14OC0009473).
+
+\end{acknowledgements}
