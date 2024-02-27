@@ -59,5 +59,6 @@ _message_after_copy: |
 
        $ make analysis
 
-    3. Edit the example analysis so that it implements your desired Bayesian workflow. If you'd like to read more about how to do this, check out this
-    documentation page: https://bibat.readthedocs.io/en/latest/working_with_bibat.html
+    3. Edit the example analysis so that it does what you want.
+
+    Find out more here: https://bibat.readthedocs.io
