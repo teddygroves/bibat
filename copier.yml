@@ -1,4 +1,9 @@
 _subdirectory: template
+_message_before_copy: |
+    Welcome to bibat, the batteries-included Bayesian analysis template!
+
+    You'll be asked a series of questions whose answers will be used to
+    generate a tailored project for you.
 project_name:
   type: str
   help: Name of your project
@@ -41,3 +46,19 @@ docs_format:
 create_dotgithub_directory:
   type: bool
   default: yes
+_message_after_copy: |
+    Your project "{{ project_name }}" has been created successfully!
+
+    Next steps:
+
+    1. Change directory to the project root:
+
+       $ cd {{ _copier_conf.dst_path }}
+
+    2. Run the example analysis:
+
+       $ make analysis
+
+    3. Edit the example analysis so that it does what you want.
+
+    Find out more here: https://bibat.readthedocs.io
