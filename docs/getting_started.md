@@ -2,8 +2,7 @@
 
 ## How to copy bibat's template
 
-To start a new Bayesian workflow project using bibat, first install [copier]
-(https://copier.readthedocs.io/en/stable/), e.g. like this:
+To start a new Bayesian workflow project using bibat, first install [copier](https://copier.readthedocs.io/en/stable/), e.g. like this:
 
 ```sh
 $ pipx install copier
