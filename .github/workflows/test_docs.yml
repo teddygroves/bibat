@@ -5,6 +5,8 @@ name: Docs check
 
 on:
   push:
+    branches:
+      - '**'
     tags-ignore:
       - '**'
 
