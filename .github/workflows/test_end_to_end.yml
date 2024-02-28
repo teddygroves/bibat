@@ -2,7 +2,10 @@
 
 name: Test end to end
 
-on: push
+on:
+  push:
+    tags-ignore:
+      - '**'
 
 jobs:
   build:

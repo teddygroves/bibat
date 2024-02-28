@@ -2,8 +2,10 @@
 
 name: Test target project docs
 
-on: push
-
+on:
+  push:
+    tags-ignore:
+      - '**'
 jobs:
   docs:
 
