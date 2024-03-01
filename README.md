@@ -122,8 +122,8 @@ documentation might also be useful.
 
 ### Target project dependencies: Quarto
 
-Bibat supports automatic generation of documentation using either mkdocs, Sphinx or
-[Quarto](https://quarto.org/). Whereas bibat will install mkdocs and Sphinx
+Bibat supports automatic generation of documentation using either Sphinx or
+[Quarto](https://quarto.org/). Whereas bibat will install Sphinx
 automatically, Quarto must be installed manually: see the [quarto
 documentation](https://quarto.org/docs/get-started/) for instructions.
 
