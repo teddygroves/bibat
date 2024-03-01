@@ -101,7 +101,7 @@ bibat'[development]'`):
 - ruff
 - furo
 
-Projects created by bibat have Python dependencies listed in their [pyproject.toml] file](https://github.com/teddygroves/bibat/blob/main/template/pyproject.toml.jinja). The additional ones are as follows:
+Projects created by bibat have Python dependencies listed in their [pyproject.toml file](https://github.com/teddygroves/bibat/blob/main/template/pyproject.toml.jinja). The additional ones are as follows:
 
 - bibat
 - jupyter
@@ -122,8 +122,8 @@ documentation might also be useful.
 
 ### Target project dependencies: Quarto
 
-Bibat supports automatic generation of documentation using either Sphinx or
-[Quarto](https://quarto.org/). Whereas bibat will install Sphinx
+Bibat supports automatic generation of documentation using either mkdocs, Sphinx or
+[Quarto](https://quarto.org/). Whereas bibat will install mkdocs and Sphinx
 automatically, Quarto must be installed manually: see the [quarto
 documentation](https://quarto.org/docs/get-started/) for instructions.
 
