@@ -14,13 +14,13 @@ ifeq ($(OS),Windows_NT)
 	ACTIVATE_VENV = $(VENV_BINARY)
 else
 	INSTALL_CMDSTAN_FLAGS = --cores 2
-	VENV_BINARY = ./venv/bin/activate
+	VENV_BINARY = .venv/bin/activate
 	ACTIVATE_VENV = . $(VENV_BINARY)
 endif
 
 env: $(ENV_MARKER)
 
-$(ACTIVATE_VENV):
+$(VENV_BINARY):
 	python -m venv .venv --prompt={{project_name_no_spaces}}
 
 {% if docs_format == 'Quarto' -%}
@@ -35,7 +35,7 @@ $(QUARTO_EXTENSIONS_FOLDER):
 		{%- endif %}
 {% if docs_format != 'No docs' %}	){% endif %}
 
-$(ENV_MARKER): $(VENV_BINARY) $(CMDSTAN)
+$(ENV_MARKER): $(VENV_BINARY)
 	$(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
 	  python -m pip install -e .; \
