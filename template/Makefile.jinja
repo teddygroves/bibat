@@ -40,7 +40,7 @@ $(ENV_MARKER): $(VENV_BINARY)
 	  python -m pip install --upgrade pip; \
 	  python -m pip install -e .; \
 	  python -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
-		$$null > $@ ; \
+		$$null > '$@' ; \
 	)
 
 test: $(ENV_MARKER)
