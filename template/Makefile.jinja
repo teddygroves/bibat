@@ -1,7 +1,6 @@
 .PHONY: clean-inferences clean-plots clean-stan clean-all analysis env test {% if docs_format != 'No docs' %}docs clean-docs{% endif %}
 
 ENV_MARKER = .venv/.bibat.marker
-ACTIVATE_VENV = .venv/bin/activate
 SRC = src
 NOTEBOOK_DIR = notebooks
 {% if docs_format != 'No docs' %}DOCS_DIR = docs{% endif %}
@@ -11,9 +10,12 @@ QUARTO_EXTENSIONS_FOLDER = $(DOCS_DIR)/_extensions{% endif %}
 
 ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS =  --version git:develop --cores 2
-	ACTIVATE_VENV = .venv/Scripts/activate
+	VENV_BINARY = .venv/Scripts/activate
+	ACTIVATE_VENV = $(VENV_BINARY)
 else
 	INSTALL_CMDSTAN_FLAGS = --cores 2
+	VENV_BINARY = ./venv/bin/activate
+	ACTIVATE_VENV = . $(VENV_BINARY)
 endif
 
 env: $(ENV_MARKER)
@@ -27,14 +29,14 @@ $(QUARTO_EXTENSIONS_FOLDER):
 {%- endif %}
 
 {% if docs_format != 'No docs' %}docs: $(ENV_MARKER) {%- if docs_format == 'Quarto' %} $(QUARTO_EXTENSIONS_FOLDER){% endif %}
-	. $(ACTIVATE_VENV) && (\ {%- endif %}
+	$(ACTIVATE_VENV) && (\ {%- endif %}
 		{% if docs_format == 'Sphinx' %}sphinx-build "$(DOCS_DIR)" "$(DOCS_BUILDDIR)" -b html; \
    	{% elif docs_format == 'Quarto' %}quarto render $(REPORT_STEM).qmd; \
 		{%- endif %}
 {% if docs_format != 'No docs' %}	){% endif %}
 
-$(ENV_MARKER): $(ACTIVATE_VENV) $(CMDSTAN)
-	. $(ACTIVATE_VENV) && (\
+$(ENV_MARKER): $(VENV_BINARY) $(CMDSTAN)
+	$(ACTIVATE_VENV) && (\
 	  python -m pip install --upgrade pip; \
 	  python -m pip install -e .; \
 	  python -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
@@ -42,13 +44,13 @@ $(ENV_MARKER): $(ACTIVATE_VENV) $(CMDSTAN)
 	)
 
 test: $(ENV_MARKER)
-	. $(ACTIVATE_VENV) && ( \
+	$(ACTIVATE_VENV) && ( \
 	  python -m pip install -e .'[dev]'; \
 	  python -m pytest || exit 1; \
 	)
 
 analysis: $(ENV_MARKER)
-	. $(ACTIVATE_VENV) && ( \
+	$(ACTIVATE_VENV) && ( \
 	  python $(SRC)/data_preparation.py || exit 1; \
 	  python $(SRC)/fitting.py || exit 1; \
 	  jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1; \
