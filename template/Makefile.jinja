@@ -13,11 +13,13 @@ ifeq ($(OS),Windows_NT)
 	VENV_BINARY = .venv/Scripts/activate
 	ACTIVATE_VENV = $(VENV_BINARY)
 	CREATE_ENV_MARKER = New-Item $(ENV_MARKER) -type file
+	PYTHON = .venv/Scripts/python
 else
 	INSTALL_CMDSTAN_FLAGS = --cores 2
 	VENV_BINARY = .venv/bin/activate
 	ACTIVATE_VENV = . $(VENV_BINARY)
 	CREATE_ENV_MARKER = touch $(ENV_MARKER)
+	PYTHON = .venv/bin/python
 endif
 
 env: $(ENV_MARKER)
@@ -38,25 +40,19 @@ $(QUARTO_EXTENSIONS_FOLDER):
 {% if docs_format != 'No docs' %}	){% endif %}
 
 $(ENV_MARKER): $(VENV_BINARY)
-	$(ACTIVATE_VENV) && (\
-	  python -m pip install --upgrade pip; \
-	  python -m pip install -e .; \
-	  python -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
-		$(CREATE_ENV_MARKER) ; \
-	)
+	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install -e .
+	$(PYTHON) -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS)
+	$(CREATE_ENV_MARKER)
 
 test: $(ENV_MARKER)
-	$(ACTIVATE_VENV) && ( \
-	  python -m pip install -e .'[dev]'; \
-	  python -m pytest || exit 1; \
-	)
+	$(PYTHON) -m pip install -e .'[dev]'
+	$(PYTHON) -m pytest || exit 1
 
 analysis: $(ENV_MARKER)
-	$(ACTIVATE_VENV) && ( \
-	  python $(SRC)/data_preparation.py || exit 1; \
-	  python $(SRC)/fitting.py || exit 1; \
-	  jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1; \
-	)
+	$(PYTHON) $(SRC)/data_preparation.py || exit 1
+	$(PYTHON) $(SRC)/fitting.py || exit 1
+	jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1
 
 {% if docs_format != 'No docs' %}clean-docs:{% endif -%}
 	{% if docs_format == 'Sphinx' -%}$(RM) -r $(DOCS_BUILDDIR)
