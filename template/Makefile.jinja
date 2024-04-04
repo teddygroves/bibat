@@ -12,10 +12,12 @@ ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS =  --version git:develop --cores 2
 	VENV_BINARY = .venv/Scripts/activate
 	ACTIVATE_VENV = $(VENV_BINARY)
+	CREATE_ENV_MARKER = New-Item $(ENV_MARKER) -type file
 else
 	INSTALL_CMDSTAN_FLAGS = --cores 2
 	VENV_BINARY = .venv/bin/activate
 	ACTIVATE_VENV = . $(VENV_BINARY)
+	CREATE_ENV_MARKER = touch $(ENV_MARKER)
 endif
 
 env: $(ENV_MARKER)
@@ -40,7 +42,7 @@ $(ENV_MARKER): $(VENV_BINARY)
 	  python -m pip install --upgrade pip; \
 	  python -m pip install -e .; \
 	  python -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
-		$$null > '$@' ; \
+		$(CREATE_ENV_MARKER) ; \
 	)
 
 test: $(ENV_MARKER)
