@@ -52,7 +52,7 @@ test: $(ENV_MARKER)
 analysis: $(ENV_MARKER)
 	$(PYTHON) $(SRC)/data_preparation.py || exit 1
 	$(PYTHON) $(SRC)/fitting.py || exit 1
-	jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1
+	$(PYTHON) -m jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1
 
 {% if docs_format != 'No docs' %}clean-docs:{% endif -%}
 	{% if docs_format == 'Sphinx' -%}$(RM) -r $(DOCS_BUILDDIR)
