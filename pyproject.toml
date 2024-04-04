@@ -31,6 +31,7 @@ dependencies = [
     "pandera",
     "pip >= 20",
     "pydantic",
+    "pyyaml-include<2",  # temporary fix: see https://github.com/copier-org/copier/issues/1568
     "scikit-learn",
     "stanio",
     "toml",
