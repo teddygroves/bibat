@@ -1,6 +1,5 @@
 .PHONY: clean-inferences clean-plots clean-stan clean-all analysis env test {% if docs_format != 'No docs' %}docs clean-docs{% endif %}
 
-ENV_MARKER = .venv/.bibat.marker
 SRC = src
 NOTEBOOK_DIR = notebooks
 {% if docs_format != 'No docs' %}DOCS_DIR = docs{% endif %}
@@ -12,44 +11,39 @@ ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS =  --version git:develop --cores 2
 	VENV_BINARY = .venv/Scripts/activate
 	ACTIVATE_VENV = $(VENV_BINARY)
-	CREATE_ENV_MARKER = New-Item $(ENV_MARKER) -type file
 	PYTHON = .venv/Scripts/python
 else
 	INSTALL_CMDSTAN_FLAGS = --cores 2
 	VENV_BINARY = .venv/bin/activate
 	ACTIVATE_VENV = . $(VENV_BINARY)
-	CREATE_ENV_MARKER = touch $(ENV_MARKER)
 	PYTHON = .venv/bin/python
 endif
 
-env: $(ENV_MARKER)
+env: $(VENV_BINARY)
 
 $(VENV_BINARY):
 	python -m venv .venv --prompt={{project_name_no_spaces}}
+	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install -e .
+	$(PYTHON) -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS)
 
 {% if docs_format == 'Quarto' -%}
 $(QUARTO_EXTENSIONS_FOLDER):
 	cd docs && quarto add quarto-ext/include-code-files && cd -
 {%- endif %}
 
-{% if docs_format != 'No docs' %}docs: $(ENV_MARKER) {%- if docs_format == 'Quarto' %} $(QUARTO_EXTENSIONS_FOLDER){% endif %}
+{% if docs_format != 'No docs' %}docs: $(VENV_BINARY) {%- if docs_format == 'Quarto' %} $(QUARTO_EXTENSIONS_FOLDER){% endif %}
 	$(ACTIVATE_VENV) && (\ {%- endif %}
 		{% if docs_format == 'Sphinx' %}sphinx-build "$(DOCS_DIR)" "$(DOCS_BUILDDIR)" -b html; \
    	{% elif docs_format == 'Quarto' %}quarto render $(REPORT_STEM).qmd; \
 		{%- endif %}
 {% if docs_format != 'No docs' %}	){% endif %}
 
-$(ENV_MARKER): $(VENV_BINARY)
-	$(PYTHON) -m pip install --upgrade pip
-	$(PYTHON) -m pip install -e .
-	$(PYTHON) -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS)
-	$(CREATE_ENV_MARKER)
-
-test: $(ENV_MARKER)
+test: $(VENV_BINARY)
 	$(PYTHON) -m pip install -e .'[dev]'
 	$(PYTHON) -m pytest || exit 1
 
-analysis: $(ENV_MARKER)
+analysis: $(VENV_BINARY)
 	$(PYTHON) $(SRC)/data_preparation.py || exit 1
 	$(PYTHON) $(SRC)/fitting.py || exit 1
 	$(PYTHON) -m jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1
