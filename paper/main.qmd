@@ -2,7 +2,7 @@
 title: "Bibat: Batteries-include Bayesian Analysis Template"
 abstract: >
   Bayesian statistical workflow offers a powerful way to learn from data,
-  but software software projects that implement complex Bayesian workflows
+  but software projects that implement complex Bayesian workflows
   in practice are unusual, partly due to the difficulty of orchestrating
   Bayesian statistical software. Bibat addresses this challenge by providing
   a full-featured, scalable Bayesian statistical analysis project using

@@ -16,7 +16,7 @@ from bibat.prepared_data import PreparedData
 
 
 class IdataSaveFormat(str, Enum):
-    """An enum for choosing the group that a fitting mode writes to."""
+    """An enum for choosing the format in which inferences are saved."""
 
     zarr = "prior"
     json = "json"
