@@ -33,6 +33,7 @@ dependencies = [
     "pydantic",
     "pyyaml-include<2",  # temporary fix: see https://github.com/copier-org/copier/issues/1568
     "scikit-learn",
+    "scipy<1.13",  # temporary fix: see https://github.com/arviz-devs/arviz/issues/2336
     "stanio",
     "toml",
     "xarray",
