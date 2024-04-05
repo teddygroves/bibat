@@ -93,13 +93,15 @@ bibat'[development]'`):
 - black
 - pre-commit
 - codecov
+- mkdocs
+- mkdocs-material
+- mkdocstrings
+- mkdocstrings-python
+- pymdown-extensions
 - pytest
 - pytest-cov
 - tox
-- sphinx
-- sphinx-click
 - ruff
-- furo
 
 Projects created by bibat have Python dependencies listed in their [pyproject.toml file](https://github.com/teddygroves/bibat/blob/main/template/pyproject.toml.jinja). The additional ones are as follows:
 
