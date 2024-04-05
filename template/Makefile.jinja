@@ -9,19 +9,22 @@ QUARTO_EXTENSIONS_FOLDER = $(DOCS_DIR)/_extensions{% endif %}
 
 ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS =  --version git:develop --cores 2
-	VENV_BINARY = .venv/Scripts/activate
-	ACTIVATE_VENV = $(VENV_BINARY)
-	PYTHON = .venv/Scripts/python
+	VENV_BINARY_DIR = .venv/Scripts
+	ACTIVATE_VENV_FILE = .venv/Scripts/activate
+	ACTIVATE_VENV = $(ACTIVATE_VENV_FILE)
 else
 	INSTALL_CMDSTAN_FLAGS = --cores 2
-	VENV_BINARY = .venv/bin/activate
-	ACTIVATE_VENV = . $(VENV_BINARY)
-	PYTHON = .venv/bin/python
+	VENV_BINARY_DIR = .venv/bin
+	ACTIVATE_VENV_FILE = .venv/bin/activate
+	ACTIVATE_VENV = . $(ACTIVATE_VENV_FILE)
 endif
 
-env: $(VENV_BINARY)
+PYTHON = $(VENV_BINARY_DIR)/python
+JUPYTER = $(VENV_BINARY_DIR)/jupyter
 
-$(VENV_BINARY):
+env: $(ACTIVATE_VENV_FILE)
+
+$(ACTIVATE_VENV_FILE):
 	python -m venv .venv --prompt={{project_name_no_spaces}}
 	$(PYTHON) -m pip install --upgrade pip
 	$(PYTHON) -m pip install -e .
@@ -32,21 +35,21 @@ $(QUARTO_EXTENSIONS_FOLDER):
 	cd docs && quarto add quarto-ext/include-code-files && cd -
 {%- endif %}
 
-{% if docs_format != 'No docs' %}docs: $(VENV_BINARY) {%- if docs_format == 'Quarto' %} $(QUARTO_EXTENSIONS_FOLDER){% endif %}
+{% if docs_format != 'No docs' %}docs: $(ACTIVATE_VENV_FILE) {%- if docs_format == 'Quarto' %} $(QUARTO_EXTENSIONS_FOLDER){% endif %}
 	$(ACTIVATE_VENV) && (\ {%- endif %}
 		{% if docs_format == 'Sphinx' %}sphinx-build "$(DOCS_DIR)" "$(DOCS_BUILDDIR)" -b html; \
    	{% elif docs_format == 'Quarto' %}quarto render $(REPORT_STEM).qmd; \
 		{%- endif %}
 {% if docs_format != 'No docs' %}	){% endif %}
 
-test: $(VENV_BINARY)
+test: $(ACTIVATE_VENV_FILE)
 	$(PYTHON) -m pip install -e .'[dev]'
 	$(PYTHON) -m pytest || exit 1
 
-analysis: $(VENV_BINARY)
+analysis: $(ACTIVATE_VENV_FILE)
 	$(PYTHON) $(SRC)/data_preparation.py || exit 1
 	$(PYTHON) $(SRC)/fitting.py || exit 1
-	$(PYTHON) -m jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1
+	$(JUPYTER) execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1
 
 {% if docs_format != 'No docs' %}clean-docs:{% endif -%}
 	{% if docs_format == 'Sphinx' -%}$(RM) -r $(DOCS_BUILDDIR)
