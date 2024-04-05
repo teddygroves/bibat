@@ -1,7 +1,5 @@
 .PHONY: clean-inferences clean-plots clean-stan clean-all analysis env test {% if docs_format != 'No docs' %}docs clean-docs{% endif %}
 
-ENV_MARKER = .venv/.bibat.marker
-ACTIVATE_VENV = .venv/bin/activate
 SRC = src
 NOTEBOOK_DIR = notebooks
 {% if docs_format != 'No docs' %}DOCS_DIR = docs{% endif %}
@@ -11,48 +9,47 @@ QUARTO_EXTENSIONS_FOLDER = $(DOCS_DIR)/_extensions{% endif %}
 
 ifeq ($(OS),Windows_NT)
 	INSTALL_CMDSTAN_FLAGS =  --version git:develop --cores 2
-	ACTIVATE_VENV = .venv/Scripts/activate
+	VENV_BINARY_DIR = .venv/Scripts
+	ACTIVATE_VENV_FILE = .venv/Scripts/activate
+	ACTIVATE_VENV = $(ACTIVATE_VENV_FILE)
 else
 	INSTALL_CMDSTAN_FLAGS = --cores 2
+	VENV_BINARY_DIR = .venv/bin
+	ACTIVATE_VENV_FILE = .venv/bin/activate
+	ACTIVATE_VENV = . $(ACTIVATE_VENV_FILE)
 endif
 
-env: $(ENV_MARKER)
+PYTHON = $(VENV_BINARY_DIR)/python
+JUPYTER = $(VENV_BINARY_DIR)/jupyter
 
-$(ACTIVATE_VENV):
+env: $(ACTIVATE_VENV_FILE)
+
+$(ACTIVATE_VENV_FILE):
 	python -m venv .venv --prompt={{project_name_no_spaces}}
+	$(PYTHON) -m pip install --upgrade pip
+	$(PYTHON) -m pip install -e .
+	$(PYTHON) -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS)
 
 {% if docs_format == 'Quarto' -%}
 $(QUARTO_EXTENSIONS_FOLDER):
 	cd docs && quarto add quarto-ext/include-code-files && cd -
 {%- endif %}
 
-{% if docs_format != 'No docs' %}docs: $(ENV_MARKER) {%- if docs_format == 'Quarto' %} $(QUARTO_EXTENSIONS_FOLDER){% endif %}
-	. $(ACTIVATE_VENV) && (\ {%- endif %}
+{% if docs_format != 'No docs' %}docs: $(ACTIVATE_VENV_FILE) {%- if docs_format == 'Quarto' %} $(QUARTO_EXTENSIONS_FOLDER){% endif %}
+	$(ACTIVATE_VENV) && (\ {%- endif %}
 		{% if docs_format == 'Sphinx' %}sphinx-build "$(DOCS_DIR)" "$(DOCS_BUILDDIR)" -b html; \
    	{% elif docs_format == 'Quarto' %}quarto render $(REPORT_STEM).qmd; \
 		{%- endif %}
 {% if docs_format != 'No docs' %}	){% endif %}
 
-$(ENV_MARKER): $(ACTIVATE_VENV) $(CMDSTAN)
-	. $(ACTIVATE_VENV) && (\
-	  python -m pip install --upgrade pip; \
-	  python -m pip install -e .; \
-	  python -m cmdstanpy.install_cmdstan $(INSTALL_CMDSTAN_FLAGS); \
-		touch $@ ; \
-	)
+test: $(ACTIVATE_VENV_FILE)
+	$(PYTHON) -m pip install -e .'[dev]'
+	$(PYTHON) -m pytest || exit 1
 
-test: $(ENV_MARKER)
-	. $(ACTIVATE_VENV) && ( \
-	  python -m pip install -e .'[dev]'; \
-	  python -m pytest || exit 1; \
-	)
-
-analysis: $(ENV_MARKER)
-	. $(ACTIVATE_VENV) && ( \
-	  python $(SRC)/data_preparation.py || exit 1; \
-	  python $(SRC)/fitting.py || exit 1; \
-	  jupyter execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1; \
-	)
+analysis: $(ACTIVATE_VENV_FILE)
+	$(PYTHON) $(SRC)/data_preparation.py || exit 1
+	$(PYTHON) $(SRC)/fitting.py || exit 1
+	$(JUPYTER) execute $(NOTEBOOK_DIR)/investigate.ipynb || exit 1
 
 {% if docs_format != 'No docs' %}clean-docs:{% endif -%}
 	{% if docs_format == 'Sphinx' -%}$(RM) -r $(DOCS_BUILDDIR)
