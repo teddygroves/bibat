@@ -58,16 +58,10 @@ extended to implement a wide range of statistical analyses.
 
 # How bibat works
 
-In order to use bibat, a user must first install the templating library copier
-[@copierdevelopersCopier2024], then choose a directory name and run this command
-from the command line:
-
-```sh
-$ copier copy gh:teddygroves/bibat my-chosen-directory-name
-```
-
-This command triggers an interactive form which prompts the user to select
-a range of customisation options. The new directory will then be created
+To use bibat, a user must first install the templating library copier
+[@copierdevelopersCopier2024] and then use the command `copier copy` to trigger
+bibat. The user is then presented with an interactive form which prompts them
+to select from a range of customisation options. A new directory is then created
 if necessary and filled with code that implements an example analysis, with
 customisations reflecting the user's choices. This analysis works immediately,
 and can be reproduced with the single command `make analysis` without the need
@@ -100,6 +94,71 @@ implement a complex statistical analysis starting from bibat's example analysis
 usage. In addition, the documentation site contains a full description of
 bibat's python API and command line interface, instructions for contributing and
 a section discussing accessibility considerations.
+
+# 'Hello world' example
+
+This section illustrates bibat's use by stepping through a typical example.
+A similar description can be found on the 'Getting started' page of bibat's
+documentation.
+
+The first step to use bibat is installing copier. This can be done using pipx
+[@pipxdevelopersPipx2024] as follows:
+
+```sh
+$ pipx install copier
+```
+
+Next, choose a directory name, e.g. `hello-world` and call trigger bibat using
+copier:
+
+```sh
+$ copier copy gh:teddygroves/bibat hello-world
+```
+
+Here is what should appear next. Some options are text fields, and others, such
+as `open_source_license` are enumerated choices.
+
+```sh
+Welcome to bibat, the batteries-included Bayesian analysis template!
+
+You'll be asked a series of questions whose answers will be used to
+generate a tailored project for you.
+
+🎤 Name of your project
+   Hello world
+🎤 Name of your project, with no spaces (used for venv and package names)
+   hello_world
+🎤 A short description of the project.
+   A 'hello world example of using bibat'
+🎤 Your name (or your organization/company/team)
+   Hello world developers
+🎤 Author email (will be included in pyproject.toml)
+   author@email.com
+🎤 Code of conduct contact
+   author@email.com
+🎤 open_source_license
+   MIT
+🎤 docs_format
+   Quarto
+🎤 create_dotgithub_directory (bool)
+   Yes
+```
+
+After all the fields are completed, the directory `hello-world` is created if it
+doesn't exist and populated or edited based on the form. If this is successful,
+some more messages appear indicating which files have been created or edited and
+explaining what to do next.
+
+The final setup step is to change directory into the new folder and run `make analysis`:
+
+```sh
+$ cd hello-world
+$ make analysis
+```
+
+This will set up a suitable Python virtual environment, install non-Python
+dependencies if necessary and then run the analysis, creating the results shown
+on the right-hand side of @fig-workflow.
 
 # Design choices
 

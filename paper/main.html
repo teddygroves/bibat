@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.4.549">
+<meta name="generator" content="quarto-1.4.553">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -3126,7 +3126,7 @@ vertical-align: -.125em;
 <div>
   <div class="abstract">
     <div class="block-title">Abstract</div>
-    <p>Bayesian statistical workflow offers a powerful way to learn from data, but software software projects that implement complex Bayesian workflows in practice are unusual, partly due to the difficulty of orchestrating Bayesian statistical software. Bibat addresses this challenge by providing a full-featured, scalable Bayesian statistical analysis project using an interactive template. Bibat is available on the Python Package index, documented at <a href="https://bibat.readthedocs.io/" class="uri">https://bibat.readthedocs.io/</a> and developed at <a href="https://github.com/teddygroves/bibat/" class="uri">https://github.com/teddygroves/bibat/</a>. Bibat is free to use under the MIT license. This paper explains the motivation for bibat, describes intended usage, discusses bibat’s design, compares bibat with similar software, highlights several examples of bibat’s use in science and provides links to community resources associated with bibat.</p>
+    <p>Bayesian statistical workflow offers a powerful way to learn from data, but software projects that implement complex Bayesian workflows in practice are unusual, partly due to the difficulty of orchestrating Bayesian statistical software. Bibat addresses this challenge by providing a full-featured, scalable Bayesian statistical analysis project using an interactive template. Bibat is available on the Python Package index, documented at <a href="https://bibat.readthedocs.io/" class="uri">https://bibat.readthedocs.io/</a> and developed at <a href="https://github.com/teddygroves/bibat/" class="uri">https://github.com/teddygroves/bibat/</a>. Bibat is free to use under the MIT license. This paper explains the motivation for bibat, describes intended usage, discusses bibat’s design, compares bibat with similar software, highlights several examples of bibat’s use in science and provides links to community resources associated with bibat.</p>
   </div>
 </div>
 
@@ -3148,9 +3148,7 @@ vertical-align: -.125em;
 </section>
 <section id="how-bibat-works" class="level1" data-number="2">
 <h1 data-number="2"><span class="header-section-number">2</span> How bibat works</h1>
-<p>In order to use bibat, a user must first install the templating library copier <span class="citation" data-cites="copierdevelopersCopier2024">(<a href="#ref-copierdevelopersCopier2024" role="doc-biblioref">copier developers 2024</a>)</span>, then choose a directory name and run this command from the command line:</p>
-<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> copier copy gh:teddygroves/bibat my-chosen-directory-name</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
-<p>This command triggers an interactive form which prompts the user to select a range of customisation options. The new directory will then be created if necessary and filled with code that implements an example analysis, with customisations reflecting the user’s choices. This analysis works immediately, and can be reproduced with the single command <code>make analysis</code> without the need for any further action by the user: in this sense bibat comes with batteries included.</p>
+<p>To use bibat, a user must first install the templating library copier <span class="citation" data-cites="copierdevelopersCopier2024">(<a href="#ref-copierdevelopersCopier2024" role="doc-biblioref">copier developers 2024</a>)</span> and then use the command <code>copier copy</code> to trigger bibat. The user is then presented with an interactive form which prompts them to select from a range of customisation options. A new directory is then created if necessary and filled with code that implements an example analysis, with customisations reflecting the user’s choices. This analysis works immediately, and can be reproduced with the single command <code>make analysis</code> without the need for any further action by the user: in this sense bibat comes with batteries included.</p>
 <p><a href="#fig-workflow" class="quarto-xref">Figure 1</a> illustrates the components of a bibat-based Bayesian workflow and shows how it proceeds: the project team edits the code components, then runs <code>make analysis</code>, triggering creation of the result components. After inspecting these they repeat the process, leading to a cycle that ultimately results in a complete, easily reproducible analysis.</p>
 <div id="fig-workflow" class="quarto-figure quarto-figure-center quarto-float anchored">
 <figure class="quarto-float quarto-float-fig figure">
@@ -3164,8 +3162,45 @@ Figure 1: Schematic representation of a Bayesian workflow implemented using bib
 </div>
 <p>Bibat is documented at <a href="https://github.com/teddygroves/bibat/" class="uri">https://github.com/teddygroves/bibat/</a>. The documentation website includes instructions for getting started, a detailed explanation of bibat’s concepts and an extended vignette illustrating how to implement a complex statistical analysis starting from bibat’s example analysis usage. In addition, the documentation site contains a full description of bibat’s python API and command line interface, instructions for contributing and a section discussing accessibility considerations.</p>
 </section>
-<section id="design-choices" class="level1" data-number="3">
-<h1 data-number="3"><span class="header-section-number">3</span> Design choices</h1>
+<section id="hello-world-example" class="level1" data-number="3">
+<h1 data-number="3"><span class="header-section-number">3</span> ‘Hello world’ example</h1>
+<p>This section illustrates bibat’s use by stepping through a typical example. A similar description can be found on the ‘Getting started’ page of bibat’s documentation.</p>
+<p>The first step to use bibat is installing copier. This can be done using pipx <span class="citation" data-cites="pipxdevelopersPipx2024">(<a href="#ref-pipxdevelopersPipx2024" role="doc-biblioref">Pipx developers 2024</a>)</span> as follows:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> pipx install copier</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Next, choose a directory name, e.g. <code>hello-world</code> and call trigger bibat using copier:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> copier copy gh:teddygroves/bibat hello-world</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>Here is what should appear next. Some options are text fields, and others, such as <code>open_source_license</code> are enumerated choices.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="ex">Welcome</span> to bibat, the batteries-included Bayesian analysis template!</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="ex">You</span><span class="st">&#39;ll be asked a series of questions whose answers will be used to</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="st">generate a tailored project for you.</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 Name of your project</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="st">   Hello world</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 Name of your project, with no spaces (used for venv and package names)</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="st">   hello_world</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 A short description of the project.</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="st">   A &#39;</span><span class="ex">hello</span> world example of using bibat<span class="st">&#39;</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 Your name (or your organization/company/team)</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="st">   Hello world developers</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 Author email (will be included in pyproject.toml)</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="st">   author@email.com</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 Code of conduct contact</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="st">   author@email.com</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 open_source_license</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="st">   MIT</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 docs_format</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="st">   Quarto</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="st">🎤 create_dotgithub_directory (bool)</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="st">   Yes</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>After all the fields are completed, the directory <code>hello-world</code> is created if it doesn’t exist and populated or edited based on the form. If this is successful, some more messages appear indicating which files have been created or edited and explaining what to do next.</p>
+<p>The final setup step is to change directory into the new folder and run <code>make analysis</code>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sh code-with-copy"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> cd hello-world</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="ex">$</span> make analysis</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<p>This will set up a suitable Python virtual environment, install non-Python dependencies if necessary and then run the analysis, creating the results shown on the right-hand side of <a href="#fig-workflow" class="quarto-xref">Figure 1</a>.</p>
+</section>
+<section id="design-choices" class="level1" data-number="4">
+<h1 data-number="4"><span class="header-section-number">4</span> Design choices</h1>
 <p>Bibat’s design was informed by the aims to accommodate the many sources of complexity and in a Bayesian workflow project, to ensure easy reproducibility and to integrate many open-source, widely-adopted and powerful Bayesian workflow tools and to encourage collaborative development.</p>
 <p>As discussed in <span class="citation" data-cites="gelmanBayesianWorkflow2020">Gelman et al. (<a href="#ref-gelmanBayesianWorkflow2020" role="doc-biblioref">2020</a>)</span>, Bayesian workflows are complicated, featuring plurality, cyclicity and complexity at many levels. As a specialised Bayesian workflow template, a key goal for bibat was to manage this complexity. Bibat achieves this aim by separating non-interacting analysis components into separate, potentially plural modules and by serialising data to files wherever possible. Prepared datasets, statistical models, inference configurations, inference results, plots and analyses all have file representations. Fitting modes, data manipulations and data models are modularised in code through the use of appropriately structured data classes and functions. Thanks to this modular approach it is possible to perform small sub analyses individually and to iteratively expand the analysis by adding components without needing to consider everything at once. In addition, bibat ensures that there are minimal restrictions on the components: for example, datasets need not be singular or tabular, and it is possible to use any statistical model that Stan can compile. Thanks to these accommodations a project team using bibat should typically not need to foresee the ultimate requirements of their analysis before starting the project.</p>
 <p>Bibat encourages reproducibility by providing a preconfigured makefile with a target <code>analysis</code> that triggers creation of an isolated environment, installation of dependencies, data preparation, statistical computation and analysis of results. In this way a bibat analysis can be reproduced on most platforms using a single command. In particular, this target attempts to install cmdstan if necessary, using a recipe tailored to the host operating system. This functionality addresses a common issue where researchers find it difficult to install Stan, especially on Windows. A second way in which bibat encourages reproducibility is by providing a preconfigured Python project following modern conventions, making bibat analyses straightforward to replicated and extend for other researchers who are already familiar with these conventions.</p>
@@ -3173,26 +3208,26 @@ Figure 1: Schematic representation of a Bayesian workflow implemented using bib
 <p>To encourage collaborative development of Bayesian workflow projects, Bibat projects include a preconfigured test environment, continuous integration, linting and pre-commit hooks. In addition, bibat includes documentation as a first class, integrated component of the analysis, helping to keep it in sync with the other components.</p>
 <p>Bibat is continuously tested to ensure that it works on the operating systems Linux, macOS and Windows. Bibat’s continuous integration runs a test suite as well as an end-to-end functional test on all supported Python versions.</p>
 </section>
-<section id="fitting-modes" class="level1" data-number="4">
-<h1 data-number="4"><span class="header-section-number">4</span> Fitting modes</h1>
+<section id="fitting-modes" class="level1" data-number="5">
+<h1 data-number="5"><span class="header-section-number">5</span> Fitting modes</h1>
 <p>The most novel part of bibat’s design is the introduction of an abstraction called “fitting mode”, which allows bibat projects to handle fitting a model to a dataset in different ways. This is often necessary as part of a Bayesian workflow: for example, one might perform MCMC sampling of both the prior and posterior distributions, or perform multiple leave-out-one-fold fits for cross-validation, or compare MCMC-based posterior inference with an alternative computation method.</p>
 <p>Fitting modes in bibat projects take the form of instances of the class <code>FittingMode</code>. Each fitting mode contains a name, a function that fits a prepared dataset and instructions for how and where to save the results. For example, the provided prior sampling fitting mode is called “prior”, contains a function that runs MCMC sampling with the <code>likelihood</code> input variable set to <code>0</code>, returning a <code>CmdStanMCMC</code> instance, and specifies that this result should be written to the <code>InferenceData</code> group <code>prior</code>. Bibat provides fitting modes corresponding for prior sampling, posterior sampling and k-fold posterior sampling. Users can easily implement additional fitting modes or modify the <code>FittingMode</code> class to achieve even richer functionality. Fitting modes can be referenced by name from the file that configures an inferece: for example, the following lines indicate that the inference should be run in prior, posterior and kfold modes:</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">modes</span> <span class="op">=</span> <span class="op">[</span><span class="st">&quot;prior&quot;</span><span class="op">,</span> <span class="st">&quot;posterior&quot;</span><span class="op">,</span> <span class="st">&quot;kfold&quot;</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode toml code-with-copy"><code class="sourceCode toml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">modes</span> <span class="op">=</span> <span class="op">[</span><span class="st">&quot;prior&quot;</span><span class="op">,</span> <span class="st">&quot;posterior&quot;</span><span class="op">,</span> <span class="st">&quot;kfold&quot;</span><span class="op">]</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 <p>Fitting modes allow bibat projects to succinctly but flexibly declare how to perform inferences, and allow results corresponding to the same inference to be stored alongside each other appropriately.</p>
 </section>
-<section id="comparison-with-alternative-software" class="level1" data-number="5">
-<h1 data-number="5"><span class="header-section-number">5</span> Comparison with alternative software</h1>
+<section id="comparison-with-alternative-software" class="level1" data-number="6">
+<h1 data-number="6"><span class="header-section-number">6</span> Comparison with alternative software</h1>
 <p>Other than bibat, we are not aware of any interactive template that specifically targets Bayesian workflow projects. There are some templates that arguably encompass Bayesian workflow as a special case of data analysis project, such as cookiecutter-data-science <span class="citation" data-cites="drivendataCookiecutterdatascience2022">(<a href="#ref-drivendataCookiecutterdatascience2022" role="doc-biblioref">Driven Data 2022</a>)</span>, but these are of limited use compared with a specialised template due to the many specificities of Bayesian workflow. cookiecutter-cmdstanpy-wrapper <span class="citation" data-cites="wardWardBrianCookiecuttercmdstanpywrapper2024">(<a href="#ref-wardWardBrianCookiecuttercmdstanpywrapper2024" role="doc-biblioref">Ward 2024</a>)</span> is an interactive template that targets a different use case than Bayesian workflow projects, namely setting up a Python package that provides pre-compiled Stan models.</p>
 <p>There is some software that addresses the general task of facilitating Bayesian workflow, but using a different approach from bibat’s. For example, bambi <span class="citation" data-cites="capretto2020">(<a href="#ref-capretto2020" role="doc-biblioref">Capretto et al. 2020</a>)</span> and brms <span class="citation" data-cites="burknerBrmsPackageBayesian2017">(<a href="#ref-burknerBrmsPackageBayesian2017" role="doc-biblioref">Bürkner 2017</a>)</span> aim to make implementing Bayesian workflows easier by providing ergonomic ways to specify and fit Bayesian regression models to tabular datasets. Bibat is complementary with these packages, as it targets use cases that they do not support, such as analyses where complex datasets or custom models might be required.</p>
 </section>
-<section id="limitations" class="level1" data-number="6">
-<h1 data-number="6"><span class="header-section-number">6</span> Limitations</h1>
+<section id="limitations" class="level1" data-number="7">
+<h1 data-number="7"><span class="header-section-number">7</span> Limitations</h1>
 <p>Using bibat effectively requires familiarity with Pydantic, pandera, arviz, Stan and managing a medium-sized Python project. Many statistical analysis projects do not require using these tools, for example if data preparation or validation is trivial, if custom statistical models are not required, or if the analysis can be carried out by a single script. Practitioners who wish to implement such Bayesian workflows may prefer to simply write their software from scratch rather than use bibat, using tools like bambi or brms to ensure that the software challenge remains manageable.</p>
 <p>Similarly, bibat accommodates plural inferences, fitting modes and datasets, but many analyses are singular in at least one of these components and could therefore be implemented more simply and concisely than an equivalent bibat project. On the other hand, it is typically difficult to predict in advance which components of a Bayesian workflow will be plural, and costly to re-write a project after mistakenly assuming that a component will be singular. While we acknowledge that accommodating potentially unneeded plurality is an important limitation of bibat, we nonetheless think that it is the correct choice for a general-purpose template.</p>
 <p>Another limitation of bibat is that it makes many opinionated choices about which tools to use. In particular, languages other than Python, inference frameworks other than Stan and validation frameworks other than Pydantic are not supported. We think that it is on the whole good for templates to be opinionated, as unopinionated templates are necessarily more complicated; this limitation of bibat is therefore best addressed by the development of additional analysis templates that make different choices.</p>
 </section>
-<section id="case-studies" class="level1" data-number="7">
-<h1 data-number="7"><span class="header-section-number">7</span> Case studies</h1>
+<section id="case-studies" class="level1" data-number="8">
+<h1 data-number="8"><span class="header-section-number">8</span> Case studies</h1>
 <p>The following cases illustrate how bibat has been used in practice to facilitate Bayesian workflow projects.</p>
 <p><span class="citation" data-cites="grovesteddyDgfreg2023">Groves and Jooste (<a href="#ref-grovesteddyDgfreg2023" role="doc-biblioref">2023</a>)</span> used bibat to compare a Bayesian and two non-Bayesian approaches to modelling a biochemical thermodynamics dataset. Bibat facilitated this analysis even though it was not very large—the final analysis contained one dataset, three models and three inferences—because the fitting mode abstraction allowed for straightforward comparison of the different methods. Additionally, bibat made it easier to iteratively investigate and discard models that did not form part of the final analysis.</p>
 <p>In <span class="citation" data-cites="grovesBaseball2022">Groves (<a href="#ref-grovesBaseball2022" role="doc-biblioref">2022</a>)</span>, Bibat was used to implement a sports analysis involving two datasets, two models and four inferences, demonstrating that the generalised Pareto distribution can be used to describe hitting ability in baseball. This analysis is now included in bibat as an illustration, along with an accompanying tutorial. An illustrative graphic from this analysis is shown in <a href="#fig-baseball" class="quarto-xref">Figure 2</a>.</p>
@@ -3209,13 +3244,13 @@ Figure 2: A graphical posterior predictive check produced as part of a bibat an
 </div>
 <p>These cases illustrate that bibat can be useful in a variety of real Bayesian workflows, with different sizes, subject matters and emphases.</p>
 </section>
-<section id="community" class="level1" data-number="8">
-<h1 data-number="8"><span class="header-section-number">8</span> Community</h1>
+<section id="community" class="level1" data-number="9">
+<h1 data-number="9"><span class="header-section-number">9</span> Community</h1>
 <p>Bibat is developed in public and encourages community contribution. Please see the contributing page <a href="https://github.com/teddygroves/bibat/blob/main/CONTRIBUTING.md" class="uri">https://github.com/teddygroves/bibat/blob/main/CONTRIBUTING.md</a> and code of conduct <a href="https://github.com/teddygroves/bibat/blob/main/CODE_OF_CONDUCT.md" class="uri">https://github.com/teddygroves/bibat/blob/main/CODE_OF_CONDUCT.md</a> if you would like to help develop bibat.</p>
 <p>Bibat has a growing user community, with 16 GitHub stars at the time of writing, and is affiliated with cmdstanpy through a link on its documentation website. Bibat is also affiliated with the Python scientific software community PyOpenSci, allowing for help with maintenance as well as peer review for code and documentation quality, usability and accessibility. The PyOpenSci peer review for bibat can be found here: <a href="https://github.com/pyOpenSci/software-submission/issues/83" class="uri">https://github.com/pyOpenSci/software-submission/issues/83</a>.</p>
 </section>
-<section id="broader-impact-statement" class="level1" data-number="9">
-<h1 data-number="9"><span class="header-section-number">9</span> Broader impact statement</h1>
+<section id="broader-impact-statement" class="level1" data-number="10">
+<h1 data-number="10"><span class="header-section-number">10</span> Broader impact statement</h1>
 <p>After careful reflection, the authors have determined that this work presents no notable negative impacts to society or the environment.</p>
 
 </section>
@@ -3265,6 +3300,9 @@ Kumar, Ravin, Colin Carroll, Ari Hartikainen, and Osvaldo Martin. 2019. <span>�
 </div>
 <div id="ref-niels_bantilan-proc-scipy-2020" class="csl-entry" role="listitem">
 Niels Bantilan. 2020. <span>“Pandera: <span>Statistical Data Validation</span> of <span>Pandas Dataframes</span>.”</span> In <em>Proceedings of the 19th <span>Python</span> in <span>Science Conference</span></em>, edited by Meghann Agarwal, Chris Calloway, Dillon Niederhut, and David Shupe, 116–24. <a href="https://doi.org/10.25080/Majora-342d178e-010">https://doi.org/10.25080/Majora-342d178e-010</a>.
+</div>
+<div id="ref-pipxdevelopersPipx2024" class="csl-entry" role="listitem">
+Pipx developers. 2024. <span>“Pipx.”</span> <a href="https://github.com/pypa/pipx">https://github.com/pypa/pipx</a>.
 </div>
 <div id="ref-pydanticdevelopersPydantic2022" class="csl-entry" role="listitem">
 Pydantic developers. 2022. <span>“Pydantic.”</span> <a href="https://pypi.org/project/pydantic/">https://pypi.org/project/pydantic/</a>.
@@ -3359,6 +3397,24 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
     // clear code selection
     e.clearSelection();
   });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+    var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
   function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
     const config = {
       allowHTML: true,
@@ -3393,7 +3449,11 @@ window.document.addEventListener("DOMContentLoaded", function (event) {
       try { href = new URL(href).hash; } catch {}
       const id = href.replace(/^#\/?/, "");
       const note = window.document.getElementById(id);
-      return note.innerHTML;
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
     });
   }
   const xrefs = window.document.querySelectorAll('a.quarto-xref');
