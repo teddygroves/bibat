@@ -200,11 +200,13 @@ other researchers who are already familiar with these conventions.
 Bibat integrates many widely-adopted open-source tools to implement
 the components of a Bayesian workflow. These include pydantic
 [@pydanticdevelopersPydantic2022] and pandera [@niels_bantilan-proc-scipy-2020]
-for data modelling, Stan [@carpenterStanProbabilisticProgramming2017] for
-statistical inference, cmdstanpy [@standevelopmentteamCmdStanPy2022] for
-python-Stan interface, arviz [@kumarArviZUnifiedLibrary2019] for storing and
-analysing inferences and sphinx [@georgbrandlandthesphinxteamSphinx2022] and
-quarto [@Allaire_Quarto_2022] for documentation.
+for data modelling, Stan [@carpenterStanProbabilisticProgramming2017]
+for statistical inference, cmdstanpy [@standevelopmentteamCmdStanPy2022]
+for python-Stan interface, arviz [@kumarArviZUnifiedLibrary2019]
+for storing and analysing inferences, matplotlib [@Hunter:2007]
+and lovelyplots [@sheriff_lovelyplots_2022] for plotting and sphinx
+[@georgbrandlandthesphinxteamSphinx2022] and quarto [@Allaire_Quarto_2022] for
+documentation.
 
 To encourage collaborative development of Bayesian workflow projects, Bibat
 projects include a preconfigured test environment, continuous integration,
